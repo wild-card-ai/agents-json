@@ -8,7 +8,7 @@
   "sources": [
     {
       "id": "giphy",
-      "path": "https://raw.githubusercontent.com/kmahorker/tmp/refs/heads/master/giphy/openapi.yaml"
+      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/giphy/openapi.yaml"
     }
   ],
   "flows": [
