@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "agentsjson"
-version = "0.1.0"
+version = "0.1.1"
 description = "Agents.json Python Implementation with Core and Integrations"
 authors = ["Wildcard AI <info@wildcard.ai>"]
 readme = "README.md"
@@ -16,7 +16,8 @@ typing-extensions = "^4.0.0"
 pyyaml = "^6.0.0"
 tweepy = "^4.0.0"
 requests = "^2.0.0"
-stripe = "^2.0.0"
+stripe = "7.11.0"
+six = "^1.16.0"
 
 [build-system]
 requires = ["poetry-core"]
