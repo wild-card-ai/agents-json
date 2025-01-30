@@ -8,7 +8,7 @@
   "sources": [
     {
       "id": "stripe",
-      "path": "https://raw.githubusercontent.com/kmahorker/tmp/refs/heads/master/stripe_openapi.yaml"
+      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/stripe/openapi.yaml"
     }
   ],
   "overrides": [],
