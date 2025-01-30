@@ -126,7 +126,7 @@ Agents need multiple context-specific API calls to complete their tasks. This is
 
 So we implemented `agents.json`, a schema to prescribe a set of API actions to an agent with the tools to make APIs work for LLMs. We built this for us and we're excited to share it with you.
 
-## The agents.json File
+### The agents.json File
 
 `agents.json` is a JSON schema of structured contracts designed for AI agents. API providers use their existing OpenAPI spec to construct this file and agents inspect this file to run accurate series of API calls. 
 
