@@ -1,0 +1,380 @@
+{
+  "agentsJson": "1.0.0",
+  "info": {
+    "title": "Giphy Agent Flows (API Key Handled Separately)",
+    "version": "1.0.0",
+    "description": "A set of flows for common Giphy API operations, where the api_key parameter is handled outside of these flows."
+  },
+  "sources": [
+    {
+      "id": "giphy",
+      "path": "https://raw.githubusercontent.com/kmahorker/tmp/refs/heads/master/giphy/openapi.yaml"
+    }
+  ],
+  "flows": [
+    {
+      "id": "get_trending_gifs_flow",
+      "title": "Get Trending GIFs",
+      "description": "Returns a list of the most relevant and engaging GIFs each day using /gifs/trending.",
+      "actions": [
+        {
+          "id": "fetch_trending_gifs",
+          "sourceId": "giphy",
+          "operationId": "giphy_get_gifs_trending"
+        }
+      ],
+      "links": [
+        {
+          "origin": { "actionId": "get_trending_gifs_flow", "fieldPath": "parameters.limit" },
+          "target": { "actionId": "fetch_trending_gifs", "fieldPath": "parameters.limit" }
+        },
+        {
+          "origin": { "actionId": "get_trending_gifs_flow", "fieldPath": "parameters.offset" },
+          "target": { "actionId": "fetch_trending_gifs", "fieldPath": "parameters.offset" }
+        },
+        {
+          "origin": { "actionId": "get_trending_gifs_flow", "fieldPath": "parameters.rating" },
+          "target": { "actionId": "fetch_trending_gifs", "fieldPath": "parameters.rating" }
+        },
+        {
+          "origin": { "actionId": "get_trending_gifs_flow", "fieldPath": "parameters.random_id" },
+          "target": { "actionId": "fetch_trending_gifs", "fieldPath": "parameters.random_id" }
+        },
+        {
+          "origin": { "actionId": "get_trending_gifs_flow", "fieldPath": "parameters.bundle" },
+          "target": { "actionId": "fetch_trending_gifs", "fieldPath": "parameters.bundle" }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "limit",
+            "description": "Max number of GIFs to return (default 25).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "Starting position of results (default 0).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "rating",
+            "description": "Filters results by rating (g, pg, pg-13, r).",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "random_id",
+            "description": "ID for a specific user session or persona.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "bundle",
+            "description": "Thread or bundle grouping for GIF renditions.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "description": "A successful response returns trending GIF data."
+          }
+        }
+      }
+    },
+    {
+      "id": "search_gifs_flow",
+      "title": "Search GIFs",
+      "description": "Performs a search for GIFs using /gifs/search",
+      "actions": [
+        {
+          "id": "search_gifs",
+          "sourceId": "giphy",
+          "operationId": "giphy_get_gifs_search"
+        }
+      ],
+      "links": [
+        {
+          "origin": { "actionId": "search_gifs_flow", "fieldPath": "parameters.q" },
+          "target": { "actionId": "search_gifs", "fieldPath": "parameters.q" }
+        },
+        {
+          "origin": { "actionId": "search_gifs_flow", "fieldPath": "parameters.limit" },
+          "target": { "actionId": "search_gifs", "fieldPath": "parameters.limit" }
+        },
+        {
+          "origin": { "actionId": "search_gifs_flow", "fieldPath": "parameters.offset" },
+          "target": { "actionId": "search_gifs", "fieldPath": "parameters.offset" }
+        },
+        {
+          "origin": { "actionId": "search_gifs_flow", "fieldPath": "parameters.rating" },
+          "target": { "actionId": "search_gifs", "fieldPath": "parameters.rating" }
+        },
+        {
+          "origin": { "actionId": "search_gifs_flow", "fieldPath": "parameters.random_id" },
+          "target": { "actionId": "search_gifs", "fieldPath": "parameters.random_id" }
+        },
+        {
+          "origin": { "actionId": "search_gifs_flow", "fieldPath": "parameters.lang" },
+          "target": { "actionId": "search_gifs", "fieldPath": "parameters.lang" }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "q",
+            "description": "Search query term or phrase.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "Max number of GIFs to return (default 25).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "Starting position of results (default 0).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "rating",
+            "description": "Filters results by rating (g, pg, pg-13, r).",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "random_id",
+            "description": "ID/proxy for a user session.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "lang",
+            "description": "Specify default language for regional content; 2-letter ISO 639-1 standard.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "description": "Search results for the requested GIF query."
+          }
+        }
+      }
+    },
+    {
+      "id": "translate_to_gif_flow",
+      "title": "Translate Phrase to GIF",
+      "description": "Converts a phrase to a single GIF using /gifs/translate",
+      "actions": [
+        {
+          "id": "translate_phrase_gif",
+          "sourceId": "giphy",
+          "operationId": "giphy_get_gifs_translate"
+        }
+      ],
+      "links": [
+        {
+          "origin": { "actionId": null, "fieldPath": "parameters.s" },
+          "target": { "actionId": "translate_phrase_gif", "fieldPath": "parameters.s" }
+        },
+        {
+          "origin": { "actionId": null, "fieldPath": "parameters.rating" },
+          "target": { "actionId": "translate_phrase_gif", "fieldPath": "parameters.rating" }
+        },
+        {
+          "origin": { "actionId": null, "fieldPath": "parameters.random_id" },
+          "target": { "actionId": "translate_phrase_gif", "fieldPath": "parameters.random_id" }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "s",
+            "required": true,
+            "type": "string",
+            "description": "Text to translate into a GIF"
+          },
+          {
+            "name": "rating",
+            "type": "string",
+            "description": "Filter results by rating (optional)."
+          },
+          {
+            "name": "random_id",
+            "type": "string",
+            "description": "Unique user ID to track session or persona (optional)."
+          }
+        ],
+        "responses": {
+          "success": { 
+            "description": "A single translated GIF object." 
+          }
+        }
+      }
+    },
+    {
+      "id": "random_gif_flow",
+      "title": "Random GIF",
+      "description": "Gets one random GIF with optional tag using /gifs/random",
+      "actions": [
+        {
+          "id": "fetch_random_gif",
+          "sourceId": "giphy",
+          "operationId": "giphy_get_gifs_random"
+        }
+      ],
+      "links": [
+        {
+          "origin": { "actionId": null, "fieldPath": "parameters.tag" },
+          "target": { "actionId": "fetch_random_gif", "fieldPath": "parameters.tag" }
+        },
+        {
+          "origin": { "actionId": null, "fieldPath": "parameters.rating" },
+          "target": { "actionId": "fetch_random_gif", "fieldPath": "parameters.rating" }
+        },
+        {
+          "origin": { "actionId": null, "fieldPath": "parameters.random_id" },
+          "target": { "actionId": "fetch_random_gif", "fieldPath": "parameters.random_id" }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "tag",
+            "type": "string",
+            "description": "Optional tag to bias the random GIF result."
+          },
+          {
+            "name": "rating",
+            "type": "string",
+            "description": "Filter results by rating (g, pg, pg-13, r)."
+          },
+          {
+            "name": "random_id",
+            "type": "string",
+            "description": "Unique user ID if you want user-specific results."
+          }
+        ],
+        "responses": {
+          "success": { 
+            "description": "A single random GIF object." 
+          }
+        }
+      }
+    },
+    {
+      "id": "get_trending_stickers_flow",
+      "title": "Get Trending Stickers",
+      "description": "Fetch trending stickers with /stickers/trending",
+      "actions": [
+        {
+          "id": "fetch_trending_stickers",
+          "sourceId": "giphy",
+          "operationId": "giphy_get_stickers_trending"
+        }
+      ],
+      "links": [
+        {
+          "origin": { "actionId": "get_trending_stickers_flow", "fieldPath": "parameters.limit" },
+          "target": { "actionId": "fetch_trending_stickers", "fieldPath": "parameters.limit" }
+        },
+        {
+          "origin": { "actionId": "get_trending_stickers_flow", "fieldPath": "parameters.offset" },
+          "target": { "actionId": "fetch_trending_stickers", "fieldPath": "parameters.offset" }
+        },
+        {
+          "origin": { "actionId": "get_trending_stickers_flow", "fieldPath": "parameters.rating" },
+          "target": { "actionId": "fetch_trending_stickers", "fieldPath": "parameters.rating" }
+        },
+        {
+          "origin": { "actionId": "get_trending_stickers_flow", "fieldPath": "parameters.random_id" },
+          "target": { "actionId": "fetch_trending_stickers", "fieldPath": "parameters.random_id" }
+        },
+        {
+          "origin": { "actionId": "get_trending_stickers_flow", "fieldPath": "parameters.bundle" },
+          "target": { "actionId": "fetch_trending_stickers", "fieldPath": "parameters.bundle" }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "limit",
+            "description": "Max number of stickers to return (default 25).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "offset",
+            "description": "Starting position of results (default 0).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "rating",
+            "description": "Filters results by rating (g, pg, pg-13, r).",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "random_id",
+            "description": "ID/proxy for a specific user session.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "bundle",
+            "description": "If you want only certain sticker renditions.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "description": "A successful response returns trending sticker data."
+          }
+        }
+      }
+    },
+    {
+      "id": "search_suggestions_flow",
+      "title": "Search Suggestions",
+      "description": "Retrieves related tags for the given term using /tags/related/{term}.",
+      "actions": [
+        {
+          "id": "fetch_search_suggestions",
+          "sourceId": "giphy",
+          "operationId": "giphy_get_tags_related_by_term"
+        }
+      ],
+      "links": [
+        {
+          "origin": { "actionId": "search_suggestions_flow", "fieldPath": "parameters.term" },
+          "target": { "actionId": "fetch_search_suggestions", "fieldPath": "parameters.term" }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "term",
+            "required": true,
+            "type": "string",
+            "description": "The text for which you want related tags."
+          }
+        ],
+        "responses": {
+          "success": {
+            "description": "A list of related terms returned by the Giphy API."
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": true
+}

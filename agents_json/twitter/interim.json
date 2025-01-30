@@ -1,0 +1,650 @@
+{
+  "info": {
+    "description": "Twitter API v2 available endpoints",
+    "title": "Twitter API v2",
+    "summary": null,
+    "x-api-uuid": null
+  },
+  "paths": [
+    {
+      "path": "/2/compliance/jobs",
+      "method": "get",
+      "operationId": "twitter_compliance_jobs_get",
+      "x-uuid": null,
+      "description": "Returns a list of recent compliance jobs.\n\nFor full details, see the [API reference](https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/api-reference/get-compliance-jobs) for this endpoint.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "List Compliance Jobs"
+    },
+    {
+      "path": "/2/compliance/jobs",
+      "method": "post",
+      "operationId": "twitter_compliance_jobs_post",
+      "x-uuid": null,
+      "description": "Creates a new compliance job for Tweet IDs or user IDs.\nA compliance job will contain an ID and a destination URL. The destination URL represents the location that contains the list of IDs consumed by your App",
+      "summary": "Create compliance job"
+    },
+    {
+      "path": "/2/compliance/jobs/{id}",
+      "method": "get",
+      "operationId": "twitter_compliance_jobs_id_get",
+      "x-uuid": null,
+      "description": "Get a single compliance job with the specified ID.\n\nFor full details, see the [API reference](https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/api-reference/get-compliance-jobs-id) for this endpoint.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Get Compliance Job"
+    },
+    {
+      "path": "/2/dm_conversations",
+      "method": "post",
+      "operationId": "twitter_dm_conversation_id_create",
+      "x-uuid": null,
+      "description": "Creates a new DM Conversation.",
+      "summary": "Create a new DM Conversation"
+    },
+    {
+      "path": "/2/dm_conversations/with/{participant_id}/dm_events",
+      "method": "get",
+      "operationId": "twitter_dm_conversations_with_participant_id_dm_events_get",
+      "x-uuid": null,
+      "description": "Returns DM Events for a DM Conversation",
+      "summary": "Get DM Events for a DM Conversation"
+    },
+    {
+      "path": "/2/dm_conversations/with/{participant_id}/messages",
+      "method": "post",
+      "operationId": "twitter_dm_conversations_with_participant_id_messages_post",
+      "x-uuid": null,
+      "description": "Creates a new message for a DM Conversation with a participant user by ID",
+      "summary": "Send a new message to a user"
+    },
+    {
+      "path": "/2/dm_conversations/{dm_conversation_id}/messages",
+      "method": "post",
+      "operationId": "twitter_dm_conversations_dm_conversation_id_messages_post",
+      "x-uuid": null,
+      "description": "Creates a new message for a DM Conversation specified by DM Conversation ID",
+      "summary": "Send a new message to a DM Conversation"
+    },
+    {
+      "path": "/2/dm_conversations/{id}/dm_events",
+      "method": "get",
+      "operationId": "twitter_get_dm_conversations_id_dm_events",
+      "x-uuid": null,
+      "description": "Returns DM Events for a DM Conversation",
+      "summary": "Get DM Events for a DM Conversation"
+    },
+    {
+      "path": "/2/dm_events",
+      "method": "get",
+      "operationId": "twitter_dm_events_get",
+      "x-uuid": null,
+      "description": "Returns recent DM Events across DM conversations",
+      "summary": "Get recent DM Events"
+    },
+    {
+      "path": "/2/lists",
+      "method": "post",
+      "operationId": "twitter_lists_post",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to create a new List.",
+      "summary": "Create List"
+    },
+    {
+      "path": "/2/lists/{id}",
+      "method": "delete",
+      "operationId": "twitter_lists_id_delete",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to delete a list they own.",
+      "summary": "Delete List"
+    },
+    {
+      "path": "/2/lists/{id}",
+      "method": "get",
+      "operationId": "twitter_lists_id_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details about the List specified by the requested ID",
+      "summary": "List lookup by List ID."
+    },
+    {
+      "path": "/2/lists/{id}",
+      "method": "put",
+      "operationId": "twitter_lists_id_put",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to update a List they own.",
+      "summary": "Update List."
+    },
+    {
+      "path": "/2/lists/{id}/followers",
+      "method": "get",
+      "operationId": "twitter_lists_id_followers_get",
+      "x-uuid": null,
+      "description": "This endpoint returns follower details from the List specified by the requested ID",
+      "summary": "Returns User objects that follow a List by the provided List ID"
+    },
+    {
+      "path": "/2/lists/{id}/members",
+      "method": "get",
+      "operationId": "twitter_lists_id_members_get",
+      "x-uuid": null,
+      "description": "This endpoint returns member details from the List specified by the requested ID",
+      "summary": "Returns User objects that are members of a List by the provided List ID."
+    },
+    {
+      "path": "/2/lists/{id}/members",
+      "method": "post",
+      "operationId": "twitter_lists_id_members_post",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to add a member to a List they own.",
+      "summary": "Add a List member"
+    },
+    {
+      "path": "/2/lists/{id}/members/{user_id}",
+      "method": "delete",
+      "operationId": "twitter_lists_id_members_user_id_delete",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to remove a member from a List they own.",
+      "summary": "Remove a List member"
+    },
+    {
+      "path": "/2/lists/{id}/tweets",
+      "method": "get",
+      "operationId": "twitter_lists_id_tweets_get",
+      "x-uuid": null,
+      "description": "This endpoint returns all Tweets from a List specified by the requested ID",
+      "summary": "List Tweets timeline by List ID."
+    },
+    {
+      "path": "/2/openapi.json",
+      "method": "get",
+      "operationId": "twitter_get_open_api_spec",
+      "x-uuid": null,
+      "description": "Full OpenAPI Specification in JSON format. (See https://github.com/OAI/OpenAPI-Specification/blob/master/README.md)",
+      "summary": "Returns the OpenAPI Specification document."
+    },
+    {
+      "path": "/2/spaces",
+      "method": "get",
+      "operationId": "twitter_spaces_get",
+      "x-uuid": null,
+      "description": "This endpoint returns information about one or more Spaces with the specified comma-separated list of IDs. You can request up to 100 Spaces in a single request\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Space lookup up Space IDs"
+    },
+    {
+      "path": "/2/spaces/by/creator_ids",
+      "method": "get",
+      "operationId": "twitter_find_spaces_by_creator_ids",
+      "x-uuid": null,
+      "description": "Returns a variety of information about the Spaces created by the provided User IDs",
+      "summary": "Space lookup by their creators"
+    },
+    {
+      "path": "/2/spaces/search",
+      "method": "get",
+      "operationId": "twitter_spaces_search_get",
+      "x-uuid": null,
+      "description": "This endpoint returns Spaces matching the specified keyword query.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Search for Spaces"
+    },
+    {
+      "path": "/2/spaces/{id}",
+      "method": "get",
+      "operationId": "twitter_spaces_id_get",
+      "x-uuid": null,
+      "description": "This endpoint returns information about a single Space with the specified ID.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Space lookup by Space ID"
+    },
+    {
+      "path": "/2/spaces/{id}/buyers",
+      "method": "get",
+      "operationId": "twitter_spaces_id_buyers_get",
+      "x-uuid": null,
+      "description": "Returns a list of users who are blocked by the specified user ID.",
+      "summary": "Retrieve the list of Users who purchased a ticket to the given space"
+    },
+    {
+      "path": "/2/spaces/{id}/tweets",
+      "method": "get",
+      "operationId": "twitter_space_tweets",
+      "x-uuid": null,
+      "description": "Retrieves Tweets shared in the specified Space.",
+      "summary": "Retrieve Tweets from a Space."
+    },
+    {
+      "path": "/2/tweets",
+      "method": "get",
+      "operationId": "twitter_tweets_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details about up to 100 Tweets specified by the requested IDs.",
+      "summary": "Tweet lookup by Tweet IDs"
+    },
+    {
+      "path": "/2/tweets",
+      "method": "post",
+      "operationId": "twitter_tweets_post",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to create a Tweet.\nYou can add parameters to post polls, quote Tweets, Tweet with reply settings, and Tweet to Super Followers in addition to other features.",
+      "summary": "Creation of a Tweet"
+    },
+    {
+      "path": "/2/tweets/compliance/stream",
+      "method": "get",
+      "operationId": "twitter_get_tweets_compliance_stream",
+      "x-uuid": null,
+      "description": "Streams 100% of compliance data for Tweets",
+      "summary": "Tweets Compliance stream"
+    },
+    {
+      "path": "/2/tweets/counts/all",
+      "method": "get",
+      "operationId": "twitter_tweets_counts_all_get",
+      "x-uuid": null,
+      "description": "Search across the complete history of public Tweets matching a search query; since the first Tweet was created in March 2006.\n**NOTE** this endpoint requires access via the Academic Research product track",
+      "summary": "Full archive search counts"
+    },
+    {
+      "path": "/2/tweets/counts/recent",
+      "method": "get",
+      "operationId": "twitter_tweets_counts_recent_get",
+      "x-uuid": null,
+      "description": "Search for public Tweets created in the last 7 days.",
+      "summary": "Recent search counts"
+    },
+    {
+      "path": "/2/tweets/firehose/stream",
+      "method": "get",
+      "operationId": "twitter_get_tweets_firehose_stream",
+      "x-uuid": null,
+      "description": "Streams 100% of public Tweets.",
+      "summary": "Firehose stream"
+    },
+    {
+      "path": "/2/tweets/label/stream",
+      "method": "get",
+      "operationId": "twitter_get_tweets_label_stream",
+      "x-uuid": null,
+      "description": "Streams 100% of labeling events applied to Tweets",
+      "summary": "Tweets Label stream"
+    },
+    {
+      "path": "/2/tweets/sample/stream",
+      "method": "get",
+      "operationId": "twitter_tweets_sample_stream_get",
+      "x-uuid": null,
+      "description": "Stream, in real-time, roughly a 1% sample of all public Tweets.\n\nPlease note streaming responses are currently [not supported](https://github.com/postmanlabs/postman-app-support/issues/5040) in Postman. Use this to help form your request, then click on Code > cURL. Copy the cURL command and paste in terminal to view the response.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Sample stream"
+    },
+    {
+      "path": "/2/tweets/sample10/stream",
+      "method": "get",
+      "operationId": "twitter_get_tweets_sample10_stream",
+      "x-uuid": null,
+      "description": "Streams a deterministic 10% of public Tweets.",
+      "summary": "Sample 10% stream"
+    },
+    {
+      "path": "/2/tweets/search/all",
+      "method": "get",
+      "operationId": "twitter_tweets_search_all_get",
+      "x-uuid": null,
+      "description": "Search across the complete history of public Tweets matching a search query; since the first Tweet was created in March 2006.\n**NOTE** this endpoint requires access via the Academic Research product track",
+      "summary": "Full-archive search"
+    },
+    {
+      "path": "/2/tweets/search/recent",
+      "method": "get",
+      "operationId": "twitter_tweets_search_recent_get",
+      "x-uuid": null,
+      "description": "Search for public Tweets created in the last 7 days.",
+      "summary": "Recent search"
+    },
+    {
+      "path": "/2/tweets/search/stream",
+      "method": "get",
+      "operationId": "twitter_tweets_search_stream_get",
+      "x-uuid": null,
+      "description": "Streams Tweets in real-time based on a specific set of filter rules.\n\nPlease note streaming responses are currently [not supported](https://github.com/postmanlabs/postman-app-support/issues/5040) in Postman. Use this to help form your request, then click on Code > cURL. Copy the cURL command and paste in terminal to view the response.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Filtered stream"
+    },
+    {
+      "path": "/2/tweets/search/stream/rules",
+      "method": "get",
+      "operationId": "twitter_tweets_search_stream_rules_get",
+      "x-uuid": null,
+      "description": "Returns a list of filter rules currently active on the streaming endpoint.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Rules lookup"
+    },
+    {
+      "path": "/2/tweets/search/stream/rules",
+      "method": "post",
+      "operationId": "twitter_tweets_search_stream_rules_post",
+      "x-uuid": null,
+      "description": "Delete filter rules. To delete one or more rules, submit a delete object payload with an array of rule values to delete.\n\n[Sign up](https://t.co/signup) for the Twitter API",
+      "summary": "Add/Delete rules"
+    },
+    {
+      "path": "/2/tweets/{id}",
+      "method": "delete",
+      "operationId": "twitter_tweets_id_delete",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to delete a Tweet.",
+      "summary": "Tweet delete by Tweet ID"
+    },
+    {
+      "path": "/2/tweets/{id}",
+      "method": "get",
+      "operationId": "twitter_tweets_id_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details about the Tweet specified by the requested ID.",
+      "summary": "Tweet lookup by Tweet ID"
+    },
+    {
+      "path": "/2/tweets/{id}/liking_users",
+      "method": "get",
+      "operationId": "twitter_tweets_id_liking_users_get",
+      "x-uuid": null,
+      "description": "Returns a list of users who have liked a specified Tweet ID.",
+      "summary": "Returns User objects that have liked the provided Tweet ID"
+    },
+    {
+      "path": "/2/tweets/{id}/quote_tweets",
+      "method": "get",
+      "operationId": "twitter_tweets_id_quote_tweets_get",
+      "x-uuid": null,
+      "description": "Returns the most recent Tweets mentioning a single user specified by the requested user ID.",
+      "summary": "Retrieve Tweets that quote a Tweet."
+    },
+    {
+      "path": "/2/tweets/{id}/retweeted_by",
+      "method": "get",
+      "operationId": "twitter_tweets_id_retweeted_by_get",
+      "x-uuid": null,
+      "description": "Returns a list of users who have liked a specified Tweet ID.",
+      "summary": "Returns User objects that have retweeted the provided Tweet ID"
+    },
+    {
+      "path": "/2/tweets/{tweet_id}/hidden",
+      "method": "put",
+      "operationId": "twitter_hide_reply_by_id",
+      "x-uuid": null,
+      "description": "Hides or unhides a reply to an owned conversation.",
+      "summary": "Hide replies"
+    },
+    {
+      "path": "/2/users",
+      "method": "get",
+      "operationId": "twitter_users_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details about up to 100 users by ID.",
+      "summary": "User lookup by IDs"
+    },
+    {
+      "path": "/2/users/by",
+      "method": "get",
+      "operationId": "twitter_users_by_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details about up to 100 users specified by username.",
+      "summary": "User lookup by usernames"
+    },
+    {
+      "path": "/2/users/by/username/{username}",
+      "method": "get",
+      "operationId": "twitter_users_by_username_username_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details about a user by username.",
+      "summary": "User lookup by username"
+    },
+    {
+      "path": "/2/users/compliance/stream",
+      "method": "get",
+      "operationId": "twitter_get_users_compliance_stream",
+      "x-uuid": null,
+      "description": "Streams 100% of compliance data for Users",
+      "summary": "Users Compliance stream"
+    },
+    {
+      "path": "/2/users/me",
+      "method": "get",
+      "operationId": "twitter_find_my_user",
+      "x-uuid": null,
+      "description": "This endpoint returns information about the requesting User.",
+      "summary": "User lookup me"
+    },
+    {
+      "path": "/2/users/{id}",
+      "method": "get",
+      "operationId": "twitter_users_id_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details about a user by ID.",
+      "summary": "User lookup by ID"
+    },
+    {
+      "path": "/2/users/{id}/blocking",
+      "method": "get",
+      "operationId": "twitter_users_id_blocking_get",
+      "x-uuid": null,
+      "description": "Returns a list of users who are blocked by the specified user ID.",
+      "summary": "Returns User objects that are blocked by provided User ID"
+    },
+    {
+      "path": "/2/users/{id}/blocking",
+      "method": "post",
+      "operationId": "twitter_users_id_blocking_post",
+      "x-uuid": null,
+      "description": "Allows a user ID to block another user.",
+      "summary": "Block User by User ID"
+    },
+    {
+      "path": "/2/users/{id}/bookmarks",
+      "method": "get",
+      "operationId": "twitter_users_id_bookmarks_get",
+      "x-uuid": null,
+      "description": "Returns a list of Tweets that have been bookmarked by a specified user ID.",
+      "summary": "Bookmarks by User"
+    },
+    {
+      "path": "/2/users/{id}/bookmarks",
+      "method": "post",
+      "operationId": "twitter_users_id_bookmarks_post",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to like a Tweet.",
+      "summary": "Add Tweet to Bookmarks"
+    },
+    {
+      "path": "/2/users/{id}/bookmarks/{tweet_id}",
+      "method": "delete",
+      "operationId": "twitter_users_id_bookmarks_tweet_id_delete",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to unlike a Tweet.",
+      "summary": "Remove a bookmarked Tweet"
+    },
+    {
+      "path": "/2/users/{id}/followed_lists",
+      "method": "get",
+      "operationId": "twitter_users_id_followed_lists_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details on Lists a user follows specified by the requested ID",
+      "summary": "Get User's Followed Lists"
+    },
+    {
+      "path": "/2/users/{id}/followed_lists",
+      "method": "post",
+      "operationId": "twitter_users_id_followed_lists_post",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to follow a specified List.",
+      "summary": "Follow a List"
+    },
+    {
+      "path": "/2/users/{id}/followed_lists/{list_id}",
+      "method": "delete",
+      "operationId": "twitter_users_id_followed_lists_list_id_delete",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to unfollow a specified List.",
+      "summary": "Unfollow a List"
+    },
+    {
+      "path": "/2/users/{id}/followers",
+      "method": "get",
+      "operationId": "twitter_users_id_followers_get",
+      "x-uuid": null,
+      "description": "Returns a list of users who are followers of the specified user ID.",
+      "summary": "Followers by User ID"
+    },
+    {
+      "path": "/2/users/{id}/following",
+      "method": "get",
+      "operationId": "twitter_users_id_following_get",
+      "x-uuid": null,
+      "description": "Returns a list of users the specified user ID is following.",
+      "summary": "Following by User ID"
+    },
+    {
+      "path": "/2/users/{id}/following",
+      "method": "post",
+      "operationId": "twitter_users_id_following_post",
+      "x-uuid": null,
+      "description": "Allows a user ID to follow another user.",
+      "summary": "Follow User"
+    },
+    {
+      "path": "/2/users/{id}/liked_tweets",
+      "method": "get",
+      "operationId": "twitter_users_id_liked_tweets_get",
+      "x-uuid": null,
+      "description": "Returns a list of Tweets that have been liked by a specified user ID.",
+      "summary": "Returns Tweet objects liked by the provided User ID"
+    },
+    {
+      "path": "/2/users/{id}/likes",
+      "method": "post",
+      "operationId": "twitter_users_id_likes_post",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to like a Tweet.",
+      "summary": "Causes the User (in the path) to like the specified Tweet"
+    },
+    {
+      "path": "/2/users/{id}/likes/{tweet_id}",
+      "method": "delete",
+      "operationId": "twitter_users_id_likes_tweet_id_delete",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to unlike a Tweet.",
+      "summary": "Causes the User (in the path) to unlike the specified Tweet"
+    },
+    {
+      "path": "/2/users/{id}/list_memberships",
+      "method": "get",
+      "operationId": "twitter_users_id_list_memberships_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details on Lists a user is a member of specified by the requested ID",
+      "summary": "Get a User's List Memberships"
+    },
+    {
+      "path": "/2/users/{id}/mentions",
+      "method": "get",
+      "operationId": "twitter_users_id_mentions_get",
+      "x-uuid": null,
+      "description": "Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you or a user you follow. This endpoint returns up to the last 3200 Tweets.",
+      "summary": "User mention timeline by User ID"
+    },
+    {
+      "path": "/2/users/{id}/muting",
+      "method": "get",
+      "operationId": "twitter_users_id_muting_get",
+      "x-uuid": null,
+      "description": "Returns a list of users who are muted by the specified user ID.",
+      "summary": "Returns User objects that are muted by the provided User ID"
+    },
+    {
+      "path": "/2/users/{id}/muting",
+      "method": "post",
+      "operationId": "twitter_users_id_muting_post",
+      "x-uuid": null,
+      "description": "Allows a user ID to mute another user.",
+      "summary": "Mute User by User ID."
+    },
+    {
+      "path": "/2/users/{id}/owned_lists",
+      "method": "get",
+      "operationId": "twitter_users_id_owned_lists_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details on user owned Lists specified by the requested ID",
+      "summary": "Get a User's Owned Lists."
+    },
+    {
+      "path": "/2/users/{id}/pinned_lists",
+      "method": "get",
+      "operationId": "twitter_users_id_pinned_lists_get",
+      "x-uuid": null,
+      "description": "This endpoint returns details on a user's pinned Lists specified by the requested ID",
+      "summary": "Get a User's Pinned Lists"
+    },
+    {
+      "path": "/2/users/{id}/pinned_lists",
+      "method": "post",
+      "operationId": "twitter_users_id_pinned_lists_post",
+      "x-uuid": null,
+      "description": "Allows the authenticated user to pin a specified List.",
+      "summary": "Pin a List"
+    },
+    {
+      "path": "/2/users/{id}/pinned_lists/{list_id}",
+      "method": "delete",
+      "operationId": "twitter_list_user_unpin",
+      "x-uuid": null,
+      "description": "Causes a User to remove a pinned List.",
+      "summary": "Unpin a List"
+    },
+    {
+      "path": "/2/users/{id}/retweets",
+      "method": "post",
+      "operationId": "twitter_users_id_retweets_post",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to Retweet a Tweet.",
+      "summary": "Causes the User (in the path) to retweet the specified Tweet."
+    },
+    {
+      "path": "/2/users/{id}/retweets/{source_tweet_id}",
+      "method": "delete",
+      "operationId": "twitter_users_id_retweets_source_tweet_id_delete",
+      "x-uuid": null,
+      "description": "Allows an authenticated user to unlike a Tweet.",
+      "summary": "Causes the User (in the path) to unretweet the specified Tweet"
+    },
+    {
+      "path": "/2/users/{id}/timelines/reverse_chronological",
+      "method": "get",
+      "operationId": "twitter_users_id_timelines_reverse_chronological_get",
+      "x-uuid": null,
+      "description": "Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you or a user you follow. This endpoint can return every Tweet created on a timeline over the last 7 days and the most recent 800 regardless of the creation date.",
+      "summary": "User home timeline by User ID"
+    },
+    {
+      "path": "/2/users/{id}/tweets",
+      "method": "get",
+      "operationId": "twitter_users_id_tweets_get",
+      "x-uuid": null,
+      "description": "Returns the most recent Tweets composed by a single user specified by the requested user ID.",
+      "summary": "User Tweets timeline by User ID"
+    },
+    {
+      "path": "/2/users/{source_user_id}/blocking/{target_user_id}",
+      "method": "delete",
+      "operationId": "twitter_users_source_user_id_blocking_target_user_id_delete",
+      "x-uuid": null,
+      "description": "Allows a user ID to unblock another user.",
+      "summary": "Unblock User by User ID"
+    },
+    {
+      "path": "/2/users/{source_user_id}/following/{target_user_id}",
+      "method": "delete",
+      "operationId": "twitter_users_source_user_id_following_target_user_id_delete",
+      "x-uuid": null,
+      "description": "Allows a user ID to unfollow another user.",
+      "summary": "Unfollow User"
+    },
+    {
+      "path": "/2/users/{source_user_id}/muting/{target_user_id}",
+      "method": "delete",
+      "operationId": "twitter_users_source_user_id_muting_target_user_id_delete",
+      "x-uuid": null,
+      "description": "Allows a user ID to unmute another user.",
+      "summary": "Unmute User by User ID"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+googlemaps
+tweepy
+stripe

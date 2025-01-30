@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "agentsjson-integrations"
+version = "0.1.0"
+description = "Integration modules for Agents.json Python implementation"
+authors = ["Wildcard AI <info@wildcard.ai>"]
+readme = "README.md"
+license = "Apache-2.0"
+packages = [
+    {include = "agentsjson/integrations"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.group.twitter]
+optional = true
+
+[tool.poetry.group.twitter.dependencies]
+tweepy = "^4.0.0"
+
+[tool.poetry.group.giphy]
+optional = true
+
+[tool.poetry.group.giphy.dependencies]
+requests = "^2.0.0"
+
+[tool.poetry.group.stripe]
+optional = true
+
+[tool.poetry.group.stripe.dependencies]
+stripe = "^2.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0.0"
+black = "^23.0.0"
+isort = "^5.0.0"
+mypy = "^1.0.0"
+
+# Define extras for pip installation
+[tool.poetry.extras]
+twitter = ["tweepy"]
+giphy = ["requests"]
+stripe = ["stripe"]
+all = ["tweepy", "requests", "stripe"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api" 

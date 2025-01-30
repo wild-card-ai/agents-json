@@ -1,0 +1,154 @@
+{
+  "info": {
+    "description": "The Giphy API allows you to search, upload, and manage GIFs and stickers. It provides endpoints to access trending content, search for specific GIFs, translate phrases into GIFs, and more.\n",
+    "title": "Giphy API",
+    "summary": null,
+    "x-api-uuid": null
+  },
+  "paths": [
+    {
+      "path": "/gifs/trending",
+      "method": "get",
+      "operationId": "giphy_get_gifs_trending",
+      "x-uuid": null,
+      "description": "Returns a list of the most relevant and engaging GIFs each and every day.",
+      "summary": "Trending GIFs"
+    },
+    {
+      "path": "/stickers/trending",
+      "method": "get",
+      "operationId": "giphy_get_stickers_trending",
+      "x-uuid": null,
+      "description": "Returns a list of the most relevant and engaging stickers each and every day.",
+      "summary": "Trending Stickers"
+    },
+    {
+      "path": "/gifs/search",
+      "method": "get",
+      "operationId": "giphy_get_gifs_search",
+      "x-uuid": null,
+      "description": "GIPHY Search gives you instant access to our library of millions of GIFs by entering a word or phrase.\n",
+      "summary": "Search GIFs"
+    },
+    {
+      "path": "/stickers/search",
+      "method": "get",
+      "operationId": "giphy_get_stickers_search",
+      "x-uuid": null,
+      "description": "GIPHY Search gives you instant access to our library of millions of stickers by entering a word or phrase.\n",
+      "summary": "Search Stickers"
+    },
+    {
+      "path": "/gifs/translate",
+      "method": "get",
+      "operationId": "giphy_get_gifs_translate",
+      "x-uuid": null,
+      "description": "Converts words and phrases to the perfect GIF using GIPHY's special sauce algorithm.",
+      "summary": "Translate to GIF"
+    },
+    {
+      "path": "/stickers/translate",
+      "method": "get",
+      "operationId": "giphy_get_stickers_translate",
+      "x-uuid": null,
+      "description": "Converts words and phrases to the perfect sticker using GIPHY's special sauce algorithm.",
+      "summary": "Translate to Sticker"
+    },
+    {
+      "path": "/gifs/random",
+      "method": "get",
+      "operationId": "giphy_get_gifs_random",
+      "x-uuid": null,
+      "description": "Returns a single random GIF related to the word or phrase entered.",
+      "summary": "Random GIF"
+    },
+    {
+      "path": "/stickers/random",
+      "method": "get",
+      "operationId": "giphy_get_stickers_random",
+      "x-uuid": null,
+      "description": "Returns a single random sticker related to the word or phrase entered.",
+      "summary": "Random Sticker"
+    },
+    {
+      "path": "/randomid",
+      "method": "get",
+      "operationId": "giphy_get_randomid",
+      "x-uuid": null,
+      "description": "Generates a unique ID you can assign to each new user in your app.",
+      "summary": "Get Random ID"
+    },
+    {
+      "path": "/emoji",
+      "method": "get",
+      "operationId": "giphy_get_emoji",
+      "x-uuid": null,
+      "description": "Fetch GIF Objects for the set of GIPHY Emoji.",
+      "summary": "Get Emoji"
+    },
+    {
+      "path": "/emoji/{gif_id}/variations",
+      "method": "get",
+      "operationId": "giphy_get_emoji_variations_by_gif_id",
+      "x-uuid": null,
+      "description": "Fetch the variations associated with a given emoji.",
+      "summary": "Get Emoji Variations"
+    },
+    {
+      "path": "/gifs/{gif_id}",
+      "method": "get",
+      "operationId": "giphy_get_gifs_by_gif_id",
+      "x-uuid": null,
+      "description": "Returns a GIF's metadata based on the GIF ID specified.",
+      "summary": "Get GIF by ID"
+    },
+    {
+      "path": "/gifs",
+      "method": "get",
+      "operationId": "giphy_get_gifs",
+      "x-uuid": null,
+      "description": "Returns metadata of multiple GIFs based on the GIF IDs specified.",
+      "summary": "Get GIFs by IDs"
+    },
+    {
+      "path": "/gifs/categories",
+      "method": "get",
+      "operationId": "giphy_get_gifs_categories",
+      "x-uuid": null,
+      "description": "Provides users a list of GIF categories on the GIPHY network.",
+      "summary": "Get Categories"
+    },
+    {
+      "path": "/gifs/search/tags",
+      "method": "get",
+      "operationId": "giphy_get_gifs_search_tags",
+      "x-uuid": null,
+      "description": "Provides users a list of valid terms that complete the given tag on the GIPHY network.",
+      "summary": "Autocomplete"
+    },
+    {
+      "path": "/channels/search",
+      "method": "get",
+      "operationId": "giphy_get_channels_search",
+      "x-uuid": null,
+      "description": "Returns all the GIPHY channels matching the query term.",
+      "summary": "Channel Search"
+    },
+    {
+      "path": "/tags/related/{term}",
+      "method": "get",
+      "operationId": "giphy_get_tags_related_by_term",
+      "x-uuid": null,
+      "description": "Provides users a list of tag terms related to the given tag on the GIPHY network.",
+      "summary": "Search Suggestions"
+    },
+    {
+      "path": "/trending/searches",
+      "method": "get",
+      "operationId": "giphy_get_trending_searches",
+      "x-uuid": null,
+      "description": "Provides users a list of the most popular trending search terms on the GIPHY network.",
+      "summary": "Trending Search Terms"
+    }
+  ]
+}
