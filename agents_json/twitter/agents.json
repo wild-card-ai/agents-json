@@ -1,1488 +1,833 @@
 {
   "agentsJson": "1.0.0",
   "info": {
-    "title": "Stripe Integration",
+    "title": "Twitter API Agent Flows",
     "version": "1.0.0",
-    "description": "Agentic workflows for interacting with the Stripe API to automate common tasks and operations."
+    "description": "A set of flows illustrating how to chain operations in the Twitter API v2. Each flow references operationIds from the provided Twitter endpoints. Note that authentication (e.g., OAuth or Bearer token) is handled separately, and thus not shown as flow parameters here."
   },
   "sources": [
     {
-      "id": "stripe",
-      "path": "https://raw.githubusercontent.com/kmahorker/tmp/refs/heads/master/stripe_openapi.yaml"
+      "id": "twitter",
+      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/twitter/openapi.yaml"
     }
   ],
-  "overrides": [],
   "flows": [
     {
-      "id": "manage_products_prices",
-      "title": "Manage Products and Prices",
-      "description": "Automates the creation, updating, and retrieval of products and their associated prices.",
+      "id": "dm_conversation_flow",
+      "title": "DM Conversation & Message Flow",
+      "description": "Creates a DM conversation, then sends a DM to a user via conversation or participant ID.",
       "actions": [
         {
-          "id": "create_product",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_products"
+          "id": "create_dm_conversation",
+          "sourceId": "twitter",
+          "operationId": "twitter_dm_conversation_id_create"
         },
         {
-          "id": "create_price",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_prices"
-        },
-        {
-          "id": "list_products",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_products"
-        },
-        {
-          "id": "list_prices",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_prices"
-        },
-        {
-          "id": "update_price",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_prices_price"
-        },
-        {
-          "id": "retrieve_price",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_prices_price"
+          "id": "send_dm_to_user",
+          "sourceId": "twitter",
+          "operationId": "twitter_dm_conversations_with_participant_id_messages_post"
         }
       ],
       "links": [
         {
           "origin": {
-            "actionId": "manage_products_prices",
-            "fieldPath": "parameters.name"
+            "actionId": "dm_conversation_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.firstMessage.properties.text"
           },
           "target": {
-            "actionId": "create_product",
-            "fieldPath": "parameters.name"
+            "actionId": "create_dm_conversation",
+            "fieldPath": "requestBody.text"
           }
         },
         {
           "origin": {
-            "actionId": "manage_products_prices",
-            "fieldPath": "parameters.description"
+            "actionId": "create_dm_conversation",
+            "fieldPath": "responseBody.data.dm_conversation_id"
           },
           "target": {
-            "actionId": "create_product",
-            "fieldPath": "parameters.description"
+            "actionId": "send_dm_to_user",
+            "fieldPath": "parameters.0.value"
           }
         },
         {
           "origin": {
-            "actionId": "create_product",
-            "fieldPath": "responses.success.id"
+            "actionId": "dm_conversation_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.dmToUser.properties.text"
           },
           "target": {
-            "actionId": "create_price",
-            "fieldPath": "parameters.product"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "manage_products_prices",
-            "fieldPath": "parameters.unit_amount"
-          },
-          "target": {
-            "actionId": "create_price",
-            "fieldPath": "parameters.unit_amount"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "manage_products_prices",
-            "fieldPath": "parameters.currency"
-          },
-          "target": {
-            "actionId": "create_price",
-            "fieldPath": "parameters.currency"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "create_price",
-            "fieldPath": "responses.success.id"
-          },
-          "target": {
-            "actionId": "update_price",
-            "fieldPath": "parameters.price_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "name",
-            "type": "string",
-            "description": "Name of the product to be created.",
-            "required": true
-          },
-          {
-            "name": "description",
-            "type": "string",
-            "description": "Optional description of the product.",
-            "required": false
-          },
-          {
-            "name": "unit_amount",
-            "type": "integer",
-            "description": "Price in cents (e.g., 1000 for $10.00).",
-            "required": true
-          },
-          {
-            "name": "currency",
-            "type": "string",
-            "description": "Three-letter ISO currency code in lowercase (e.g., 'usd').",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "product": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "name": { "type": "string" }
-                }
-              },
-              "price": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "currency": { "type": "string" },
-                  "unit_amount": { "type": "integer" }
-                }
-              }
-            }
-          },
-          "example": {
-            "product": {
-              "id": "prod_ABC123",
-              "name": "Test Product"
-            },
-            "price": {
-              "id": "price_DEF456",
-              "currency": "usd",
-              "unit_amount": 1000
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "search_retrieve_customers",
-      "title": "Search and Retrieve Customer Information",
-      "description": "Automates searching for customers and retrieving their detailed information.",
-      "actions": [
-        {
-          "id": "search_customers",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers_search"
-        },
-        {
-          "id": "retrieve_customer_details",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers_customer"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "search_customers",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "retrieve_customer_details",
-            "fieldPath": "parameters.customer_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "search_query",
-            "type": "string",
-            "description": "Query string to search for customers.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "customers": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "string" },
-                    "email": { "type": "string" },
-                    "name": { "type": "string" },
-                    "created": { "type": "integer" }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "customers": [
-              {
-                "id": "cus_J5oXqKbxgZy6Nc",
-                "email": "alice@example.com",
-                "name": "Alice Smith",
-                "created": 1616161616
-              },
-              {
-                "id": "cus_J5oYqKbyhXy7Nd",
-                "email": "bob@example.com",
-                "name": "Bob Johnson",
-                "created": 1616161626
-              }
-            ]
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "process_payments_refunds",
-      "title": "Process Payments and Handle Refunds",
-      "description": "Automates payment processing for customers and manages refunds efficiently.",
-      "actions": [
-        {
-          "id": "create_checkout_session",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_checkout_sessions"
-        },
-        {
-          "id": "issue_refund",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_refunds"
-        },
-        {
-          "id": "retrieve_balance",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_balance"
-        },
-        {
-          "id": "retrieve_charges",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_charges"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "create_checkout_session",
-            "fieldPath": "responses.id"
-          },
-          "target": {
-            "actionId": "retrieve_charges",
-            "fieldPath": "parameters.session_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "checkout_session_details",
-            "type": "object",
-            "description": "Details required to create a checkout session.",
-            "required": true
-          },
-          {
-            "name": "refund_details",
-            "type": "object",
-            "description": "Details required to issue a refund.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "checkout_session": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "amount_total": { "type": "integer" },
-                  "currency": { "type": "string" }
-                }
-              },
-              "refund": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "amount": { "type": "integer" },
-                  "status": { "type": "string" }
-                }
-              },
-              "balance": {
-                "type": "object",
-                "properties": {
-                  "available": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "amount": { "type": "integer" },
-                        "currency": { "type": "string" },
-                        "source_types": {
-                          "type": "object",
-                          "properties": {
-                            "card": { "type": "integer" }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "pending": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "amount": { "type": "integer" },
-                        "currency": { "type": "string" },
-                        "source_types": {
-                          "type": "object",
-                          "properties": {
-                            "card": { "type": "integer" }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "charges": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "string" },
-                    "amount": { "type": "integer" },
-                    "currency": { "type": "string" },
-                    "status": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "checkout_session": {
-              "id": "cs_test_a1b2c3d4e5",
-              "amount_total": 5000,
-              "currency": "usd"
-            },
-            "refund": {
-              "id": "re_1A2B3C4D5E6F",
-              "amount": 5000,
-              "status": "succeeded"
-            },
-            "balance": {
-              "available": [
-                {
-                  "amount": 10000,
-                  "currency": "usd",
-                  "source_types": {
-                    "card": 10000
-                  }
-                }
-              ],
-              "pending": []
-            },
-            "charges": [
-              {
-                "id": "ch_1A2B3C4D5E6F",
-                "amount": 5000,
-                "currency": "usd",
-                "status": "succeeded"
-              }
-            ]
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "create_product_price",
-      "title": "Create Product with Price",
-      "description": "Creates a new product and associates a price with it in Stripe.",
-      "actions": [
-        {
-          "id": "create_product",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_products"
-        },
-        {
-          "id": "create_price",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_prices"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "create_product_price",
-            "fieldPath": "parameters.name"
-          },
-          "target": {
-            "actionId": "create_product",
-            "fieldPath": "parameters.name"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "create_product_price",
-            "fieldPath": "parameters.description"
-          },
-          "target": {
-            "actionId": "create_product",
-            "fieldPath": "parameters.description"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "create_product",
-            "fieldPath": "responses.success.id"
-          },
-          "target": {
-            "actionId": "create_price",
-            "fieldPath": "parameters.product"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "create_product_price",
-            "fieldPath": "parameters.unit_amount"
-          },
-          "target": {
-            "actionId": "create_price",
-            "fieldPath": "parameters.unit_amount"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "create_product_price",
-            "fieldPath": "parameters.currency"
-          },
-          "target": {
-            "actionId": "create_price",
-            "fieldPath": "parameters.currency"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "name",
-            "type": "string",
-            "description": "Name of the product to be created",
-            "required": true
-          },
-          {
-            "name": "description",
-            "type": "string",
-            "description": "Description of the product",
-            "required": false
-          },
-          {
-            "name": "unit_amount",
-            "type": "integer",
-            "description": "Price amount in cents (e.g., 2000 for $20.00)",
-            "required": true
-          },
-          {
-            "name": "currency",
-            "type": "string",
-            "description": "Three-letter currency code (e.g., 'usd')",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "product": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "name": { "type": "string" }
-                }
-              },
-              "price": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "unit_amount": { "type": "integer" },
-                  "currency": { "type": "string" }
-                }
-              }
-            }
-          },
-          "example": {
-            "product": {
-              "id": "prod_ABC123",
-              "name": "Sample Product"
-            },
-            "price": {
-              "id": "price_XYZ789",
-              "unit_amount": 2000,
-              "currency": "usd"
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "create_subscription_customer",
-      "title": "Create Subscription for Customer",
-      "description": "Automates the creation of subscriptions for customers, enabling recurring billing for products or services.",
-      "actions": [
-        {
-          "id": "create_customer",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_customers"
-        },
-        {
-          "id": "create_subscription",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_subscriptions"
-        },
-        {
-          "id": "list_subscriptions",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_subscriptions"
-        },
-        {
-          "id": "retrieve_customer_details",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers_customer"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "create_customer",
-            "fieldPath": "responses.id"
-          },
-          "target": {
-            "actionId": "create_subscription",
-            "fieldPath": "parameters.customer"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "customer_details",
-            "type": "object",
-            "description": "Details required to create a new customer.",
-            "required": true
-          },
-          {
-            "name": "subscription_plan",
-            "type": "string",
-            "description": "The plan to subscribe the customer to.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "customer": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "email": { "type": "string" },
-                  "name": { "type": "string" },
-                  "created": { "type": "integer" }
-                }
-              },
-              "subscription": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "status": { "type": "string" },
-                  "plan": {
-                    "type": "object",
-                    "properties": {
-                      "id": { "type": "string" },
-                      "amount": { "type": "integer" },
-                      "currency": { "type": "string" }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "customer": {
-              "id": "cus_J5oXqKbxgZy6Nc",
-              "email": "customer@example.com",
-              "name": "John Doe",
-              "created": 1616161616
-            },
-            "subscription": {
-              "id": "sub_1A2B3C4D5E6F",
-              "status": "active",
-              "plan": {
-                "id": "plan_GHI789",
-                "amount": 1000,
-                "currency": "usd"
-              }
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "cancel_subscription",
-      "title": "Cancel Subscription",
-      "description": "Automates the cancellation of customer subscriptions, managing recurring billing and service access.",
-      "actions": [
-        {
-          "id": "cancel_subscription",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_subscriptions_cancel"
-        },
-        {
-          "id": "list_subscriptions",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_subscriptions"
-        },
-        {
-          "id": "retrieve_customer_details",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers_customer"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "cancel_subscription",
-            "fieldPath": "responses.id"
-          },
-          "target": {
-            "actionId": "list_subscriptions",
-            "fieldPath": "parameters.subscription_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "subscription_id",
-            "type": "string",
-            "description": "ID of the subscription to be canceled.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "subscription": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "status": { "type": "string" },
-                  "canceled_at": { "type": "integer" }
-                }
-              }
-            }
-          },
-          "example": {
-            "subscription": {
-              "id": "sub_1A2B3C4D5E6F",
-              "status": "canceled",
-              "canceled_at": 1616161617
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "bulk_refund_product_customers",
-      "title": "Bulk Refund to All Customers of a Product",
-      "description": "Automates issuing refunds to all customers who have purchased a specific product.",
-      "actions": [
-        {
-          "id": "list_customers",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers"
-        },
-        {
-          "id": "retrieve_product_charges",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_charges"
-        },
-        {
-          "id": "issue_refund",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_refunds"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "list_customers",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "retrieve_product_charges",
-            "fieldPath": "parameters.customer_id"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "retrieve_product_charges",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "issue_refund",
-            "fieldPath": "parameters.charge_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "product_id",
-            "type": "string",
-            "description": "ID of the product for which refunds are to be issued.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "refunds": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "string" },
-                    "charge": { "type": "string" },
-                    "amount": { "type": "integer" },
-                    "status": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "refunds": [
-              {
-                "id": "re_1A2B3C4D5E6F",
-                "charge": "ch_1A2B3C4D5E6F",
-                "amount": 1000,
-                "status": "succeeded"
-              },
-              {
-                "id": "re_1A2B3C4D5E6G",
-                "charge": "ch_1A2B3C4D5E6G",
-                "amount": 1500,
-                "status": "succeeded"
-              }
-            ]
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "update_product_descriptions",
-      "title": "Update Product Descriptions",
-      "description": "Automates updating product descriptions based on product names.",
-      "actions": [
-        {
-          "id": "list_products",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_products"
-        },
-        {
-          "id": "update_product_description",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_products_id"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "list_products",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "update_product_description",
-            "fieldPath": "parameters.product_id"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "list_products",
-            "fieldPath": "response.data.name"
-          },
-          "target": {
-            "actionId": "update_product_description",
-            "fieldPath": "parameters.description_template"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "product_id",
-            "type": "string",
-            "description": "ID of the product to update.",
-            "required": true
-          },
-          {
-            "name": "description_template",
-            "type": "string",
-            "description": "Template or logic for generating product descriptions from product names.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "product": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "name": { "type": "string" },
-                  "description": { "type": "string" }
-                }
-              }
-            }
-          },
-          "example": {
-            "product": {
-              "id": "prod_ABC123",
-              "name": "Test Product",
-              "description": "Premium subscription with unlimited access."
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "retrieve_account_balance",
-      "title": "Retrieve Account Balance",
-      "description": "Automates fetching and displaying the current account balance, including available and pending funds.",
-      "actions": [
-        {
-          "id": "get_balance",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_balance"
-        },
-        {
-          "id": "display_balance",
-          "sourceId": "display_api",
-          "operationId": "display_balance_function"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "get_balance",
-            "fieldPath": "response"
-          },
-          "target": {
-            "actionId": "display_balance",
-            "fieldPath": "parameters.balance_data"
+            "actionId": "send_dm_to_user",
+            "fieldPath": "requestBody.text"
           }
         }
       ],
       "fields": {
         "parameters": [],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "available": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "amount": { "type": "integer" },
-                    "currency": { "type": "string" },
-                    "source_types": {
-                      "type": "object",
-                      "properties": {
-                        "card": { "type": "integer" }
-                      }
-                    }
-                  }
-                }
-              },
-              "pending": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "amount": { "type": "integer" },
-                    "currency": { "type": "string" },
-                    "source_types": {
-                      "type": "object",
-                      "properties": {
-                        "card": { "type": "integer" }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "available": [
-              {
-                "amount": 100000,
-                "currency": "usd",
-                "source_types": {
-                  "card": 100000
-                }
-              }
-            ],
-            "pending": []
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "update_customer_payment_methods",
-      "title": "Update Customer Payment Methods",
-      "description": "Automates updating a customer's payment methods to ensure billing information is current.",
-      "actions": [
-        {
-          "id": "retrieve_customer",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers_customer"
-        },
-        {
-          "id": "update_payment_method",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_payment_methods"
-        },
-        {
-          "id": "confirm_update",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_customers_customer"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "retrieve_customer",
-            "fieldPath": "responses.id"
-          },
-          "target": {
-            "actionId": "update_payment_method",
-            "fieldPath": "parameters.customer_id"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "update_payment_method",
-            "fieldPath": "responses.id"
-          },
-          "target": {
-            "actionId": "confirm_update",
-            "fieldPath": "parameters.payment_method_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "customer_id",
-            "type": "string",
-            "description": "ID of the customer whose payment method is to be updated.",
-            "required": true
-          },
-          {
-            "name": "payment_method_details",
-            "type": "object",
-            "description": "Details of the new payment method.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "customer": {
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
                 "type": "object",
+                "description": "Structure for DM text in the conversation creation and the subsequent message.",
                 "properties": {
-                  "id": { "type": "string" },
-                  "payment_methods": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "id": { "type": "string" },
-                        "type": { "type": "string" },
-                        "details": {
-                          "type": "object",
-                          "properties": {
-                            "brand": { "type": "string" },
-                            "last4": { "type": "string" },
-                            "exp_month": { "type": "integer" },
-                            "exp_year": { "type": "integer" }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "customer": {
-              "id": "cus_J5oXqKbxgZy6Nc",
-              "payment_methods": [
-                {
-                  "id": "pm_1A2B3C4D5E6F",
-                  "type": "card",
-                  "details": {
-                    "brand": "Visa",
-                    "last4": "4242",
-                    "exp_month": 12,
-                    "exp_year": 2024
-                  }
-                }
-              ]
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "create_manage_refunds",
-      "title": "Create and Manage Refunds",
-      "description": "Automates issuing refunds for transactions, ensuring timely and accurate handling.",
-      "actions": [
-        {
-          "id": "retrieve_charge",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_charges"
-        },
-        {
-          "id": "issue_refund",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_refunds"
-        },
-        {
-          "id": "list_refunds",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_refunds"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "retrieve_charge",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "issue_refund",
-            "fieldPath": "parameters.charge_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "charge_id",
-            "type": "string",
-            "description": "ID of the charge to refund.",
-            "required": true
-          },
-          {
-            "name": "refund_amount",
-            "type": "integer",
-            "description": "Amount to refund in cents.",
-            "required": false
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "refund": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "amount": { "type": "integer" },
-                  "status": { "type": "string" }
-                }
-              }
-            }
-          },
-          "example": {
-            "refund": {
-              "id": "re_1A2B3C4D5E6F",
-              "amount": 1000,
-              "status": "succeeded"
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "create_manage_checkout_sessions",
-      "title": "Create and Manage Checkout Sessions",
-      "description": "Automates the creation and management of Checkout Sessions for seamless payment processes.",
-      "actions": [
-        {
-          "id": "create_checkout_session",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_checkout_sessions"
-        },
-        {
-          "id": "list_checkout_sessions",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_checkout_sessions"
-        },
-        {
-          "id": "update_checkout_session",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_checkout_sessions_id"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "create_checkout_session",
-            "fieldPath": "responses.id"
-          },
-          "target": {
-            "actionId": "update_checkout_session",
-            "fieldPath": "parameters.session_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "session_details",
-            "type": "object",
-            "description": "Details for creating a new checkout session.",
-            "required": true
-          },
-          {
-            "name": "session_update_details",
-            "type": "object",
-            "description": "Details for updating an existing checkout session.",
-            "required": false
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "checkout_session": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "url": { "type": "string" },
-                  "status": { "type": "string" }
-                }
-              }
-            }
-          },
-          "example": {
-            "checkout_session": {
-              "id": "cs_test_a1b2c3d4e5",
-              "url": "https://checkout.stripe.com/pay/cs_test_a1b2c3d4e5",
-              "status": "open"
-            }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "retrieve_update_subscriptions",
-      "title": "Retrieve and Update Customer Subscriptions",
-      "description": "Automates retrieving and updating customer subscriptions for efficient management.",
-      "actions": [
-        {
-          "id": "list_subscriptions",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_subscriptions"
-        },
-        {
-          "id": "update_subscription",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_subscriptions_update"
-        },
-        {
-          "id": "confirm_subscription_update",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_subscriptions"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "list_subscriptions",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "update_subscription",
-            "fieldPath": "parameters.subscription_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "customer_id",
-            "type": "string",
-            "description": "ID of the customer whose subscriptions are to be retrieved and updated.",
-            "required": true
-          },
-          {
-            "name": "subscription_update_details",
-            "type": "object",
-            "description": "Details for updating the subscription.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "subscriptions": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "string" },
-                    "status": { "type": "string" },
-                    "current_period_end": { "type": "integer" }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "subscriptions": [
-              {
-                "id": "sub_1A2B3C4D5E6F",
-                "status": "active",
-                "current_period_end": 1616161626
-              }
-            ]
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "manage_billing_portal_sessions",
-      "title": "Create and Manage Billing Portal Sessions",
-      "description": "Automates creating billing portal sessions and managing portal configurations.",
-      "actions": [
-        {
-          "id": "create_billing_portal_session",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_billing_portal_sessions"
-        },
-        {
-          "id": "configure_billing_portal",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_billing_portal_configurations"
-        },
-        {
-          "id": "retrieve_configurations",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_billing_portal_configurations"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "create_billing_portal_session",
-            "fieldPath": "responses.id"
-          },
-          "target": {
-            "actionId": "configure_billing_portal",
-            "fieldPath": "parameters.session_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "session_details",
-            "type": "object",
-            "description": "Details required to create a billing portal session.",
-            "required": true
-          },
-          {
-            "name": "configuration_details",
-            "type": "object",
-            "description": "Details required to create a billing portal configuration.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "billing_portal_session": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "url": { "type": "string" }
-                }
-              },
-              "billing_portal_configuration": {
-                "type": "object",
-                "properties": {
-                  "id": { "type": "string" },
-                  "features": {
+                  "firstMessage": {
                     "type": "object",
                     "properties": {
-                      "customer_update": {
-                        "type": "object",
-                        "properties": {
-                          "enabled": { "type": "boolean" }
-                        }
+                      "text": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "dmToUser": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string"
                       }
                     }
                   }
                 }
-              }
-            }
-          },
-          "example": {
-            "billing_portal_session": {
-              "id": "bps_test_a1b2c3d4e5",
-              "url": "https://billing.stripe.com/session_test_a1b2c3d4e5"
-            },
-            "billing_portal_configuration": {
-              "id": "bpc_TEST123",
-              "features": {
-                "customer_update": {
-                  "enabled": true
+              },
+              "example": {
+                "firstMessage": {
+                  "text": "Hello, I'd like to start a DM conversation!"
+                },
+                "dmToUser": {
+                  "text": "Hi again—this is my second message."
                 }
               }
             }
           }
+        },
+        "responses": {
+          "success": {
+            "description": "DM conversation created and message sent successfully."
+          }
         }
-      },
-      "additionalProperties": false
+      }
     },
     {
-      "id": "bulk_refund_product_customers",
-      "title": "Bulk Refund to All Customers of a Product",
-      "description": "Automates issuing refunds to all customers who have purchased a specific product.",
+      "id": "compliance_job_flow",
+      "title": "Batch Compliance Job Flow",
+      "description": "Creates a compliance job and shows how to list and retrieve details of compliance jobs.",
       "actions": [
         {
-          "id": "list_customers",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers"
+          "id": "create_compliance_job",
+          "sourceId": "twitter",
+          "operationId": "twitter_compliance_jobs_post"
         },
         {
-          "id": "retrieve_product_charges",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_charges"
+          "id": "list_compliance_jobs",
+          "sourceId": "twitter",
+          "operationId": "twitter_compliance_jobs_get"
         },
         {
-          "id": "issue_refund",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_refunds"
+          "id": "get_compliance_job_by_id",
+          "sourceId": "twitter",
+          "operationId": "twitter_compliance_jobs_id_get"
         }
       ],
       "links": [
         {
           "origin": {
-            "actionId": "list_customers",
-            "fieldPath": "response.data.id"
+            "actionId": "compliance_job_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.createJob.properties.type"
           },
           "target": {
-            "actionId": "retrieve_product_charges",
-            "fieldPath": "parameters.customer_id"
+            "actionId": "create_compliance_job",
+            "fieldPath": "requestBody.type"
           }
         },
         {
           "origin": {
-            "actionId": "retrieve_product_charges",
-            "fieldPath": "response.data.id"
+            "actionId": "compliance_job_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.createJob.properties.name"
           },
           "target": {
-            "actionId": "issue_refund",
-            "fieldPath": "parameters.charge_id"
+            "actionId": "create_compliance_job",
+            "fieldPath": "requestBody.name"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_compliance_job",
+            "fieldPath": "responseBody.data.id"
+          },
+          "target": {
+            "actionId": "get_compliance_job_by_id",
+            "fieldPath": "parameters.0.value"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data needed to create a new compliance job.",
+                "properties": {
+                  "createJob": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "createJob": {
+                  "type": "tweets",
+                  "name": "My batch job"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "success": {
+            "description": "Compliance job created, listed, and retrieved successfully."
+          }
+        }
+      }
+    },
+    {
+      "id": "lists_management_flow",
+      "title": "List Management Chain",
+      "description": "Creates a List, adds a user to it, and optionally removes them.",
+      "actions": [
+        {
+          "id": "create_list",
+          "sourceId": "twitter",
+          "operationId": "twitter_lists_post"
+        },
+        {
+          "id": "add_member_to_list",
+          "sourceId": "twitter",
+          "operationId": "twitter_lists_id_members_post"
+        },
+        {
+          "id": "remove_member_from_list",
+          "sourceId": "twitter",
+          "operationId": "twitter_lists_id_members_user_id_delete"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "lists_management_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.newList.properties.name"
+          },
+          "target": {
+            "actionId": "create_list",
+            "fieldPath": "requestBody.name"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_list",
+            "fieldPath": "responseBody.data.id"
+          },
+          "target": {
+            "actionId": "add_member_to_list",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "lists_management_flow",
+            "fieldPath": "parameters.user_id"
+          },
+          "target": {
+            "actionId": "add_member_to_list",
+            "fieldPath": "requestBody.user_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_list",
+            "fieldPath": "responseBody.data.id"
+          },
+          "target": {
+            "actionId": "remove_member_from_list",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "lists_management_flow",
+            "fieldPath": "parameters.user_id"
+          },
+          "target": {
+            "actionId": "remove_member_from_list",
+            "fieldPath": "parameters.1.value"
           }
         }
       ],
       "fields": {
         "parameters": [
           {
-            "name": "product_id",
+            "name": "user_id",
             "type": "string",
-            "description": "ID of the product for which refunds are to be issued.",
-            "required": true
+            "description": "ID of the user to add or remove from the list."
           }
         ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "refunds": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "string" },
-                    "charge": { "type": "string" },
-                    "amount": { "type": "integer" },
-                    "status": { "type": "string" }
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data needed to create a new list and add or remove users.",
+                "properties": {
+                  "newList": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
                   }
+                }
+              },
+              "example": {
+                "newList": {
+                  "name": "Awesome Devs"
                 }
               }
             }
-          },
-          "example": {
-            "refunds": [
-              {
-                "id": "re_1A2B3C4D5E6F",
-                "charge": "ch_1A2B3C4D5E6F",
-                "amount": 1000,
-                "status": "succeeded"
-              },
-              {
-                "id": "re_1A2B3C4D5E6G",
-                "charge": "ch_1A2B3C4D5E6G",
-                "amount": 1500,
-                "status": "succeeded"
-              }
-            ]
+          }
+        },
+        "responses": {
+          "success": {
+            "description": "List created, user added, and/or user removed successfully."
           }
         }
-      },
-      "additionalProperties": false
+      }
+    },
+    {
+      "id": "advanced_lists_flow",
+      "title": "Advanced Lists Flow (Follow, Pin, Unpin)",
+      "description": "Allows the authenticated user to follow a list, pin it, and later unpin it.",
+      "actions": [
+        {
+          "id": "follow_list",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_id_followed_lists_post"
+        },
+        {
+          "id": "pin_list",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_id_pinned_lists_post"
+        },
+        {
+          "id": "unpin_list",
+          "sourceId": "twitter",
+          "operationId": "twitter_list_user_unpin"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": null,
+            "fieldPath": "parameters.authenticated_user_id"
+          },
+          "target": {
+            "actionId": "follow_list",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": null,
+            "fieldPath": "parameters.list_id"
+          },
+          "target": {
+            "actionId": "follow_list",
+            "fieldPath": "requestBody.list_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": null,
+            "fieldPath": "parameters.authenticated_user_id"
+          },
+          "target": {
+            "actionId": "pin_list",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": null,
+            "fieldPath": "parameters.list_id"
+          },
+          "target": {
+            "actionId": "pin_list",
+            "fieldPath": "requestBody.list_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": null,
+            "fieldPath": "parameters.authenticated_user_id"
+          },
+          "target": {
+            "actionId": "unpin_list",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": null,
+            "fieldPath": "parameters.list_id"
+          },
+          "target": {
+            "actionId": "unpin_list",
+            "fieldPath": "parameters.1.value"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "authenticated_user_id",
+            "type": "string",
+            "description": "ID of the user performing the follow/pin actions."
+          },
+          {
+            "name": "list_id",
+            "type": "string",
+            "description": "ID of the list to follow/pin/unpin."
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Body required by follow/pin endpoints (often just a list_id).",
+                "properties": {
+                  "list_id": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "list_id": "123456789"
+              }
+            }
+          }
+        },
+        "responses": {
+          "success": {
+            "description": "List followed, pinned, and unpinned successfully."
+          }
+        }
+      }
+    },
+    {
+      "id": "user_relationship_flow",
+      "title": "User Relationship Flow",
+      "description": "Demonstrates how to follow, unfollow, block, unblock, mute, and unmute a user. Typically, you supply 'source_user_id' (your ID) and 'target_user_id'.",
+      "actions": [
+        {
+          "id": "follow_user",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_id_following_post"
+        },
+        {
+          "id": "unfollow_user",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_source_user_id_following_target_user_id_delete"
+        },
+        {
+          "id": "block_user",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_id_blocking_post"
+        },
+        {
+          "id": "unblock_user",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_source_user_id_blocking_target_user_id_delete"
+        },
+        {
+          "id": "mute_user",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_id_muting_post"
+        },
+        {
+          "id": "unmute_user",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_source_user_id_muting_target_user_id_delete"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "follow_user",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.follow.properties.target_user_id"
+          },
+          "target": {
+            "actionId": "follow_user",
+            "fieldPath": "requestBody.target_user_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "unfollow_user",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.target_user_id"
+          },
+          "target": {
+            "actionId": "unfollow_user",
+            "fieldPath": "parameters.1.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "block_user",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.block.properties.target_user_id"
+          },
+          "target": {
+            "actionId": "block_user",
+            "fieldPath": "requestBody.target_user_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "unblock_user",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.target_user_id"
+          },
+          "target": {
+            "actionId": "unblock_user",
+            "fieldPath": "parameters.1.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "mute_user",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.mute.properties.target_user_id"
+          },
+          "target": {
+            "actionId": "mute_user",
+            "fieldPath": "requestBody.target_user_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "unmute_user",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "user_relationship_flow",
+            "fieldPath": "parameters.target_user_id"
+          },
+          "target": {
+            "actionId": "unmute_user",
+            "fieldPath": "parameters.1.value"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "my_user_id",
+            "type": "string",
+            "description": "The ID of the authenticated user performing these actions."
+          },
+          {
+            "name": "target_user_id",
+            "type": "string",
+            "description": "The ID of the user you want to follow, block, etc."
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Example bodies for follow/mute/block endpoints.",
+                "properties": {
+                  "follow": {
+                    "type": "object",
+                    "properties": {
+                      "target_user_id": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "block": {
+                    "type": "object",
+                    "properties": {
+                      "target_user_id": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "mute": {
+                    "type": "object",
+                    "properties": {
+                      "target_user_id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "follow": {
+                  "target_user_id": "12345"
+                },
+                "block": {
+                  "target_user_id": "67890"
+                },
+                "mute": {
+                  "target_user_id": "11111"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "success": {
+            "description": "Successfully followed, unfollowed, blocked, unblocked, muted, or unmuted the user."
+          }
+        }
+      }
+    },
+    {
+      "id": "tweet_engagement_flow",
+      "title": "Tweet Engagement Flow",
+      "description": "Illustration of liking a Tweet and retweeting it. Often requires your user_id plus the tweet_id you plan to engage with.",
+      "actions": [
+        {
+          "id": "like_tweet",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_id_likes_post"
+        },
+        {
+          "id": "retweet_tweet",
+          "sourceId": "twitter",
+          "operationId": "twitter_users_id_retweets_post"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "tweet_engagement_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "like_tweet",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "tweet_engagement_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.likeTweet.properties.tweet_id"
+          },
+          "target": {
+            "actionId": "like_tweet",
+            "fieldPath": "requestBody.tweet_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "tweet_engagement_flow",
+            "fieldPath": "parameters.my_user_id"
+          },
+          "target": {
+            "actionId": "retweet_tweet",
+            "fieldPath": "parameters.0.value"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "tweet_engagement_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.retweet.properties.tweet_id"
+          },
+          "target": {
+            "actionId": "retweet_tweet",
+            "fieldPath": "requestBody.tweet_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "my_user_id",
+            "type": "string",
+            "description": "ID of the user liking or retweeting the Tweet."
+          }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Request bodies for like/retweet endpoints, needing the target tweet_id.",
+                "properties": {
+                  "likeTweet": {
+                    "type": "object",
+                    "properties": {
+                      "tweet_id": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "retweet": {
+                    "type": "object",
+                    "properties": {
+                      "tweet_id": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "likeTweet": {
+                  "tweet_id": "9876543210"
+                },
+                "retweet": {
+                  "tweet_id": "9876543210"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "success": {
+            "description": "Tweet was liked and/or retweeted successfully."
+          }
+        }
+      }
+    },
+    {
+      "id": "tweet_creation_flow",
+      "title": "Tweet Creation Flow",
+      "description": "Creates (posts) a new Tweet for the authenticated user.",
+      "actions": [
+        {
+          "id": "create_tweet",
+          "sourceId": "twitter",
+          "operationId": "twitter_tweets_post"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "tweet_creation_flow",
+            "fieldPath": "requestBody.tweetContent.text"
+          },
+          "target": {
+            "actionId": "create_tweet",
+            "fieldPath": "requestBody.text"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Body data needed to create a tweet, such as 'text'.",
+                "properties": {
+                  "tweetContent": {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "tweetContent": {
+                  "text": "Hello world from my brand-new Tweet!"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "success": {
+            "description": "New Tweet created successfully (Tweet object returned)."
+          }
+        }
+      }
     }
   ],
-  "additionalProperties": false
+  "additionalProperties": true
 }
