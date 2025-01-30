@@ -138,15 +138,15 @@ To solve this, we introduce flows and links. Flows are contracts with a series o
 
 We propose the file placed in `/.well-known/agents.json` so it is easily discoverable by agents accessing web services. For now, we compose a GitHub repository as a registry for available `agents.json` files.
 
-### The agents.json Bridge
+### Wildcard Bridge
 
-The agents.json Bridge enables LLMs to load, parse, and run agents.json. Here's how it works:
+Wildcard Bridge enables LLMs to load, parse, and run agents.json. Here's how it works:
 
 1. A developer connects their agent with an agents.json file.
 2. The relevant chain(s) are chosen by the agent and arguments populated for a given task.
-3. The Bridge runs the chain(s).
+3. Bridge runs the chain(s).
 
-The goal experience is a developer adds an agents.json file in their workflow and the correct set of actions for an integration is executed. The Bridge supports adding Basic, ApiKey, and Bearer authentication to requests.
+The goal experience is a developer adds an agents.json file in their workflow and the correct set of actions for an integration is executed. Bridge supports adding Basic, ApiKey, and Bearer authentication to requests.
 
 ### Design Tenets
 
