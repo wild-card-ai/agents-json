@@ -10,7 +10,7 @@
 
 ## Table of Contents
 - [Python Quickstart](#python-quickstart)
-- [Specification](#specification)
+- [Specification](#agentsjson-specification)
 - [Feature Roadmap](#feature-roadmap)
 - [Licenses](#licenses)
 - [Contributions](#contributions)
