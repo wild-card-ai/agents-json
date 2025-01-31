@@ -3,7 +3,7 @@
   <img alt="Shows a white agents.json Logo with a black background." src="./static/agentsjson-white-blackbackground.png" width="full">
 </picture>
 
-<!-- [![GitHub stars](https://img.shields.io/github/stars/wild-card-ai/agents-json?style=social)](https://github.com/wild-card-ai/agents-json/stargazers) -->
+[![GitHub stars](https://img.shields.io/github/stars/wild-card-ai/agents-json?style=social)](https://github.com/wild-card-ai/agents-json/stargazers)
 [![Discord](https://img.shields.io/discord/1334616501436682405?style=flat&logo=discord&logoColor=white&label=discord&color=7289DA&link=https%3A%2F%2Fdiscord.gg%2F7AP6wSkVtQ)](https://discord.gg/7AP6wSkVtQ)
 [![Documentation](https://img.shields.io/badge/Documentation-📕-blue)](https://docs.wild-card.ai/agents-json)
 [![Twitter Follow](https://img.shields.io/twitter/follow/wildcard_ai?style=social)](https://x.com/wildcard_ai)
@@ -120,13 +120,11 @@ APIs are designed for developers and not LLMs. If you're building integrations f
 
 For example, the Gmail API has endpoints to search for threads, list the emails in a thread, and reply with an email given base64 RFC 822 content. Instead, LLMs need a clear, top-level directive that can handle all of this with one tool.
 
-**Why is `agents.json` built on OpenAPI?** — OpenAPI is the gold standard for describing how API endpoints work and can be executed. Most API providers have OpenAPI specs or have APIs that can be described fully by OpenAPI. These specs alone aren't sufficient for the age of AI agents, but provide great groundwork for API↔agent communication.
+**Why is `agents.json` built on OpenAPI?** — OpenAPI is the gold standard for describing how API endpoints work and can be executed. Most API providers have OpenAPI specs or have APIs that can be described fully by OpenAPI. These specs alone aren't sufficient for the age of AI agents, but provide great groundwork for API agent communication.
 
-Agents need multiple context-specific API calls to complete their tasks. This is because APIs are resource-based, modifying objects, whereas agents are action-based, delivering outcomes. However, APIs alone lack enough information to deliver cohesive outcomes.
+So we implemented `agents.json`. We built this for us and we're excited to share it with you.
 
-So we implemented `agents.json`, a schema to prescribe a set of API actions to an agent with the tools to make APIs work for LLMs. We built this for us and we're excited to share it with you.
-
-### The agents.json File
+### The `agents.json` File
 
 `agents.json` is a JSON schema of structured contracts designed for AI agents. API providers use their existing OpenAPI spec to construct this file and agents inspect this file to run accurate series of API calls. 
 
@@ -136,7 +134,7 @@ Describing endpoints/data models without describing ***how*** they interact toge
 
 To solve this, we introduce flows and links. Flows are contracts with a series of 1 or more API calls that describe an outcome. Links describe how two actions are stitched together.
 
-We propose the file placed in `/.well-known/agents.json` so it is easily discoverable by agents accessing web services. For now, we compose a GitHub repository as a registry for available `agents.json` files.
+We propose the file placed in `/.well-known/agents.json` so it is easily discoverable by agents accessing web services. For now, we compose a GitHub repository as a registry for [available `agents.json` files](./agents_json/).
 
 ### Wildcard Bridge
 
@@ -153,16 +151,13 @@ The goal experience is a developer adds an agents.json file in their workflow an
 1. **Build on top of the OpenAPI standard** <br>
    Leverage existing standards and infrastructure where possible.
 
-2. **Prioritize open source** <br>
-   Maintain trust, observability, and customizability.
-
-3. **Optimize schema for LLMs, not humans** <br>
+2. **Optimize schema for LLMs, not humans** <br>
    Design with AI consumption in mind.
 
-4. **Enforce Statelessness** <br>
+3. **Enforce Statelessness** <br>
    Orchestration is handled by the calling agent.
 
-5. **Require minimal changes to existing APIs** <br>
+4. **Require minimal changes to existing APIs** <br>
    Make adoption as seamless as possible.
 
 ### Why Now?
@@ -218,7 +213,7 @@ The agents.json Bridge is source-available, licensed under the [BUSL-1.1 License
 
 ## Contributions
 
-The agents.json specification needs community input. This GitHub repository hosts an informal overview, allowing for version control and public discussion. A community discord channel is available for sharing implementation experiences and discussing best practices. This is an evolving project and can't be done without your feedback.
+The agents.json specification needs community input. This GitHub repository will host informal reviews, allowing for version control and public discussion. To discuss, [join the Discord community](https://discord.gg/7AP6wSkVtQ). This is an evolving project and can't be done without your feedback.
 
 
 ## Team
