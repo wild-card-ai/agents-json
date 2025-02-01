@@ -1,0 +1,255 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "This schema uses key words such as \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", and \"OPTIONAL\" as defined in [RFC 2119](https://tools.ietf.org/html/rfc2119) and [RFC 8174](https://tools.ietf.org/html/rfc8174) to indicate requirement levels.",
+    "type": "object",
+    "required": ["agentsJson", "info", "sources", "flows"],
+    "properties": {
+        "agentsJson": {
+            "type": "string",
+            "description": "MUST specify the version of the `agents.json` specification being used. Adheres to Semantic Versioning (SemVer) as outlined at [https://semver.org/](https://semver.org/)."
+        },
+        "info": {
+            "type": "object",
+            "required": ["title", "version", "description"],
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "MUST provide the title of the `agents.json` specification. This title serves as a human-readable name for the specification."
+                },
+                "version": {
+                    "type": "string",
+                    "description": "MUST follow the Semantic Versioning (SemVer) format as defined in [https://semver.org/](https://semver.org/). This version identifier ensures strict version control and compatibility management."
+                },
+                "description": {
+                    "type": "string",
+                    "description": "MUST include a comprehensive description of the `agents.json` specification. This description should outline its purpose, functionality, and key features, facilitating understanding and implementation by users and Large Language Models (LLMs)."
+                }
+            },
+            "additionalProperties": true
+        },
+        "sources": {
+            "type": "array",
+            "description": "MUST include an array of API sources available for use within flows. Each source references an OpenAPI 3+ specification, enabling the chaining of multiple APIs.",
+            "items": {
+                "type": "object",
+                "required": ["id", "path"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "MUST provide a unique, human-readable identifier for the API source. Identifiers MUST be in snake_case format and globally unique within the `agents.json` context, ensuring clear reference and invocation. **Example**: `user_service`"
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "MUST specify the file path or URL to the OpenAPI 3+ specification of the API source. The path SHOULD follow a structured format using dot notation and array indices where necessary (e.g., `components.schemas.User`)."
+                    }
+                },
+                "additionalProperties": true
+            }
+        },
+        "overrides": {
+            "type": "array",
+            "description": "OPTIONAL. An array of overrides that allow customization of specific API operations. Overrides can modify fields within operations based on the specified `fieldPath`, enabling tailored behavior without altering the original API definitions.",
+            "items": {
+                "type": "object",
+                "required": ["sourceId", "operationId", "fieldPath", "value"],
+                "properties": {
+                    "sourceId": {
+                        "type": "string",
+                        "description": "MUST correspond to an `id` in the `sources` array. This ensures the override targets a valid API source."
+                    },
+                    "operationId": {
+                        "type": "string",
+                        "description": "MUST match an `operationId` in the referenced OpenAPI specification. This ensures accurate targeting of the operation to be overridden."
+                    },
+                    "fieldPath": {
+                        "type": "string",
+                        "description": "MUST be a JSON path expression that specifies the exact field within the operation to modify. The path SHOULD traverse the OpenAPI operation hierarchy using dot notation and array indices (e.g., `parameters.0.required`), treating the OpenAPI operation as the root."
+                    },
+                    "value": {
+                        "oneOf": [
+                            { "type": "string" },
+                            { "type": "object" },
+                            { "type": "array" },
+                            { "type": "boolean" },
+                            { "type": "integer" },
+                            { "type": "number" }
+                        ],
+                        "description": "MUST assign a new value to the specified field. Supports multiple data types to allow for flexible and comprehensive overrides of operation fields."
+                    }
+                },
+                "additionalProperties": true
+            }
+        },
+        "flows": {
+            "type": "array",
+            "description": "MUST include an array of flows that define sequences of API operations to be executed. Each flow represents a cohesive workflow involving multiple actions, data links, and user interactions.",
+            "items": {
+                "type": "object",
+                "required": ["id", "title", "description", "actions", "fields"],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "MUST provide a unique, human-readable identifier for the flow. Identifiers MUST be in snake_case format and globally unique within the `agents.json` context, ensuring clear reference and invocation. **Example**: `process_order_flow`"
+                    },
+                    "title": {
+                        "type": "string",
+                        "description": "MUST provide the title of the flow. This title serves as a human-readable name for the flow, facilitating easy identification and selection."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "MUST include a detailed description of the flow. This description should explain its purpose, the sequence of operations it performs, and its overall functionality. Essential for LLMs to determine the appropriate flow to execute based on user intent."
+                    },
+                    "actions": {
+                        "type": "array",
+                        "description": "MUST include an array of actions that define the API operations to be executed in the flow. Each action corresponds to a specific API operation from a defined source, orchestrating the overall workflow.",
+                        "items": {
+                            "type": "object",
+                            "required": ["id", "sourceId", "operationId"],
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "MUST provide a unique, human-readable identifier for the action within the flow. Identifiers MUST be in snake_case format and unique within the flow, enabling precise reference in links. **Example**: `validate_payment`"
+                                },
+                                "sourceId": {
+                                    "type": "string",
+                                    "description": "MUST reference the `id` of an API source defined in the `sources` array. Indicates which API the action is associated with, ensuring correct operation execution."
+                                },
+                                "operationId": {
+                                    "type": "string",
+                                    "description": "MUST identify the specific operation within the API source to execute. Must match an `operationId` in the referenced OpenAPI specification, ensuring accurate and intended operation invocation."
+                                }
+                            },
+                            "additionalProperties": true
+                        }
+                    },
+                    "links": {
+                        "type": "array",
+                        "description": "MUST include an array of links that define how data flows between sources and destinations within the flow. Links connect data providers to data consumers, ensuring accurate data transfer.",
+                        "items": {
+                            "type": "object",
+                            "required": ["origin", "target"],
+                            "properties": {
+                                "origin": {
+                                    "type": "object",
+                                    "required": ["fieldPath"],
+                                    "properties": {
+                                        "actionId": {
+                                            "type": ["string", "null"],
+                                            "description": "OPTIONAL. The identifier of the action providing the data. If null, the source is the flow's input parameters."
+                                        },
+                                        "fieldPath": {
+                                            "type": "string",
+                                            "description": "MUST be a JSON path expression specifying the source field from which to extract data. The path SHOULD traverse the OpenAPI operation hierarchy using dot notation and array indices (e.g., `response.data.items.0.name`), treating the OpenAPI operation as the root."
+                                        }
+                                    },
+                                    "description": "MUST specify the data origin for the link, which can be an action's response or the flow's input parameters."
+                                },
+                                "target": {
+                                    "type": "object",
+                                    "required": ["fieldPath"],
+                                    "properties": {
+                                        "actionId": {
+                                            "type": ["string", "null"],
+                                            "description": "OPTIONAL. The identifier of the action receiving the data. If null, the target is the flow's response fields, allowing data to be outputted to the user."
+                                        },
+                                        "fieldPath": {
+                                            "type": "string",
+                                            "description": "MUST be a JSON path expression specifying the destination field where the data should be placed. The path SHOULD traverse the OpenAPI operation hierarchy using dot notation and array indices (e.g., `parameters.userId`), treating the OpenAPI operation as the root."
+                                        }
+                                    },
+                                    "description": "MUST specify the destination location for the mapped data, targeting an action's parameters or the flow's response fields."
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "fields": {
+                        "type": "object",
+                        "description": "MUST define the parameters, request body, and responses for the flow. These fields serve as the interface for interaction with the flow, ensuring structured and clear data handling.",
+                        "required": ["parameters", "responses"],
+                        "properties": {
+                            "parameters": {
+                                "type": "array",
+                                "description": "MUST include an array of parameters that define the inputs required or accepted by the flow. These parameters serve as the interface for user-provided data, enabling dynamic and flexible flow interactions.",
+                                "items": {
+                                    "type": "object",
+                                    "required": ["name"],
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "description": "MUST provide the name of the parameter. This name is used to reference the parameter in links and user interactions, ensuring consistency and clarity."
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "description": "OPTIONAL. A detailed description of the parameter, explaining its purpose, usage, and any constraints. This aids users in understanding what is expected when providing input."
+                                        },
+                                        "required": {
+                                            "type": "boolean",
+                                            "description": "OPTIONAL. Indicates whether the parameter is mandatory (`true`) or optional (`false`) when invoking the flow.",
+                                            "default": false
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "description": "The type of the parameter. This can be a primitive type (e.g., `string`, `number`, `boolean`, `array`, `object`) or a complex type (e.g., `array`, `object`). If not provided, the type is inferred from the context."
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "description": "Defines a parameter that users must or can provide when invoking the flow. Parameters are used to input data into the flow, enabling interaction and customization."
+                                }
+                            },
+                            "requestBody": {
+                                "type": "object",
+                                "description": "OPTIONAL. Describes the structure of the request payload that the flow expects. Aligns with OpenAPI's `requestBody` specification as per [RFC 7231](https://tools.ietf.org/html/rfc7231), ensuring standardized data formats and communication.",
+                                "properties": {
+                                    "content": {
+                                        "type": "object",
+                                        "description": "MUST include a map of MIME types to their corresponding schemas defining the request body. Each key MUST conform to the media type format as per [RFC 7231](https://tools.ietf.org/html/rfc7231), enabling content negotiation and proper data handling.",
+                                        "additionalProperties": {
+                                            "type": "object",
+                                            "properties": {
+                                                "schema": {
+                                                    "type": "object",
+                                                    "description": "MUST provide the schema defining the structure of the request body for the specified MIME type. Follows JSON Schema specifications as per [RFC 7159](https://tools.ietf.org/html/rfc7159), enabling precise data validation and formatting."
+                                                },
+                                                "example": {
+                                                    "type": "object",
+                                                    "description": "OPTIONAL. An example of the request body content for the specified MIME type. Provides practical illustrations of expected data formats and structures."
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        }
+                                    },
+                                    "required": {
+                                        "type": "boolean",
+                                        "description": "OPTIONAL. Specifies whether the request body is required (`true`) or optional (`false`) for the flow.",
+                                        "default": false
+                                    }
+                                },
+                                "additionalProperties": false
+                            },
+                            "responses": {
+                                "type": "object",
+                                "description": "MUST be an object where that contains a `success` property that describes the response for a successful operation.",
+                                "required": ["success"],
+                                "properties": {
+                                    "success": {
+                                        "type": "object",
+                                        "description": "MUST provide the schema defining the structure of the response body for the specified MIME type. Follows JSON Schema specifications as per [RFC 7159](https://tools.ietf.org/html/rfc7159), enabling accurate data validation and formatting."
+                                    },
+                                    "example": {
+                                        "type": "object",
+                                        "description": "OPTIONAL. An example of the response body content for the specified MIME type. Provides practical illustrations of expected data formats and structures."
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "additionalProperties": true
+                    },
+                    "additionalProperties": true
+                }
+            }
+        },
+        "additionalProperties": true
+    }
+}

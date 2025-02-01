@@ -10,7 +10,7 @@
 
 The agents.json Specification is an open specification that formally describes contracts for API and agent interactions, built on top of the OpenAPI standard.
 
-The current version is 1.0.0.
+The current version is 0.1.0.
 
 The agents.json Bridge is a Python package that enables LLMs to load, parse, and run agents.json.
 
@@ -104,7 +104,7 @@ For the full schema, see the [documentation 📕](https://docs.wild-card.ai/agen
 ## agents.json Specification
 The `agents.json` Specification is an open specification that formally describes contracts for API and agent interactions, built on top of the OpenAPI standard.
 
-The current version is `1.0.0`.
+The current version is `0.1.0`.
 
 Give feedback, share your projects, and get help in our [Discord](https://discord.gg/7AP6wSkVt).
 

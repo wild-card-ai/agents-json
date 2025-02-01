@@ -1,8 +1,8 @@
 {
-  "agentsJson": "1.0.0",
+  "agentsJson": "0.1.0",
   "info": {
-    "title": "Stripe Integration",
-    "version": "1.0.0",
+    "title": "Stripe API Agent Flows",
+    "version": "0.1.0",
     "description": "Agentic workflows for interacting with the Stripe API to automate common tasks and operations."
   },
   "sources": [

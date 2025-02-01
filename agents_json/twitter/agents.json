@@ -1,8 +1,8 @@
 {
-  "agentsJson": "1.0.0",
+  "agentsJson": "0.1.0",
   "info": {
     "title": "Twitter API Agent Flows",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "A set of flows illustrating how to chain operations in the Twitter API v2. Each flow references operationIds from the provided Twitter endpoints. Note that authentication (e.g., OAuth or Bearer token) is handled separately, and thus not shown as flow parameters here."
   },
   "sources": [
