@@ -2,7 +2,7 @@
   "agentsJson": "0.1.0",
   "info": {
     "title": "Giphy Agent Flows",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A set of flows for common Giphy API operations, where the api_key parameter is handled outside of these flows."
   },
   "sources": [

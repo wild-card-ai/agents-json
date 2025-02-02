@@ -2,7 +2,7 @@
   "agentsJson": "0.1.0",
   "info": {
     "title": "Stripe API Agent Flows",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Agentic workflows for interacting with the Stripe API to automate common tasks and operations."
   },
   "sources": [
@@ -107,7 +107,17 @@
           },
           "target": {
             "actionId": "update_price",
-            "fieldPath": "parameters.price_id"
+            "fieldPath": "parameters.price"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_price",
+            "fieldPath": "responses.success.id"
+          },
+          "target": {
+            "actionId": "retrieve_price",
+            "fieldPath": "parameters.price"
           }
         }
       ],
@@ -193,12 +203,22 @@
       "links": [
         {
           "origin": {
+            "actionId": "search_retrieve_customers",
+            "fieldPath": "parameters.search_query"
+          },
+          "target": {
+            "actionId": "search_customers",
+            "fieldPath": "parameters.query"
+          }
+        },
+        {
+          "origin": {
             "actionId": "search_customers",
             "fieldPath": "response.data.id"
           },
           "target": {
             "actionId": "retrieve_customer_details",
-            "fieldPath": "parameters.customer_id"
+            "fieldPath": "parameters.customer"
           }
         }
       ],
@@ -207,7 +227,7 @@
           {
             "name": "search_query",
             "type": "string",
-            "description": "Query string to search for customers.",
+            "description": "Query string to search for customers. A query clause consists of a field followed by an operator followed by a value. e.g. email:eq:test@test.com Every search field supports exact matching with a :. Certain fields such as email and name support substring matching. Certain other fields such as amount support numeric comparators like > and <.",
             "required": true
           }
         ],
@@ -576,6 +596,16 @@
             "actionId": "create_subscription",
             "fieldPath": "parameters.customer"
           }
+        },
+        {
+          "origin": {
+            "actionId": "create_customer",
+            "fieldPath": "responses.id"
+          },
+          "target": {
+            "actionId": "retrieve_customer_details",
+            "fieldPath": "parameters.customer"
+          }
         }
       ],
       "fields": {
@@ -675,6 +705,16 @@
             "actionId": "list_subscriptions",
             "fieldPath": "parameters.subscription_id"
           }
+        },
+        {
+          "origin": {
+            "actionId": "cancel_subscription",
+            "fieldPath": "parameters.customer"
+          },
+          "target": {
+            "actionId": "retrieve_customer_details",
+            "fieldPath": "parameters.customer"
+          }
         }
       ],
       "fields": {
@@ -683,6 +723,12 @@
             "name": "subscription_id",
             "type": "string",
             "description": "ID of the subscription to be canceled.",
+            "required": true
+          },
+          {
+            "name": "customer",
+            "type": "string",
+            "description": "ID of the customer for subscription cancellation.",
             "required": true
           }
         ],
@@ -706,96 +752,6 @@
               "status": "canceled",
               "canceled_at": 1616161617
             }
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "id": "bulk_refund_product_customers",
-      "title": "Bulk Refund to All Customers of a Product",
-      "description": "Automates issuing refunds to all customers who have purchased a specific product.",
-      "actions": [
-        {
-          "id": "list_customers",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_customers"
-        },
-        {
-          "id": "retrieve_product_charges",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_charges"
-        },
-        {
-          "id": "issue_refund",
-          "sourceId": "stripe",
-          "operationId": "stripe_post_refunds"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "list_customers",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "retrieve_product_charges",
-            "fieldPath": "parameters.customer_id"
-          }
-        },
-        {
-          "origin": {
-            "actionId": "retrieve_product_charges",
-            "fieldPath": "response.data.id"
-          },
-          "target": {
-            "actionId": "issue_refund",
-            "fieldPath": "parameters.charge_id"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [
-          {
-            "name": "product_id",
-            "type": "string",
-            "description": "ID of the product for which refunds are to be issued.",
-            "required": true
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "refunds": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": { "type": "string" },
-                    "charge": { "type": "string" },
-                    "amount": { "type": "integer" },
-                    "status": { "type": "string" }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "refunds": [
-              {
-                "id": "re_1A2B3C4D5E6F",
-                "charge": "ch_1A2B3C4D5E6F",
-                "amount": 1000,
-                "status": "succeeded"
-              },
-              {
-                "id": "re_1A2B3C4D5E6G",
-                "charge": "ch_1A2B3C4D5E6G",
-                "amount": 1500,
-                "status": "succeeded"
-              }
-            ]
           }
         }
       },
@@ -836,6 +792,16 @@
           "target": {
             "actionId": "update_product_description",
             "fieldPath": "parameters.description_template"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "list_products",
+            "fieldPath": "response.data.id"
+          },
+          "target": {
+            "actionId": "update_product_description",
+            "fieldPath": "parameters.id"
           }
         }
       ],
@@ -880,90 +846,6 @@
       "additionalProperties": false
     },
     {
-      "id": "retrieve_account_balance",
-      "title": "Retrieve Account Balance",
-      "description": "Automates fetching and displaying the current account balance, including available and pending funds.",
-      "actions": [
-        {
-          "id": "get_balance",
-          "sourceId": "stripe",
-          "operationId": "stripe_get_balance"
-        },
-        {
-          "id": "display_balance",
-          "sourceId": "display_api",
-          "operationId": "display_balance_function"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "get_balance",
-            "fieldPath": "response"
-          },
-          "target": {
-            "actionId": "display_balance",
-            "fieldPath": "parameters.balance_data"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [],
-        "responses": {
-          "success": {
-            "type": "object",
-            "properties": {
-              "available": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "amount": { "type": "integer" },
-                    "currency": { "type": "string" },
-                    "source_types": {
-                      "type": "object",
-                      "properties": {
-                        "card": { "type": "integer" }
-                      }
-                    }
-                  }
-                }
-              },
-              "pending": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "amount": { "type": "integer" },
-                    "currency": { "type": "string" },
-                    "source_types": {
-                      "type": "object",
-                      "properties": {
-                        "card": { "type": "integer" }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "example": {
-            "available": [
-              {
-                "amount": 100000,
-                "currency": "usd",
-                "source_types": {
-                  "card": 100000
-                }
-              }
-            ],
-            "pending": []
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    {
       "id": "update_customer_payment_methods",
       "title": "Update Customer Payment Methods",
       "description": "Automates updating a customer's payment methods to ensure billing information is current.",
@@ -987,12 +869,12 @@
       "links": [
         {
           "origin": {
-            "actionId": "retrieve_customer",
-            "fieldPath": "responses.id"
+            "actionId": "update_customer_payment_methods",
+            "fieldPath": "parameters.customer_id"
           },
           "target": {
-            "actionId": "update_payment_method",
-            "fieldPath": "parameters.customer_id"
+            "actionId": "retrieve_customer",
+            "fieldPath": "parameters.customer"
           }
         },
         {
@@ -1002,7 +884,7 @@
           },
           "target": {
             "actionId": "confirm_update",
-            "fieldPath": "parameters.payment_method_id"
+            "fieldPath": "parameters.customer"
           }
         }
       ],

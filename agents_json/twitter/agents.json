@@ -2,7 +2,7 @@
   "agentsJson": "0.1.0",
   "info": {
     "title": "Twitter API Agent Flows",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A set of flows illustrating how to chain operations in the Twitter API v2. Each flow references operationIds from the provided Twitter endpoints. Note that authentication (e.g., OAuth or Bearer token) is handled separately, and thus not shown as flow parameters here."
   },
   "sources": [
@@ -46,7 +46,7 @@
           },
           "target": {
             "actionId": "send_dm_to_user",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.participant_id"
           }
         },
         {
@@ -135,7 +135,7 @@
           },
           "target": {
             "actionId": "create_compliance_job",
-            "fieldPath": "requestBody.type"
+            "fieldPath": "parameters.type"
           }
         },
         {
@@ -150,17 +150,33 @@
         },
         {
           "origin": {
+            "actionId": "compliance_job_flow",
+            "fieldPath": "requestBody.content.application/json.schema.properties.createJob.properties.type"
+          },
+          "target": {
+            "actionId": "list_compliance_jobs",
+            "fieldPath": "parameters.type"
+          }
+        },
+        {
+          "origin": {
             "actionId": "create_compliance_job",
             "fieldPath": "responseBody.data.id"
           },
           "target": {
             "actionId": "get_compliance_job_by_id",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         }
       ],
       "fields": {
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "The type of compliance job."
+          }
+        ],
         "requestBody": {
           "required": false,
           "content": {
@@ -237,7 +253,7 @@
           },
           "target": {
             "actionId": "add_member_to_list",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
@@ -257,7 +273,7 @@
           },
           "target": {
             "actionId": "remove_member_from_list",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
@@ -267,7 +283,7 @@
           },
           "target": {
             "actionId": "remove_member_from_list",
-            "fieldPath": "parameters.1.value"
+            "fieldPath": "parameters.user_id"
           }
         }
       ],
@@ -336,62 +352,62 @@
       "links": [
         {
           "origin": {
-            "actionId": null,
+            "actionId": "advanced_lists_flow",
             "fieldPath": "parameters.authenticated_user_id"
           },
           "target": {
             "actionId": "follow_list",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
           "origin": {
-            "actionId": null,
+            "actionId": "advanced_lists_flow",
             "fieldPath": "parameters.list_id"
           },
           "target": {
             "actionId": "follow_list",
-            "fieldPath": "requestBody.list_id"
+            "fieldPath": "parameters.list_id"
           }
         },
         {
           "origin": {
-            "actionId": null,
+            "actionId": "advanced_lists_flow",
             "fieldPath": "parameters.authenticated_user_id"
           },
           "target": {
             "actionId": "pin_list",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
           "origin": {
-            "actionId": null,
+            "actionId": "advanced_lists_flow",
             "fieldPath": "parameters.list_id"
           },
           "target": {
             "actionId": "pin_list",
-            "fieldPath": "requestBody.list_id"
+            "fieldPath": "parameters.list_id"
           }
         },
         {
           "origin": {
-            "actionId": null,
+            "actionId": "advanced_lists_flow",
             "fieldPath": "parameters.authenticated_user_id"
           },
           "target": {
             "actionId": "unpin_list",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
           "origin": {
-            "actionId": null,
+            "actionId": "advanced_lists_flow",
             "fieldPath": "parameters.list_id"
           },
           "target": {
             "actionId": "unpin_list",
-            "fieldPath": "parameters.1.value"
+            "fieldPath": "parameters.list_id"
           }
         }
       ],
@@ -478,7 +494,7 @@
           },
           "target": {
             "actionId": "follow_user",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
@@ -498,7 +514,7 @@
           },
           "target": {
             "actionId": "unfollow_user",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.source_user_id"
           }
         },
         {
@@ -508,7 +524,7 @@
           },
           "target": {
             "actionId": "unfollow_user",
-            "fieldPath": "parameters.1.value"
+            "fieldPath": "parameters.target_user_id"
           }
         },
         {
@@ -518,17 +534,17 @@
           },
           "target": {
             "actionId": "block_user",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
           "origin": {
             "actionId": "user_relationship_flow",
-            "fieldPath": "requestBody.content.application/json.schema.properties.block.properties.target_user_id"
+            "fieldPath": "parameters.target_user_id"
           },
           "target": {
             "actionId": "block_user",
-            "fieldPath": "requestBody.target_user_id"
+            "fieldPath": "parameters.target_user_id"
           }
         },
         {
@@ -538,7 +554,7 @@
           },
           "target": {
             "actionId": "unblock_user",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.source_user_id"
           }
         },
         {
@@ -548,7 +564,7 @@
           },
           "target": {
             "actionId": "unblock_user",
-            "fieldPath": "parameters.1.value"
+            "fieldPath": "parameters.target_user_id"
           }
         },
         {
@@ -558,17 +574,17 @@
           },
           "target": {
             "actionId": "mute_user",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
           "origin": {
             "actionId": "user_relationship_flow",
-            "fieldPath": "requestBody.content.application/json.schema.properties.mute.properties.target_user_id"
+            "fieldPath": "parameters.target_user_id"
           },
           "target": {
             "actionId": "mute_user",
-            "fieldPath": "requestBody.target_user_id"
+            "fieldPath": "parameters.target_user_id"
           }
         },
         {
@@ -578,7 +594,7 @@
           },
           "target": {
             "actionId": "unmute_user",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.source_user_id"
           }
         },
         {
@@ -588,7 +604,7 @@
           },
           "target": {
             "actionId": "unmute_user",
-            "fieldPath": "parameters.1.value"
+            "fieldPath": "parameters.target_user_id"
           }
         }
       ],
@@ -684,7 +700,7 @@
           },
           "target": {
             "actionId": "like_tweet",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
@@ -704,7 +720,7 @@
           },
           "target": {
             "actionId": "retweet_tweet",
-            "fieldPath": "parameters.0.value"
+            "fieldPath": "parameters.id"
           }
         },
         {
