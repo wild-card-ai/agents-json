@@ -1,0 +1,954 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Google Sheets API Agents",
+    "version": "0.1.0",
+    "description": "This specification enables agents to interact with the Google Sheets API by exposing both compound and individual operations. Each flow is defined in a clear, structured way so that an LLM can easily understand the intent, map parameters between actions, and execute a series of operations such as creating spreadsheets, retrieving data, and updating cell values. The compound flows also demonstrate how to chain actions by mapping outputs from one request to inputs in the next."
+  },
+  "sources": [
+    {
+      "id": "google_sheets",
+      "path": "agents-json/agents_json/google_sheets/openapi.yaml"
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "spreadsheets_create",
+      "title": "Create Spreadsheet",
+      "description": "Creates a new Google Spreadsheet. This operation sets up a new spreadsheet resource with optional initial properties and formatting. It is useful for agents that need to programmatically generate new spreadsheets for data collection or reporting purposes.",
+      "actions": [
+        {
+          "id": "create_spreadsheet_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_create"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Spreadsheet resource definition. Include properties such as title, sheets, and formatting options.",
+                "example": {
+                  "properties": {
+                    "title": "My New Spreadsheet"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The newly created spreadsheet resource including its spreadsheetId.",
+            "example": {
+              "spreadsheetId": "abc123",
+              "properties": {
+                "title": "My New Spreadsheet"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_get",
+      "title": "Get Spreadsheet",
+      "description": "Retrieves details of an existing Google Spreadsheet using its spreadsheetId. This operation returns metadata including properties and sheet information.",
+      "actions": [
+        {
+          "id": "get_spreadsheet_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_get"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The unique identifier of the spreadsheet to retrieve.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Spreadsheet details including properties and sheets information.",
+            "example": {
+              "spreadsheetId": "abc123",
+              "properties": {
+                "title": "My Spreadsheet"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_developer_metadata_get",
+      "title": "Get Developer Metadata",
+      "description": "Retrieves specific developer metadata from a spreadsheet using its metadataId. Agents can extract custom metadata to determine application-specific information.",
+      "actions": [
+        {
+          "id": "get_developer_metadata_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_developer_metadata_get"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The identifier of the spreadsheet where metadata is stored.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "metadataId",
+            "description": "The unique identifier of the developer metadata to retrieve.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Developer metadata resource details.",
+            "example": {
+              "metadataId": "123456",
+              "metadataKey": "customKey",
+              "metadataValue": "customValue"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_developer_metadata_search",
+      "title": "Search Developer Metadata",
+      "description": "Searches across developer metadata in a spreadsheet using criteria specified in the request body. This operation helps agents find records based on custom metadata keys and values.",
+      "actions": [
+        {
+          "id": "search_developer_metadata_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_developer_metadata_search"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The identifier of the spreadsheet in which to search for metadata.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Criteria for searching developer metadata, for example, metadataKey and location filters.",
+                "example": {
+                  "dataFilters": [
+                    {
+                      "metadataKey": "customKey"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Results containing matching developer metadata entries.",
+            "example": {
+              "matchedMetadata": [
+                {
+                  "metadataId": "123456",
+                  "metadataKey": "customKey",
+                  "metadataValue": "customValue"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_sheets_copy_to",
+      "title": "Copy Sheet",
+      "description": "Copies a sheet from one spreadsheet to another. This is useful for duplicating data or templates between spreadsheets.",
+      "actions": [
+        {
+          "id": "copy_sheet_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_sheets_copy_to"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet containing the sheet to copy.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sheetId",
+            "description": "The ID of the sheet to be copied.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Destination details including destinationSpreadsheetId where the sheet will be copied.",
+                "example": {
+                  "destinationSpreadsheetId": "dest123"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Information about the newly copied sheet.",
+            "example": {
+              "sheetId": 98765,
+              "title": "Copied Sheet"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_get",
+      "title": "Get Spreadsheet Values",
+      "description": "Retrieves cell values from a specified range in a spreadsheet. This flow is ideal for agents that need to gather data for analysis or reporting.",
+      "actions": [
+        {
+          "id": "get_values_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_get"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to read data from.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range (in A1 or R1C1 notation) from which to retrieve values.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Cell values retrieved from the specified range.",
+            "example": {
+              "range": "Sheet1!A1:B2",
+              "values": [
+                ["Header1", "Header2"],
+                ["Value1", "Value2"]
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_update",
+      "title": "Update Spreadsheet Values",
+      "description": "Updates values in a given range of a spreadsheet. Agents can use this flow to modify existing data in a precise manner.",
+      "actions": [
+        {
+          "id": "update_values_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_update"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to update.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range in which to update cell values.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "The new cell values provided as an array of arrays.",
+                "example": {
+                  "values": [
+                    ["NewValue1", "NewValue2"]
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Outcome of the update operation, including the number of updated cells.",
+            "example": {
+              "updatedCells": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_append",
+      "title": "Append Spreadsheet Values",
+      "description": "Appends new cell values to the end of a given range in a spreadsheet. Use this flow for adding records without altering existing data.",
+      "actions": [
+        {
+          "id": "append_values_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_append"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to append data to.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range target for appending data (typically starting at the first empty row).",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data to be appended represented as an array of rows.",
+                "example": {
+                  "values": [
+                    ["Data1", "Data2"]
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response showing the result of the append operation.",
+            "example": {
+              "updates": {
+                "updatedCells": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_clear",
+      "title": "Clear Spreadsheet Values",
+      "description": "Clears all values from a specified range in a spreadsheet. This flow can be used by agents to remove outdated or unwanted data.",
+      "actions": [
+        {
+          "id": "clear_values_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_clear"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet from which to clear values.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The target range (in A1 notation) to be cleared.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Result of the clear operation including the cleared range.",
+            "example": {
+              "clearedRange": "Sheet1!A1:B2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_clear",
+      "title": "Batch Clear Spreadsheet Values",
+      "description": "Clears values from multiple specified ranges in a single batch request. This optimizes deletion by handling several ranges in one call.",
+      "actions": [
+        {
+          "id": "batch_clear_values_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_clear"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet identifier where values will be cleared.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "An array of ranges to be cleared within the spreadsheet.",
+                "example": {
+                  "ranges": [
+                    "Sheet1!A1:B2",
+                    "Sheet1!C1:D2"
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Result indicating the ranges that were cleared.",
+            "example": {
+              "clearedRanges": [
+                "Sheet1!A1:B2",
+                "Sheet1!C1:D2"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_clear_by_data_filter",
+      "title": "Batch Clear Values by Data Filter",
+      "description": "Clears spreadsheet values based on specified data filters. This dynamic operation allows agents to clear ranges that match a certain condition rather than fixed ranges.",
+      "actions": [
+        {
+          "id": "batch_clear_by_filter_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_clear_by_data_filter"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "Spreadsheet ID for which the clear operation is applied.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters used to specify ranges that should be cleared.",
+                "example": {
+                  "dataFilters": [
+                    {
+                      "range": {
+                        "sheetId": 0,
+                        "startRowIndex": 0,
+                        "endRowIndex": 2
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Outcome of the clear operation using data filters.",
+            "example": {
+              "clearedRanges": [
+                "Sheet1!A1:B2"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_get",
+      "title": "Batch Get Spreadsheet Values",
+      "description": "Retrieves values from multiple ranges within a single spreadsheet. This batch request is useful for agents that need comprehensive data snapshots with minimal API calls.",
+      "actions": [
+        {
+          "id": "batch_get_values_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_get"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet identifier to retrieve data from.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Multiple ranges' values retrieved in one batch response.",
+            "example": {
+              "valueRanges": [
+                {
+                  "range": "Sheet1!A1:B2",
+                  "values": [
+                    ["Header1", "Header2"],
+                    ["Value1", "Value2"]
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_get_by_data_filter",
+      "title": "Batch Get Values by Data Filter",
+      "description": "Retrieves spreadsheet values using dynamic data filters to select ranges. This is especially useful when the desired ranges may vary depending on runtime conditions.",
+      "actions": [
+        {
+          "id": "batch_get_by_filter_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_get_by_data_filter"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet ID to query.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters to dynamically select ranges from which to retrieve values.",
+                "example": {
+                  "dataFilters": [
+                    {
+                      "gridRange": {
+                        "sheetId": 0,
+                        "startRowIndex": 0,
+                        "endRowIndex": 2
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response containing values for ranges matching the data filters.",
+            "example": {
+              "valueRanges": [
+                {
+                  "range": "Sheet1!A1:B2",
+                  "values": [
+                    ["Header1", "Header2"],
+                    ["Value1", "Value2"]
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_update",
+      "title": "Batch Update Spreadsheet Values",
+      "description": "Updates multiple ranges in a spreadsheet with new values in a single batch request. This operation optimizes data updates over large spreadsheets.",
+      "actions": [
+        {
+          "id": "batch_update_values_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_update"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet ID to apply updates to.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "A list of update requests, each specifying a range and new values.",
+                "example": {
+                  "data": [
+                    {
+                      "range": "Sheet1!A1:B1",
+                      "values": [
+                        ["Updated1", "Updated2"]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response indicating the total number of updated cells.",
+            "example": {
+              "totalUpdatedCells": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_update_by_data_filter",
+      "title": "Batch Update Values by Data Filter",
+      "description": "Updates spreadsheet values based on dynamic data filters in a batch operation. This flow is ideal for conditional updates where target ranges are determined at runtime.",
+      "actions": [
+        {
+          "id": "batch_update_by_filter_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_update_by_data_filter"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet ID where values will be updated.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters and corresponding new values for updating.",
+                "example": {
+                  "data": [
+                    {
+                      "dataFilter": {
+                        "range": {
+                          "sheetId": 0,
+                          "startRowIndex": 0,
+                          "endRowIndex": 1
+                        }
+                      },
+                      "values": [
+                        ["NewValue"]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response showing the result of the data filter based batch update.",
+            "example": {
+              "totalUpdatedCells": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_batch_update",
+      "title": "Batch Update Spreadsheet",
+      "description": "Executes multiple update operations on a spreadsheet in a single batch request. This flow can update properties, cell data, and more, making it ideal for large-scale modifications.",
+      "actions": [
+        {
+          "id": "batch_update_spreadsheet_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_batch_update"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to be updated.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "A list of update requests, such as updating sheet properties, cell values, or formatting.",
+                "example": {
+                  "requests": [
+                    {
+                      "updateSheetProperties": {
+                        "properties": {
+                          "sheetId": 0,
+                          "title": "New Title"
+                        },
+                        "fields": "title"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Results of the batch update operation.",
+            "example": {
+              "replies": [
+                {
+                  "updateSheetProperties": {
+                    "updatedProperties": {
+                      "title": "New Title"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_get_by_data_filter",
+      "title": "Get Spreadsheet by Data Filter",
+      "description": "Retrieves spreadsheet data based on specified data filters. This flexible query operation lets agents request only the information that meets the desired criteria.",
+      "actions": [
+        {
+          "id": "get_spreadsheet_by_filter_action",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_get_by_data_filter"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet identifier.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters specifying which parts of the spreadsheet to retrieve.",
+                "example": {
+                  "dataFilters": [
+                    {
+                      "gridRange": {
+                        "sheetId": 0,
+                        "startRowIndex": 0,
+                        "endRowIndex": 5
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Spreadsheet data matching the provided filters.",
+            "example": {
+              "spreadsheetId": "abc123",
+              "sheets": [
+                {
+                  "properties": {
+                    "sheetId": 0,
+                    "title": "Sheet1"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "create_and_initialize_spreadsheet",
+      "title": "Create and Initialize Spreadsheet",
+      "description": "A compound flow that first creates a new Google Spreadsheet and then appends initial data to it. This flow is ideal for agents that need to set up a spreadsheet and immediately populate it with headers and initial content.",
+      "actions": [
+        {
+          "id": "create_spreadsheet_compound",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_create"
+        },
+        {
+          "id": "append_initial_values",
+          "sourceId": "google_sheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_append"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "create_spreadsheet_compound",
+            "fieldPath": "responses.success.spreadsheetId"
+          },
+          "target": {
+            "actionId": "append_initial_values",
+            "fieldPath": "spreadsheetId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Combined request body for the compound flow. The 'create' part accepts spreadsheet properties, and the 'append' part provides the initial data to populate the spreadsheet.",
+                "example": {
+                  "create": {
+                    "properties": {
+                      "title": "Initialized Spreadsheet"
+                    }
+                  },
+                  "append": {
+                    "range": "Sheet1!A1",
+                    "values": [
+                      ["Header1", "Header2"],
+                      ["Data1", "Data2"]
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Combined result from creating the spreadsheet and appending initial data.",
+            "example": {
+              "spreadsheetId": "abc123",
+              "appendResult": {
+                "updates": {
+                  "updatedCells": 4
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
