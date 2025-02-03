@@ -97,7 +97,7 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
                 m for m in flow.links 
                 if m.target and m.target.actionId == action.id
             ]
-        
+                
         # Initialize action parameters
         action_parameters = benedict({})
         action_requestBody = benedict({})
@@ -118,8 +118,8 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         execution_trace[action.id] = {
             "parameters": action_parameters,
             "requestBody": action_requestBody
-        }
-        
+        }     
+           
         # Get authentication
         auth_key = resolve_auth(auth)
         
@@ -132,7 +132,7 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         if "responses" not in execution_trace[action.id]:
             execution_trace[action.id]["responses"] = {}
         execution_trace[action.id]["responses"]["success"] = result
-    
+            
     # Process flow response links
     flow_response_links = []
     if flow.links:
@@ -169,11 +169,11 @@ def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List
     results = {}
         
     if not response.choices[0].message.tool_calls:
-        return results
+        return {"message": response.choices[0].message.content}
     
     for tool_call in response.choices[0].message.tool_calls:
         args_dict = json.loads(tool_call.function.arguments)
-        
+
         # Account for missing "parameters" and "requestBody" keys
         flow = next(f for f in flows if f.id == tool_call.function.name)
         if "parameters" not in args_dict and "requestBody" not in args_dict:
@@ -189,5 +189,5 @@ def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List
             parameters = args_dict.get("parameters", {})
             requestBody = args_dict.get("requestBody", {})
         results[flow.id] = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody)
-        
+                
     return results
