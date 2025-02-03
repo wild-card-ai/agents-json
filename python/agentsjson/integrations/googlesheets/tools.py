@@ -48,7 +48,7 @@ class Executor(BaseModel):
     @staticmethod
     def googlesheets_sheets_spreadsheets_create(auth_config: OAuth2AuthConfig, **kwargs):
         service = Executor._get_sheets_service(auth_config)
-        return service.spreadsheets().create(**kwargs).execute()
+        return service.spreadsheets().create(body=kwargs).execute()
 
     @staticmethod
     def googlesheets_sheets_spreadsheets_get(auth_config: OAuth2AuthConfig, spreadsheetId: str, **kwargs):
@@ -78,7 +78,7 @@ class Executor(BaseModel):
         return service.spreadsheets().sheets().copyTo(
             spreadsheetId=spreadsheetId,
             sheetId=sheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
     @staticmethod
@@ -91,21 +91,23 @@ class Executor(BaseModel):
         ).execute()
 
     @staticmethod
-    def googlesheets_sheets_spreadsheets_values_update(auth_config: OAuth2AuthConfig, spreadsheetId: str, range: str, **kwargs):
+    def googlesheets_sheets_spreadsheets_values_update(auth_config: OAuth2AuthConfig, spreadsheetId: str, range: str, valueInputOption: str, **kwargs):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().values().update(
             spreadsheetId=spreadsheetId,
             range=range,
-            **kwargs
+            valueInputOption=valueInputOption,
+            body=kwargs
         ).execute()
 
     @staticmethod
-    def googlesheets_sheets_spreadsheets_values_append(auth_config: OAuth2AuthConfig, spreadsheetId: str, range: str, **kwargs):
+    def googlesheets_sheets_spreadsheets_values_append(auth_config: OAuth2AuthConfig, spreadsheetId: str, range: str, valueInputOption: str, **kwargs):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().values().append(
             spreadsheetId=spreadsheetId,
             range=range,
-            **kwargs
+            valueInputOption=valueInputOption,
+            body=kwargs
         ).execute()
 
     @staticmethod
@@ -122,7 +124,7 @@ class Executor(BaseModel):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().values().batchClear(
             spreadsheetId=spreadsheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
     @staticmethod
@@ -130,7 +132,7 @@ class Executor(BaseModel):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().values().batchClearByDataFilter(
             spreadsheetId=spreadsheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
     @staticmethod
@@ -146,7 +148,7 @@ class Executor(BaseModel):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().values().batchGetByDataFilter(
             spreadsheetId=spreadsheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
     @staticmethod
@@ -154,7 +156,7 @@ class Executor(BaseModel):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().values().batchUpdate(
             spreadsheetId=spreadsheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
     @staticmethod
@@ -162,7 +164,7 @@ class Executor(BaseModel):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().values().batchUpdateByDataFilter(
             spreadsheetId=spreadsheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
     @staticmethod
@@ -178,6 +180,6 @@ class Executor(BaseModel):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().getByDataFilter(
             spreadsheetId=spreadsheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
