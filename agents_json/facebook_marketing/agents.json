@@ -1,0 +1,1191 @@
+{
+  "agentsJson": "1.0.0",
+  "info": {
+    "title": "Facebook Marketing API Agents",
+    "version": "v12.0",
+    "description": "This agents.json file exposes individual API operations for the Facebook Marketing API as well as several composite flows that bundle conjoined actions into common high-usage workflows."
+  },
+  "sources": [
+    {
+      "id": "facebook_marketing_api",
+      "path": "/Users/yagnyapatel/Downloads/Facebook-Marketing-API.yml",
+      "description": "OpenAPI specification for Facebook Marketing API v12.0."
+    }
+  ],
+  "flows": [
+    {
+      "id": "full_campaign_setup_flow",
+      "title": "Full Campaign Setup Flow",
+      "description": "Composite flow to create a campaign, then an ad set linked to that campaign, and finally an ad linked to the ad set.",
+      "actions": [
+        {
+          "id": "create_campaign",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_create_campaign"
+        },
+        {
+          "id": "create_ad_set",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_create_ad_set"
+        },
+        {
+          "id": "create_ad",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_create_ad"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "full_campaign_setup_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "create_campaign",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "full_campaign_setup_flow",
+            "fieldPath": "parameters.campaign_properties"
+          },
+          "target": {
+            "actionId": "create_campaign",
+            "fieldPath": "parameters.properties"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_campaign",
+            "fieldPath": "response.id"
+          },
+          "target": {
+            "actionId": "create_ad_set",
+            "fieldPath": "parameters.campaign_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "full_campaign_setup_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "create_ad_set",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "full_campaign_setup_flow",
+            "fieldPath": "parameters.adset_properties"
+          },
+          "target": {
+            "actionId": "create_ad_set",
+            "fieldPath": "parameters.properties"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_ad_set",
+            "fieldPath": "response.id"
+          },
+          "target": {
+            "actionId": "create_ad",
+            "fieldPath": "parameters.ad_set_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "full_campaign_setup_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "create_ad",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "full_campaign_setup_flow",
+            "fieldPath": "parameters.ad_properties"
+          },
+          "target": {
+            "actionId": "create_ad",
+            "fieldPath": "parameters.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID used by every step.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "campaign_properties",
+            "description": "Payload for creating a campaign.",
+            "required": true,
+            "type": "object"
+          },
+          {
+            "name": "adset_properties",
+            "description": "Payload for creating an ad set, including targeting and budget info.",
+            "required": true,
+            "type": "object"
+          },
+          {
+            "name": "ad_properties",
+            "description": "Payload for creating an ad, including creative details.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response containing the IDs of the created campaign, ad set, and ad.",
+            "properties": {
+              "campaign_id": {
+                "type": "string",
+                "description": "ID of the created campaign."
+              },
+              "ad_set_id": {
+                "type": "string",
+                "description": "ID of the created ad set."
+              },
+              "ad_id": {
+                "type": "string",
+                "description": "ID of the created ad."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "campaign_termination_flow",
+      "title": "Campaign Termination Flow",
+      "description": "Composite flow to update a campaign (for example, archiving it) and then dissociate it from the ad account.",
+      "actions": [
+        {
+          "id": "update_campaign",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_update_campaign"
+        },
+        {
+          "id": "dissociate_campaign",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_dissociate_campaign"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "campaign_termination_flow",
+            "fieldPath": "parameters.campaign_id"
+          },
+          "target": {
+            "actionId": "update_campaign",
+            "fieldPath": "parameters.campaign_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "campaign_termination_flow",
+            "fieldPath": "parameters.update_properties"
+          },
+          "target": {
+            "actionId": "update_campaign",
+            "fieldPath": "parameters.properties"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "campaign_termination_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "update_campaign",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "campaign_termination_flow",
+            "fieldPath": "parameters.campaign_id"
+          },
+          "target": {
+            "actionId": "dissociate_campaign",
+            "fieldPath": "parameters.campaign_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "campaign_termination_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "dissociate_campaign",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "campaign_id",
+            "description": "ID of the campaign to terminate.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "update_properties",
+            "description": "Payload for updating the campaign (for example, setting its status to ARCHIVED).",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response indicating the campaign was updated and dissociated.",
+            "properties": {
+              "updated_campaign_id": {
+                "type": "string",
+                "description": "ID of the updated campaign."
+              },
+              "dissociated": {
+                "type": "boolean",
+                "description": "Whether the dissociation succeeded."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_and_get_adset_flow",
+      "title": "Update and Get Ad Set Flow",
+      "description": "Composite flow to update an ad set and then retrieve its updated details.",
+      "actions": [
+        {
+          "id": "update_ad_set",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_update_ad_set"
+        },
+        {
+          "id": "get_ad_set",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_get_ad_set"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "update_and_get_adset_flow",
+            "fieldPath": "parameters.ad_set_id"
+          },
+          "target": {
+            "actionId": "update_ad_set",
+            "fieldPath": "parameters.ad_set_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "update_and_get_adset_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "update_ad_set",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "update_and_get_adset_flow",
+            "fieldPath": "parameters.properties"
+          },
+          "target": {
+            "actionId": "update_ad_set",
+            "fieldPath": "parameters.properties"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "update_and_get_adset_flow",
+            "fieldPath": "parameters.ad_set_id"
+          },
+          "target": {
+            "actionId": "get_ad_set",
+            "fieldPath": "parameters.ad_set_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ad_set_id",
+            "description": "ID of the ad set to be updated and retrieved.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "properties",
+            "description": "Payload for updating the ad set.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response containing details of the updated ad set.",
+            "properties": {
+              "ad_set_id": {
+                "type": "string",
+                "description": "ID of the updated ad set."
+              },
+              "details": {
+                "type": "object",
+                "description": "Detailed information about the ad set."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "list_campaigns_flow",
+      "title": "List Campaigns Flow",
+      "description": "Flow to list campaigns using facebookmarketing_get_campaigns.",
+      "actions": [
+        {
+          "id": "list_campaigns",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_get_campaigns"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "list_campaigns_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "list_campaigns",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response from listing campaigns.",
+            "properties": {
+              "data": {
+                "type": "array",
+                "description": "Array of campaigns."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "create_campaign_flow",
+      "title": "Create Campaign Flow",
+      "description": "Flow to create a campaign using facebookmarketing_create_campaign.",
+      "actions": [
+        {
+          "id": "create_campaign",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_create_campaign"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "create_campaign_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "create_campaign",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_campaign_flow",
+            "fieldPath": "parameters.properties"
+          },
+          "target": {
+            "actionId": "create_campaign",
+            "fieldPath": "parameters.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "properties",
+            "description": "Campaign properties payload.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Create campaign response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID of the created campaign."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_campaign_flow",
+      "title": "Update Campaign Flow",
+      "description": "Flow to update a campaign using facebookmarketing_update_campaign.",
+      "actions": [
+        {
+          "id": "update_campaign",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_update_campaign"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "update_campaign_flow",
+            "fieldPath": "parameters.campaign_id"
+          },
+          "target": {
+            "actionId": "update_campaign",
+            "fieldPath": "parameters.campaign_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "update_campaign_flow",
+            "fieldPath": "parameters.properties"
+          },
+          "target": {
+            "actionId": "update_campaign",
+            "fieldPath": "parameters.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "description": "ID of the campaign to update.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "properties",
+            "description": "Campaign update properties payload.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Update campaign response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Updated campaign ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "delete_campaign_flow",
+      "title": "Delete Campaign Flow",
+      "description": "Flow to delete a campaign using facebookmarketing_delete_campaign.",
+      "actions": [
+        {
+          "id": "delete_campaign",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_delete_campaign"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "delete_campaign_flow",
+            "fieldPath": "parameters.campaign_id"
+          },
+          "target": {
+            "actionId": "delete_campaign",
+            "fieldPath": "parameters.campaign_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "description": "ID of the campaign to delete.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Delete campaign response.",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "description": "Flag indicating whether deletion was successful."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "campaign_dissociation_flow",
+      "title": "Campaign Dissociation Flow",
+      "description": "Flow to dissociate a campaign using facebookmarketing_dissociate_campaign.",
+      "actions": [
+        {
+          "id": "dissociate_campaign",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_dissociate_campaign"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "campaign_dissociation_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "dissociate_campaign",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "campaign_dissociation_flow",
+            "fieldPath": "parameters.campaign_id"
+          },
+          "target": {
+            "actionId": "dissociate_campaign",
+            "fieldPath": "parameters.campaign_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "campaign_id",
+            "description": "ID of the campaign to dissociate.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Campaign dissociation response.",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "description": "Flag indicating success."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "list_adsets_flow",
+      "title": "List Ad Sets Flow",
+      "description": "Flow to list ad sets using facebookmarketing_get_ad_sets.",
+      "actions": [
+        {
+          "id": "list_adsets",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_get_ad_sets"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "list_adsets_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "list_adsets",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List ad sets response.",
+            "properties": {
+              "data": {
+                "type": "array",
+                "description": "Array of ad sets."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "create_adset_flow",
+      "title": "Create Ad Set Flow",
+      "description": "Flow to create an ad set using facebookmarketing_create_ad_set.",
+      "actions": [
+        {
+          "id": "create_adset",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_create_ad_set"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "create_adset_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "create_adset",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_adset_flow",
+            "fieldPath": "parameters.properties"
+          },
+          "target": {
+            "actionId": "create_adset",
+            "fieldPath": "parameters.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "properties",
+            "description": "Ad set properties payload.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Create ad set response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID of the created ad set."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "get_adset_flow",
+      "title": "Get Ad Set Flow",
+      "description": "Flow to retrieve an ad set using facebookmarketing_get_ad_set.",
+      "actions": [
+        {
+          "id": "get_adset",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_get_ad_set"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "get_adset_flow",
+            "fieldPath": "parameters.ad_set_id"
+          },
+          "target": {
+            "actionId": "get_adset",
+            "fieldPath": "parameters.ad_set_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_set_id",
+            "description": "ID of the ad set to retrieve.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Get ad set response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Ad set ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_adset_flow",
+      "title": "Update Ad Set Flow",
+      "description": "Flow to update an ad set using facebookmarketing_update_ad_set.",
+      "actions": [
+        {
+          "id": "update_adset",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_update_ad_set"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "update_adset_flow",
+            "fieldPath": "parameters.ad_set_id"
+          },
+          "target": {
+            "actionId": "update_adset",
+            "fieldPath": "parameters.ad_set_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "update_adset_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "update_adset",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "update_adset_flow",
+            "fieldPath": "parameters.properties"
+          },
+          "target": {
+            "actionId": "update_adset",
+            "fieldPath": "parameters.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_set_id",
+            "description": "ID of the ad set to update.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "properties",
+            "description": "Ad set update properties payload.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Update ad set response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Updated ad set ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "delete_adset_flow",
+      "title": "Delete Ad Set Flow",
+      "description": "Flow to delete an ad set using facebookmarketing_delete_ad_set.",
+      "actions": [
+        {
+          "id": "delete_adset",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_delete_ad_set"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "delete_adset_flow",
+            "fieldPath": "parameters.ad_set_id"
+          },
+          "target": {
+            "actionId": "delete_adset",
+            "fieldPath": "parameters.ad_set_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_set_id",
+            "description": "ID of the ad set to delete.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Delete ad set response.",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "description": "Flag indicating whether deletion was successful."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "list_ads_flow",
+      "title": "List Ads Flow",
+      "description": "Flow to list ads using facebookmarketing_get_ads.",
+      "actions": [
+        {
+          "id": "list_ads",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_get_ads"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "list_ads_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "list_ads",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List ads response.",
+            "properties": {
+              "data": {
+                "type": "array",
+                "description": "Array of ads."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "create_ad_flow",
+      "title": "Create Ad Flow",
+      "description": "Flow to create an ad using facebookmarketing_create_ad.",
+      "actions": [
+        {
+          "id": "create_ad",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_create_ad"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "create_ad_flow",
+            "fieldPath": "parameters.ad_account_id"
+          },
+          "target": {
+            "actionId": "create_ad",
+            "fieldPath": "parameters.ad_account_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_ad_flow",
+            "fieldPath": "parameters.properties"
+          },
+          "target": {
+            "actionId": "create_ad",
+            "fieldPath": "parameters.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_account_id",
+            "description": "Facebook Ad Account ID.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "properties",
+            "description": "Ad creation properties payload.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Create ad response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID of the created ad."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "get_ad_flow",
+      "title": "Get Ad Flow",
+      "description": "Flow to retrieve ad details using facebookmarketing_get_ad.",
+      "actions": [
+        {
+          "id": "get_ad",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_get_ad"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "get_ad_flow",
+            "fieldPath": "parameters.ad_id"
+          },
+          "target": {
+            "actionId": "get_ad",
+            "fieldPath": "parameters.ad_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_id",
+            "description": "ID of the ad to retrieve.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Get ad response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Ad ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_ad_flow",
+      "title": "Update Ad Flow",
+      "description": "Flow to update an ad using facebookmarketing_update_ad.",
+      "actions": [
+        {
+          "id": "update_ad",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_update_ad"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "update_ad_flow",
+            "fieldPath": "parameters.ad_id"
+          },
+          "target": {
+            "actionId": "update_ad",
+            "fieldPath": "parameters.ad_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "update_ad_flow",
+            "fieldPath": "parameters.properties"
+          },
+          "target": {
+            "actionId": "update_ad",
+            "fieldPath": "parameters.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_id",
+            "description": "ID of the ad to update.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "properties",
+            "description": "Ad update properties payload.",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Update ad response.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Updated ad ID."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "delete_ad_flow",
+      "title": "Delete Ad Flow",
+      "description": "Flow to delete an ad using facebookmarketing_delete_ad.",
+      "actions": [
+        {
+          "id": "delete_ad",
+          "sourceId": "facebook_marketing_api",
+          "operationId": "facebookmarketing_delete_ad"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "delete_ad_flow",
+            "fieldPath": "parameters.ad_id"
+          },
+          "target": {
+            "actionId": "delete_ad",
+            "fieldPath": "parameters.ad_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "ad_id",
+            "description": "ID of the ad to delete.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Delete ad response.",
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "description": "Flag indicating whether deletion succeeded."
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

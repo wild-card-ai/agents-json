@@ -1,0 +1,21 @@
+from .tools import Executor
+
+map = {
+    "googlesheets_sheets_spreadsheets_create": Executor.googlesheets_sheets_spreadsheets_create,
+    "googlesheets_sheets_spreadsheets_get": Executor.googlesheets_sheets_spreadsheets_get,
+    "googlesheets_sheets_spreadsheets_developer_metadata_get": Executor.googlesheets_sheets_spreadsheets_developer_metadata_get,
+    "googlesheets_sheets_spreadsheets_developer_metadata_search": Executor.googlesheets_sheets_spreadsheets_developer_metadata_search,
+    "googlesheets_sheets_spreadsheets_sheets_copy_to": Executor.googlesheets_sheets_spreadsheets_sheets_copy_to,
+    "googlesheets_sheets_spreadsheets_values_get": Executor.googlesheets_sheets_spreadsheets_values_get,
+    "googlesheets_sheets_spreadsheets_values_update": Executor.googlesheets_sheets_spreadsheets_values_update,
+    "googlesheets_sheets_spreadsheets_values_append": Executor.googlesheets_sheets_spreadsheets_values_append,
+    "googlesheets_sheets_spreadsheets_values_clear": Executor.googlesheets_sheets_spreadsheets_values_clear,
+    "googlesheets_sheets_spreadsheets_values_batch_clear": Executor.googlesheets_sheets_spreadsheets_values_batch_clear,
+    "googlesheets_sheets_spreadsheets_values_batch_clear_by_data_filter": Executor.googlesheets_sheets_spreadsheets_values_batch_clear_by_data_filter,
+    "googlesheets_sheets_spreadsheets_values_batch_get": Executor.googlesheets_sheets_spreadsheets_values_batch_get,
+    "googlesheets_sheets_spreadsheets_values_batch_get_by_data_filter": Executor.googlesheets_sheets_spreadsheets_values_batch_get_by_data_filter,
+    "googlesheets_sheets_spreadsheets_values_batch_update": Executor.googlesheets_sheets_spreadsheets_values_batch_update,
+    "googlesheets_sheets_spreadsheets_values_batch_update_by_data_filter": Executor.googlesheets_sheets_spreadsheets_values_batch_update_by_data_filter,
+    "googlesheets_sheets_spreadsheets_batch_update": Executor.googlesheets_sheets_spreadsheets_batch_update,
+    "googlesheets_sheets_spreadsheets_get_by_data_filter": Executor.googlesheets_sheets_spreadsheets_get_by_data_filter
+}
