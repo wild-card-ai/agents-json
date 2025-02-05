@@ -6,5 +6,6 @@ from . import twitter
 from . import giphy
 from . import stripe
 from . import googlesheets
+from . import hubspotcontacts
 
-__all__ = ["twitter", "giphy", "stripe", "googlesheets"]
+__all__ = ["twitter", "giphy", "stripe", "googlesheets", "hubspotcontacts"]

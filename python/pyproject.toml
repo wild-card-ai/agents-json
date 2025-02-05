@@ -19,6 +19,7 @@ requests = "^2.0.0"
 stripe = "7.11.0"
 six = "^1.16.0"
 google-api-python-client = "^2.0.0"
+hubspot-api-client = "^8.1.0"
 
 [build-system]
 requires = ["poetry-core"]
