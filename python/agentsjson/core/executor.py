@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Any, Dict, List, Tuple, Union
 import importlib
 from benedict import benedict
@@ -9,6 +10,17 @@ from .utils import convert_dot_digits_to_brackets
 from .models.auth import AuthConfig, AuthType, OAuth1AuthConfig, UserPassCredentials, OAuth2AuthConfig
 from .parsetools import ToolFormat
 from .models.schema import Flow, Link
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+def configure_logging(debug: bool = False):
+    """Configure logging level and format"""
+    level = logging.DEBUG if debug else logging.INFO
+    logging.basicConfig(
+        level=level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
 
 def apply_link(link: Link, execution_trace: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     """
@@ -62,13 +74,17 @@ def resolve_auth(auth: AuthConfig) -> Union[str, Tuple[str, str], OAuth1AuthConf
     else:
         raise ValueError(f"Unsupported auth type: {auth.type}")
 
-def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, Any], requestBody: Dict[str, Any]) -> Dict[str, Any]:
+def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, Any], requestBody: Dict[str, Any], debug: bool = False) -> Dict[str, Any]:
     """
     Executes a flow of Actions in order, applying link-based parameter link.
     Each new link is deep-merged so we don't overwrite nested structures.
     """
     
+    if debug:
+        configure_logging(True)
+    
     if not flow.actions:
+        logger.warning("No actions found in flow")
         return {}
         
     # Initialize execution trace with flow parameters
@@ -79,15 +95,23 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         "responses": {}
     }
     
+    logger.debug(f"Starting execution of flow: {flow.id}")
+    logger.debug(f"Initial parameters: {parameters}")
+    logger.debug(f"Initial requestBody: {requestBody}")
+    
     # Execute each action in order
     for action in flow.actions:
+        logger.debug(f"Executing action: {action.id}")
+        
         # Dynamically import the integration package
-        integration_module = importlib.import_module(
-            f".{action.sourceId}",
-            package="agentsjson.integrations"
-        )
-        operation_map = integration_module.map
-        operation = operation_map[action.operationId]
+        try:
+            integration_module = importlib.import_module(f"agentsjson.integrations.{action.sourceId}")
+            operation_map = integration_module.map
+            operation = operation_map[action.operationId]
+            logger.debug(f"Loaded operation: {action.operationId}")
+        except Exception as e:
+            logger.error(f"Failed to load integration module: {str(e)}")
+            raise
         
         # Find all links targeting this action
         action_links = []
@@ -97,14 +121,17 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
                 m for m in flow.links 
                 if m.target and m.target.actionId == action.id
             ]
-                
+            logger.debug(f"Found {len(action_links)} links targeting action {action.id}")
+        
         # Initialize action parameters
         action_parameters = benedict({})
         action_requestBody = benedict({})
         
         # Apply each link and merge the results
         for link in action_links:
+            logger.debug(f"Applying link: {link}")
             apply = apply_link(link, execution_trace)
+            logger.debug(f"Link application result: {apply}")
         
             # Deep merge parameters and requestBody
             action_parameters.merge(apply.get("parameters", {}), overwrite=True)
@@ -118,21 +145,34 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         execution_trace[action.id] = {
             "parameters": action_parameters,
             "requestBody": action_requestBody
-        }     
-           
+        }
+        
+        logger.debug(f"Final action parameters: {action_parameters}")
+        logger.debug(f"Final action request body: {action_requestBody}")
+        
         # Get authentication
-        auth_key = resolve_auth(auth)
+        try:
+            auth_key = resolve_auth(auth)
+            logger.debug("Authentication resolved successfully")
+        except Exception as e:
+            logger.error(f"Failed to resolve authentication: {str(e)}")
+            raise
         
         # Execute the operation
-        if isinstance(auth_key, tuple):
-            result = operation(auth_key[0], auth_key[1], **action_parameters, **action_requestBody)
-        else:
-            result = operation(auth_key, **action_parameters, **action_requestBody)
+        try:
+            if isinstance(auth_key, tuple):
+                result = operation(auth_key[0], auth_key[1], **action_parameters, **action_requestBody)
+            else:
+                result = operation(auth_key, **action_parameters, **action_requestBody)
+            logger.debug(f"Operation executed successfully: {action.operationId}")
+        except Exception as e:
+            logger.error(f"Operation execution failed: {str(e)}")
+            raise
         
         if "responses" not in execution_trace[action.id]:
             execution_trace[action.id]["responses"] = {}
         execution_trace[action.id]["responses"]["success"] = result
-            
+    
     # Process flow response links
     flow_response_links = []
     if flow.links:
@@ -141,19 +181,23 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
             if m.target and m.target.actionId == flow.id 
             and m.target.fieldPath.startswith("responses")
         ]
+        logger.debug(f"Found {len(flow_response_links)} response links")
     
     if not flow_response_links:
         # If no response links defined, return the last action's response
         last_action = flow.actions[-1]
+        logger.debug(f"No response links found, returning last action response: {last_action.id}")
         return execution_trace[last_action.id]["responses"]
     
     # Merge all flow response links
     flow_responses = benedict(execution_trace[flow.id]["responses"])
     for link in flow_response_links:
+        logger.debug(f"Applying response link: {link}")
         apply = apply_link(link, execution_trace)
         if "responses" in apply:
             flow_responses.merge(apply["responses"], overwrite=True)
     
+    logger.debug("Flow execution completed successfully")
     return dict(flow_responses)
 
 
