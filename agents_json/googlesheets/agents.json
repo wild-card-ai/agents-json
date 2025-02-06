@@ -1337,6 +1337,16 @@
             "actionId": "batch_update_spreadsheet_action",
             "fieldPath": "parameters.spreadsheetId"
           }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_batch_update",
+            "fieldPath": "requestBody.requests"
+          },
+          "target": {
+            "actionId": "batch_update_spreadsheet_action",
+            "fieldPath": "requestBody.requests"
+          }
         }
       ],
       "fields": {

@@ -172,7 +172,7 @@ class Executor(BaseModel):
         service = Executor._get_sheets_service(auth_config)
         return service.spreadsheets().batchUpdate(
             spreadsheetId=spreadsheetId,
-            **kwargs
+            body=kwargs
         ).execute()
 
     @staticmethod
