@@ -1,105 +1,36 @@
-<picture>
-  <source srcset="./static/agentsjson-white-blackbackground.png">
-  <img alt="Shows a white agents.json Logo with a black background." src="./static/agentsjson-white-blackbackground.png" width="full">
-</picture>
+<p align="center">
+  <source srcset="./static/logo/agentsjson-white-blackbackground.png">
+  <img alt="Shows a white agents.json Logo with a black background." src="./static/logo/agentsjson-white-blackbackground.png" width="full">
+</p>
+
+<h1 align="center"> Translate OpenAPI into LLM Tools</h1>
 
 [![GitHub stars](https://img.shields.io/github/stars/wild-card-ai/agents-json?style=social)](https://github.com/wild-card-ai/agents-json/stargazers)
 [![Discord](https://img.shields.io/discord/1334616501436682405?style=flat&logo=discord&logoColor=white&label=discord&color=7289DA&link=https%3A%2F%2Fdiscord.gg%2F7AP6wSkVtQ)](https://discord.gg/7VU6HKq7cZ)
 [![Documentation](https://img.shields.io/badge/Documentation-📕-blue)](https://docs.wild-card.ai/agents-json)
 [![Twitter Follow](https://img.shields.io/twitter/follow/wildcard_ai?style=social)](https://x.com/wildcard_ai)
 
-The agents.json Specification is an open specification that formally describes contracts for API and agent interactions, built on top of the OpenAPI standard.
+→ The `agents.json` Specification is an open specification that translates from OpenAPI to LLM tools.
 
-The current version is 0.1.0.
+→ Use the `agents.json` Bridge Python package to load, parse, and run agents.json.
 
-The agents.json Bridge is a Python package that enables LLMs to load, parse, and run agents.json.
+## Quickstart
 
-## Table of Contents
-- [Python Quickstart](#python-quickstart)
-- [Specification](#agentsjson-specification)
-- [Feature Roadmap](#feature-roadmap)
-- [Licenses](#licenses)
-- [Contributions](#contributions)
+<p align="center">
+<img align="center" src="./static/quickstart/3easysteps.png" alt="agents.json Bridge" width="700">
+</p>
 
-## Python Quickstart
+### Use one of the quickstart notebooks to get started:
 
-You can find the code for this example in [examples/single.ipynb](examples/single.ipynb).
+→ [Stripe Agent](./examples/single.ipynb) \
+→ [Twitter + Giphy Agent](./examples/multiple.ipynb)
 
-### Setup
+## Demos
 
-Install the agentsjson-core package and the openai package to create and run an agent:
-```bash
-pip install agentsjson
-pip install openai
-```
-
-Load the agents.json file:
-```python
-agents_json_url = "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/stripe/agents.json"
-
-from agentsjson.core.models import Flow
-from agentsjson.core.models.bundle import Bundle
-import agentsjson.core as core
-
-# load the agents.json file
-data: Bundle = core.load_agents_json(agents_json_url)
-flows = data.agentsJson.flows
-```
-
-### Creating and Running an Agent
-Set up your .env file with your API keys. We'll use Stripe for this agent.
-```python
-STRIPE_API_KEY="<your_stripe_api_key>"
-OPENAI_API_KEY="<your_openai_api_key>"
-```
-
-Set up your agent:
-```python
-from agentsjson.core import ToolFormat
-
-# Format the flows data for the prompt
-flows_context = core.flows_prompt(flows)
-
-# Create the system prompt
-system_prompt = f"""You are an AI assistant that helps users interact with the Stripe API.
-You have access to the following API flows:
-
-{flows_context}
-
-Analyze the user's request and use the appropriate API flows to accomplish the task.
-You must give your arguments for the tool call as Structued Outputs JSON with keys `parameters` and `requestBody`"""
-```
-
-Configure authentication:
-```python
-from agentsjson.core.models.auth import AuthType, BearerAuthConfig
-auth = BearerAuthConfig(type=AuthType.BEARER, token=STRIPE_API_KEY)
-```
-
-Run your agent:
-```python
-from openai import OpenAI
-from agentsjson.core.executor import execute_flows
-client = OpenAI(api_key=OPENAI_API_KEY)
-
-query = "Create a new Stripe product for tie-die tshirts priced at $10, $15, and $30 for small, medium, and large sizes"
-
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": query}
-    ],
-    tools=core.flows_tools(flows, format=ToolFormat.OPENAI),
-    temperature=0
-)
-
-response = execute_flows(response, format=core.ToolFormat.OPENAI, bundle=data, flows=flows, auth=auth)
-
-response
-```
-
-For the full schema, see the [documentation 📕](https://docs.wild-card.ai/agentsjson/schema).
+|  |  |
+| --- | --- |
+| [Stripe Agent](https://wild-card.ai/stripe) | [![Stripe Agent](./static/demo/stripe-demo.png)](https://wild-card.ai/stripe) |
+| [Google Sheets Agent](https://wild-card.ai/googlesheets) | [![Google Sheets Agent](./static/demo/googlesheets-demo.png)](https://wild-card.ai/googlesheets) |
 
 ## agents.json Specification
 The `agents.json` Specification is an open specification that formally describes contracts for API and agent interactions, built on top of the OpenAPI standard.
@@ -120,9 +51,17 @@ APIs are designed for developers and not LLMs. If you're building integrations f
 
 For example, the Gmail API has endpoints to search for threads, list the emails in a thread, and reply with an email given base64 RFC 822 content. Instead, LLMs need a clear, top-level directive that can handle all of this with one tool.
 
+<p align="center">
+<img style="text-align: center;" src="./static/diagram/TraditionalFlowDiagram.png" alt="Traditional API Paradigm" width="full" title="Traditional API Paradigm">
+</p>
+
 **Why is `agents.json` built on OpenAPI?** — OpenAPI is the gold standard for describing how API endpoints work and can be executed. Most API providers have OpenAPI specs or have APIs that can be described fully by OpenAPI. These specs alone aren't sufficient for the age of AI agents, but provide great groundwork for API agent communication.
 
 So we implemented `agents.json`. We built this for us and we're excited to share it with you.
+
+<p align="center">
+<img style="text-align: center;" src="./static/diagram/AirgapFlowDiagram.png" alt="LLMs with an Airgap" width="full" title="LLMs with an Airgap">
+</p>
 
 ### The `agents.json` File
 
@@ -135,6 +74,10 @@ Describing endpoints/data models without describing ***how*** they interact toge
 To solve this, we introduce flows and links. Flows are contracts with a series of 1 or more API calls that describe an outcome. Links describe how two actions are stitched together.
 
 We propose the file placed in `/.well-known/agents.json` so it is easily discoverable by agents accessing web services. For now, we compose a GitHub repository as a registry for [available `agents.json` files](./agents_json/).
+
+<p align="center">
+<img style="text-align: center;" src="./static/diagram/LlmWorksDiagram.png" alt="LLMs with an Airgap" width="full" title="LLMs with an Airgap">
+</p>
 
 ### Wildcard Bridge
 
@@ -170,26 +113,39 @@ There are still open questions and more to be done. Starting the discussion now 
 
 ### FAQs
 
-#### Shouldn't API providers provide their own agent servers or "/agent" endpoints?
+<details>
+<summary>Shouldn't API providers provide their own agent servers or "/agent" endpoints?</summary>
 
 We can begin building agents.json files immediately before official adoption by providers. No extra infrastructure changes, servers, or new endpoints. By putting responsibility of execution on the client - the paradigm abides by the same security and orchestration protocol of existing API based applications today. API providers can still choose to maintain official agents.json files.
 
-#### Why route to an SDK instead of making HTTP requests directly?
+</details>
+
+<details>
+<summary>Why route to an SDK instead of making HTTP requests directly?</summary>
 
 Although OpenAPI specs offer great descriptions of how to use APIs, code-gen with tools like OpenAPI generator and Swagger code-gen isn't perfect. Many APIs have edge cases that are accounted for in client SDKs and not in raw HTTP requests. For example, Gmail's RFC2822 format or Twilio's custom TwiML format are better parsed by code rather than generated as input by an LLM. We include copies of OpenAPI specs beside agents.json files in the repo for use.
 
-#### How is this different than the Model Context Protocol?
+</details>
+
+<details>
+<summary>How is this different than the Model Context Protocol?</summary>
 
 While MCP is designed to be stateful—relying on persistent connections between clients and servers for exchanging context and requests—Agents.json is stateless. Here, the agent independently manages all context. You can leverage your existing agent architecture and RAG systems to handle state effectively. Agents.json lets you build with existing pub/sub architectures, server-less environments, and infrastructure APIs already support today. And definitions are strongly typed by OpenAPI specs.
 
-#### What about llms.txt?
+</details>
+
+<details>
+<summary>What about llms.txt?</summary>
 
 [llms.txt](https://llmstxt.org) is a great standard for making website content more readable to LLMs, but it doesn't address the challenges of **taking structured actions**. While llms.txt helps LLMs retrieve and interpret information, agents.json enables them to execute multi-step workflows reliably.
 
-#### Why use OpenAPI?
+</details>
+<details>
+<summary>Why use OpenAPI?</summary>
 
 OpenAPI is a thoughtful standard that has evolved with the changes of HTTP APIs. It is the gold standard for describing how API endpoints work and can be executed. Most API providers have OpenAPI specs or have APIs that can be described fully by OpenAPI. These specs aren't quite sufficient for the age of agents, but do provide great groundwork for API↔agent communication.
 
+</details>
 
 ## Feature Roadmap
 
