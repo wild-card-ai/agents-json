@@ -8,7 +8,7 @@
   "sources": [
     {
       "id": "googlesheets",
-      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/sheets/agents_json/googlesheets/openapi.yaml"
+      "path": "https://raw.githubusercontent.com/kmahorker/tmp/refs/heads/master/googlesheets/openapi.yaml"
     }
   ],
   "overrides": [],
