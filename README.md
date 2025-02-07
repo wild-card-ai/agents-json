@@ -12,12 +12,12 @@
 
 → The `agents.json` Specification is an open specification that translates from OpenAPI to LLM tools.
 
-→ Use the `agents.json` Bridge Python package to load, parse, and run agents.json.
+→ Use the Wildcard Bridge Python package to load, parse, and run agents.json.
 
 ## Quickstart
 
 <p align="center">
-<img align="center" src="./static/quickstart/3easysteps.png" alt="agents.json Bridge" width="700">
+<img align="center" src="./static/quickstart/3easysteps.png" alt="Wildcard Bridge" width="700">
 </p>
 
 ### Use one of the quickstart notebooks to get started:
@@ -167,7 +167,7 @@ OpenAPI is a thoughtful standard that has evolved with the changes of HTTP APIs.
 ## Licenses
 
 The agents.json specification is open source, licensed under the [Apache 2.0 License](./agents_json/LICENSE).
-The agents.json Bridge is source-available, licensed under the [BUSL-1.1 License](./python/LICENSE).
+The Wildcard Bridge is source-available, licensed under the [BUSL-1.1 License](./python/LICENSE).
 
 ## Contributions
 
