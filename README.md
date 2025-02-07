@@ -10,9 +10,9 @@
 [![Documentation](https://img.shields.io/badge/Documentation-📕-blue)](https://docs.wild-card.ai/agents-json)
 [![Twitter Follow](https://img.shields.io/twitter/follow/wildcard_ai?style=social)](https://x.com/wildcard_ai)
 
-→ The `agents.json` Specification is an open specification that translates from OpenAPI to LLM tools.
+The `agents.json` Specification is an open specification that formally describes contracts for API and agent interactions, built on top of the OpenAPI standard. The current version is `0.1.0`.
 
-→ Use the Wildcard Bridge Python package to load, parse, and run agents.json.
+Use the Wildcard Bridge Python package to load, parse, and run agents.json.
 
 ## Quickstart
 
