@@ -1,0 +1,2310 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Google Sheets API Methods",
+    "version": "0.1.0",
+    "description": "This specification enables interaction with the Google Sheets API by exposing both compound and individual operations. Each flow is defined clearly so that method callers or embedding-based search can easily match the functionality to operations such as creating spreadsheets, retrieving data, or updating cell values."
+  },
+  "sources": [
+    {
+      "id": "googlesheets",
+      "path": "https://raw.githubusercontent.com/kmahorker/tmp/refs/heads/master/googlesheets/openapi.yaml"
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "spreadsheets_create",
+      "title": "Create Spreadsheet",
+      "description": "Creates a new Google Spreadsheet with specified properties and formatting options.",
+      "actions": [
+        {
+          "id": "create_spreadsheet_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_create"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_create",
+            "fieldPath": "requestBody.properties.title"
+          },
+          "target": {
+            "actionId": "create_spreadsheet_action",
+            "fieldPath": "requestBody.properties.title"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Spreadsheet resource definition. Include properties such as title, sheets, and formatting options.",
+                "properties": {
+                  "properties": {
+                    "type": "object",
+                    "description": "Spreadsheet properties.",
+                    "properties": {
+                      "title": {
+                        "type": "string",
+                        "description": "Title of the spreadsheet."
+                      }
+                    },
+                    "required": ["title"]
+                  }
+                },
+                "required": ["properties"]
+              },
+              "example": {
+                "properties": {
+                  "title": "My New Spreadsheet"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The newly created spreadsheet resource including its spreadsheetId.",
+            "example": {
+              "spreadsheetId": "abc123",
+              "properties": {
+                "title": "My New Spreadsheet"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_get",
+      "title": "Get Spreadsheet",
+      "description": "Retrieves details of an existing Google Spreadsheet using its spreadsheetId.",
+      "actions": [
+        {
+          "id": "get_spreadsheet_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_get"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_get",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "get_spreadsheet_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The unique identifier of the spreadsheet.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Spreadsheet details including properties and sheet information.",
+            "example": {
+              "spreadsheetId": "abc123",
+              "properties": {
+                "title": "My Spreadsheet"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_developer_metadata_get",
+      "title": "Get Developer Metadata",
+      "description": "Retrieves developer metadata from a spreadsheet using its metadataId.",
+      "actions": [
+        {
+          "id": "get_developer_metadata_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_developer_metadata_get"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_developer_metadata_get",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "get_developer_metadata_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_developer_metadata_get",
+            "fieldPath": "parameters.metadataId"
+          },
+          "target": {
+            "actionId": "get_developer_metadata_action",
+            "fieldPath": "parameters.metadataId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The identifier of the spreadsheet where metadata is stored.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "metadataId",
+            "description": "The unique identifier of the developer metadata.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Developer metadata details.",
+            "example": {
+              "metadataId": "123456",
+              "metadataKey": "customKey",
+              "metadataValue": "customValue"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_developer_metadata_search",
+      "title": "Search Developer Metadata",
+      "description": "Searches for developer metadata in a spreadsheet using specified criteria.",
+      "actions": [
+        {
+          "id": "search_developer_metadata_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_developer_metadata_search"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_developer_metadata_search",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "search_developer_metadata_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The identifier of the spreadsheet to search in.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Criteria for searching developer metadata.",
+                "properties": {
+                  "dataFilters": {
+                    "type": "array",
+                    "description": "An array of data filters.",
+                    "items": {
+                      "type": "object",
+                      "description": "A filter specifying metadata search criteria.",
+                      "properties": {
+                        "metadataKey": {
+                          "type": "string",
+                          "description": "The key for developer metadata."
+                        }
+                      },
+                      "required": ["metadataKey"]
+                    }
+                  }
+                },
+                "required": ["dataFilters"]
+              },
+              "example": {
+                "dataFilters": [
+                  {
+                    "metadataKey": "customKey"
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Results containing matching developer metadata.",
+            "example": {
+              "matchedMetadata": [
+                {
+                  "metadataId": "123456",
+                  "metadataKey": "customKey",
+                  "metadataValue": "customValue"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_sheets_copy_to",
+      "title": "Copy Sheet",
+      "description": "Copies a sheet from one spreadsheet to another.",
+      "actions": [
+        {
+          "id": "copy_sheet_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_sheets_copy_to"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_sheets_copy_to",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "copy_sheet_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_sheets_copy_to",
+            "fieldPath": "parameters.sheetId"
+          },
+          "target": {
+            "actionId": "copy_sheet_action",
+            "fieldPath": "parameters.sheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_sheets_copy_to",
+            "fieldPath": "requestBody.destinationSpreadsheetId"
+          },
+          "target": {
+            "actionId": "copy_sheet_action",
+            "fieldPath": "requestBody.destinationSpreadsheetId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the source spreadsheet.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sheetId",
+            "description": "The ID of the sheet to copy.",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Destination details for the copy operation.",
+                "properties": {
+                  "destinationSpreadsheetId": {
+                    "type": "string",
+                    "description": "The ID of the destination spreadsheet."
+                  }
+                },
+                "required": ["destinationSpreadsheetId"]
+              },
+              "example": {
+                "destinationSpreadsheetId": "dest123"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Information about the copied sheet.",
+            "example": {
+              "sheetId": 98765,
+              "title": "Copied Sheet"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_get",
+      "title": "Get Spreadsheet Values",
+      "description": "Retrieves cell values from a specified range in a spreadsheet.",
+      "actions": [
+        {
+          "id": "get_values_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_get"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_get",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "get_values_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_get",
+            "fieldPath": "parameters.range"
+          },
+          "target": {
+            "actionId": "get_values_action",
+            "fieldPath": "parameters.range"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to read from.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range (in A1 notation) to retrieve values from.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The cell values from the specified range.",
+            "example": {
+              "range": "Sheet1!A1:B2",
+              "values": [
+                ["Header1", "Header2"],
+                ["Value1", "Value2"]
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_update",
+      "title": "Update Spreadsheet Values",
+      "description": "Updates cell values in a specified range of a spreadsheet.",
+      "actions": [
+        {
+          "id": "update_values_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_update"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_update",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "update_values_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_update",
+            "fieldPath": "parameters.range"
+          },
+          "target": {
+            "actionId": "update_values_action",
+            "fieldPath": "parameters.range"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_update",
+            "fieldPath": "parameters.valueInputOption"
+          },
+          "target": {
+            "actionId": "update_values_action",
+            "fieldPath": "parameters.valueInputOption"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_update",
+            "fieldPath": "requestBody.values"
+          },
+          "target": {
+            "actionId": "update_values_action",
+            "fieldPath": "requestBody.values"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to update.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range (in A1 notation) where values will be updated.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "valueInputOption",
+            "description": "How the input data should be interpreted. Accepted values are: RAW or USER_ENTERED",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "New cell values for the update operation.",
+                "properties": {
+                  "values": {
+                    "type": "array",
+                    "description": "An array of rows with new values.",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": ["values"]
+              },
+              "example": {
+                "values": [
+                  ["NewValue1", "NewValue2"]
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The update result including the number of updated cells.",
+            "example": {
+              "updatedCells": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_append",
+      "title": "Append Spreadsheet Values",
+      "description": "Appends new rows of cell values to a specified range in a spreadsheet.",
+      "actions": [
+        {
+          "id": "append_values_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_append"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_append",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "append_values_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_append",
+            "fieldPath": "parameters.range"
+          },
+          "target": {
+            "actionId": "append_values_action",
+            "fieldPath": "parameters.range"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_append",
+            "fieldPath": "parameters.valueInputOption"
+          },
+          "target": {
+            "actionId": "append_values_action",
+            "fieldPath": "parameters.valueInputOption"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_append",
+            "fieldPath": "requestBody.values"
+          },
+          "target": {
+            "actionId": "append_values_action",
+            "fieldPath": "requestBody.values"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to append to.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The target range for appending new rows.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "valueInputOption",
+            "description": "How the input data should be interpreted. Accepted values are: RAW or USER_ENTERED",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Rows of data to append.",
+                "properties": {
+                  "values": {
+                    "type": "array",
+                    "description": "An array of rows to append.",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": ["values"]
+              },
+              "example": {
+                "values": [
+                  ["Data1", "Data2"]
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The result of the append operation showing the number of updated cells.",
+            "example": {
+              "updates": {
+                "updatedCells": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_clear",
+      "title": "Clear Spreadsheet Values",
+      "description": "Clears all cell values from a specified range in a spreadsheet.",
+      "actions": [
+        {
+          "id": "clear_values_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_clear"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_clear",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "clear_values_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_clear",
+            "fieldPath": "parameters.range"
+          },
+          "target": {
+            "actionId": "clear_values_action",
+            "fieldPath": "parameters.range"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to clear.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range (in A1 notation) to clear.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The final clear operation output.",
+            "properties": {
+              "clearedRange": {
+                "type": "string",
+                "description": "The range that was cleared."
+              }
+            },
+            "example": {
+              "clearedRange": "Sheet1!A1:B2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_clear",
+      "title": "Batch Clear Spreadsheet Values",
+      "description": "Clears cell values from multiple ranges in one batch request.",
+      "actions": [
+        {
+          "id": "batch_clear_values_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_clear"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_clear",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_clear_values_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_clear",
+            "fieldPath": "requestBody.ranges"
+          },
+          "target": {
+            "actionId": "batch_clear_values_action",
+            "fieldPath": "requestBody.ranges"
+          }
+        }
+      ],
+      
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet identifier for the batch clear operation.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "The list of ranges to clear.",
+                "properties": {
+                  "ranges": {
+                    "type": "array",
+                    "description": "An array of ranges in A1 notation.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["ranges"]
+              },
+              "example": {
+                "ranges": [
+                  "Sheet1!A1:B2",
+                  "Sheet1!C1:D2"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The result of the batch clear operation.",
+            "example": {
+              "clearedRanges": [
+                "Sheet1!A1:B2",
+                "Sheet1!C1:D2"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_get",
+      "title": "Batch Get Spreadsheet Values",
+      "description": "Retrieves cell values from multiple ranges in one batch request.",
+      "actions": [
+        {
+          "id": "batch_get_values_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_get"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_get",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_get_values_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_get",
+            "fieldPath": "requestBody.ranges"
+          },
+          "target": {
+            "actionId": "batch_get_values_action",
+            "fieldPath": "parameters.ranges"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_get",
+            "fieldPath": "parameters.majorDimension"
+          },
+          "target": {
+            "actionId": "batch_get_values_action",
+            "fieldPath": "parameters.majorDimension"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet identifier to retrieve data from.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "majorDimension",
+            "description": "The major dimension that results should use. For example, if the spreadsheet data is: A1:B1,A2:B2, then requesting majorDimension=ROWS will return a response with two rows of values. The caller can specify the major dimension by setting the dimensions parameter. For example, if the spreadsheet data is: A1:B1,A2:B2, then requesting dimensions=ROWS will return a response with two rows of values. The caller can specify the major dimension by setting the dimensions parameter.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "The list of ranges to retrieve values from.",
+                "properties": {
+                  "ranges": {
+                    "type": "array",
+                    "description": "An array of ranges in A1 notation.",
+                    "items": {
+                      "type": "string",
+                      "description": "A range in A1 notation like 'Sheet1!A1:B2'"
+                    }
+                  }
+                },
+                "required": ["ranges"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The batch get result containing multiple ranges.",
+            "example": {
+              "valueRanges": [
+                {
+                  "range": "Sheet1!A1:B2",
+                  "values": [
+                    ["Header1", "Header2"],
+                    ["Value1", "Value2"]
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_get_by_data_filter",
+      "title": "Batch Get Values by Data Filter",
+      "description": "Retrieves cell values using dynamic data filters to select ranges.",
+      "actions": [
+        {
+          "id": "batch_get_by_filter_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_get_by_data_filter"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_get_by_data_filter",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_get_by_filter_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_get_by_data_filter",
+            "fieldPath": "requestBody.dataFilters"
+          },
+          "target": {
+            "actionId": "batch_get_by_filter_action",
+            "fieldPath": "requestBody.dataFilters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet ID to query.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters to select ranges from which to retrieve values.",
+                "properties": {
+                  "dataFilters": {
+                    "type": "array",
+                    "description": "An array of data filters.",
+                    "items": {
+                      "type": "object",
+                      "description": "A filter specifying what data should be selected or returned from a request.",
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "gridRange": {
+                              "type": "object",
+                              "description": "A grid range on a sheet.",
+                              "properties": {
+                                "sheetId": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The sheet ID."
+                                },
+                                "startRowIndex": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The start row index (inclusive)."
+                                },
+                                "endRowIndex": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The end row index (exclusive)."
+                                }
+                              },
+                              "required": ["sheetId", "startRowIndex", "endRowIndex"]
+                            }
+                          }
+                        },
+                        {
+                          "properties": {
+                            "developerMetadataLookup": {
+                              "type": "object",
+                              "description": "Selects data associated with the developer metadata matching the criteria"
+                            }
+                          }
+                        },
+                        {
+                          "properties": {
+                            "a1Range": {
+                              "type": "string",
+                              "description": "Selects data that matches the specified A1 range."
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": ["dataFilters"]
+              },
+              "example": {
+                "dataFilters": [
+                  {
+                    "gridRange": {
+                      "sheetId": 0,
+                      "startRowIndex": 0,
+                      "endRowIndex": 2
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The result containing values for the selected ranges.",
+            "example": {
+              "valueRanges": [
+                {
+                  "range": "Sheet1!A1:B2",
+                  "values": [
+                    ["Header1", "Header2"],
+                    ["Value1", "Value2"]
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_update",
+      "title": "Batch Update Spreadsheet Values",
+      "description": "Updates multiple ranges in a spreadsheet with new values in one batch request.",
+      "actions": [
+        {
+          "id": "batch_update_values_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_update"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_update",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_update_values_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet ID to update.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "A list of update requests for spreadsheet values.",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "description": "An array of update requests.",
+                    "items": {
+                      "type": "object",
+                      "description": "An update request specifying a range and new values.",
+                      "properties": {
+                        "range": {
+                          "type": "string",
+                          "description": "The range to update."
+                        },
+                        "values": {
+                          "type": "array",
+                          "description": "The new values as an array of rows.",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": ["range", "values"]
+                    }
+                  }
+                },
+                "required": ["data"]
+              },
+              "example": {
+                "data": [
+                  {
+                    "range": "Sheet1!A1:B1",
+                    "values": [
+                      ["UpdatedValue1", "UpdatedValue2"]
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The result of the batch update operation.",
+            "example": {
+              "totalUpdatedCells": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_update_by_data_filter",
+      "title": "Batch Update Values by Data Filter",
+      "description": "Updates spreadsheet values based on dynamic data filters in one batch operation.",
+      "actions": [
+        {
+          "id": "batch_update_by_filter_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_update_by_data_filter"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_update_by_data_filter",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_update_by_filter_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_update_by_data_filter",
+            "fieldPath": "requestBody.valueInputOption"
+          },
+          "target": {
+            "actionId": "batch_update_by_filter_action",
+            "fieldPath": "requestBody.valueInputOption"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_update_by_data_filter",
+            "fieldPath": "requestBody.data"
+          },
+          "target": {
+            "actionId": "batch_update_by_filter_action",
+            "fieldPath": "requestBody.data"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet ID where updates will be applied.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters and new values for updating ranges.",
+                "properties": {
+                  "valueInputOption": {
+                    "type": "string",
+                    "description": "How the input data should be interpreted.",
+                    "enum": ["RAW", "USER_ENTERED"]
+                  },
+                  "data": {
+                    "type": "array",
+                    "description": "The data to write. If more than one range is matched by the specified DataFilter the specified values are applied to all of those ranges.",
+                    "items": {
+                      "type": "object",
+                      "description": "A range of values whose location is specified by a DataFilter.",
+                      "properties": {
+                        "dataFilter": {
+                          "type": "object",
+                          "description": "A filter that describes what data should be selected.",
+                          "anyOf": [
+                            {
+                              "properties": {
+                                "gridRange": {
+                                  "type": "object",
+                                  "description": "A grid range on a sheet.",
+                                  "properties": {
+                                    "sheetId": {
+                                      "type": "integer",
+                                      "format": "int32",
+                                      "description": "The sheet ID."
+                                    },
+                                    "startRowIndex": {
+                                      "type": "integer",
+                                      "format": "int32",
+                                      "description": "The start row index (inclusive)."
+                                    },
+                                    "endRowIndex": {
+                                      "type": "integer",
+                                      "format": "int32",
+                                      "description": "The end row index (exclusive)."
+                                    }
+                                  },
+                                  "required": ["sheetId", "startRowIndex", "endRowIndex"]
+                                }
+                              }
+                            },
+                            {
+                              "properties": {
+                                "developerMetadataLookup": {
+                                  "type": "object",
+                                  "description": "Selects data associated with the developer metadata matching the criteria"
+                                }
+                              }
+                            },
+                            {
+                              "properties": {
+                                "a1Range": {
+                                  "type": "string",
+                                  "description": "Selects data that matches the specified A1 range."
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        "majorDimension": {
+                          "type": "string",
+                          "description": "The major dimension of the values.",
+                          "enum": ["ROWS", "COLUMNS"]
+                        },
+                        "values": {
+                          "type": "array",
+                          "description": "The data to be written. If the provided values exceed any of the ranges matched by the data filter then the request fails. If the provided values are less than the matched ranges only the specified values are written, existing values in the matched ranges remain unaffected.",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": ["dataFilter", "values"]
+                    }
+                  }
+                },
+                "required": ["valueInputOption", "data"]
+              },
+              "example": {
+                "valueInputOption": "USER_ENTERED",
+                "data": [
+                  {
+                    "dataFilter": {
+                      "a1Range": "Sheet1!A1:B1"
+                    },
+                    "values": [
+                      ["NewValue"]
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The result of the batch update by data filter operation.",
+            "example": {
+              "totalUpdatedCells": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_batch_update",
+      "title": "Batch Update Spreadsheet",
+      "description": "Executes multiple update operations on a spreadsheet in one batch request.",
+      "actions": [
+        {
+          "id": "batch_update_spreadsheet_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_batch_update"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_batch_update",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_update_spreadsheet_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_batch_update",
+            "fieldPath": "requestBody.requests"
+          },
+          "target": {
+            "actionId": "batch_update_spreadsheet_action",
+            "fieldPath": "requestBody.requests"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet to update.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "A list of update requests for spreadsheet modifications.",
+                "properties": {
+                  "requests": {
+                    "type": "array",
+                    "description": "An array of update requests.",
+                    "items": {
+                      "type": "object",
+                      "description": "An individual update request.",
+                      "properties": {
+                        "updateSheetProperties": {
+                          "type": "object",
+                          "description": "Request to update sheet properties.",
+                          "properties": {
+                            "properties": {
+                              "type": "object",
+                              "description": "Sheet properties to update.",
+                              "properties": {
+                                "sheetId": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The sheet ID."
+                                },
+                                "title": {
+                                  "type": "string",
+                                  "description": "The new title for the sheet."
+                                }
+                              },
+                              "required": ["sheetId", "title"]
+                            },
+                            "fields": {
+                              "type": "string",
+                              "description": "Comma-separated list of fields to update."
+                            }
+                          },
+                          "required": ["properties", "fields"]
+                        }
+                      },
+                      "required": ["updateSheetProperties"]
+                    }
+                  }
+                },
+                "required": ["requests"]
+              },
+              "example": {
+                "requests": [
+                  {
+                    "updateSheetProperties": {
+                      "properties": {
+                        "sheetId": 0,
+                        "title": "New Title"
+                      },
+                      "fields": "title"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The results of the batch update operation.",
+            "example": {
+              "replies": [
+                {
+                  "updateSheetProperties": {
+                    "updatedProperties": {
+                      "title": "New Title"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_get_by_data_filter",
+      "title": "Get Spreadsheet by Data Filter",
+      "description": "Retrieves spreadsheet data based on specified data filters.",
+      "actions": [
+        {
+          "id": "get_spreadsheet_by_filter_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_get_by_data_filter"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_get_by_data_filter",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "get_spreadsheet_by_filter_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_get_by_data_filter",
+            "fieldPath": "requestBody.dataFilters"
+          },
+          "target": {
+            "actionId": "get_spreadsheet_by_filter_action",
+            "fieldPath": "requestBody.dataFilters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet identifier.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters specifying which parts of the spreadsheet to retrieve.",
+                "properties": {
+                  "dataFilters": {
+                    "type": "array",
+                    "description": "An array of data filters.",
+                    "items": {
+                      "type": "object",
+                      "description": "A filter specifying what data should be selected or returned from a request.",
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "gridRange": {
+                              "type": "object",
+                              "description": "A grid range on a sheet.",
+                              "properties": {
+                                "sheetId": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The sheet ID."
+                                },
+                                "startRowIndex": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The start row index (inclusive)."
+                                },
+                                "endRowIndex": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The end row index (exclusive)."
+                                }
+                              },
+                              "required": ["sheetId", "startRowIndex", "endRowIndex"]
+                            }
+                          }
+                        },
+                        {
+                          "properties": {
+                            "developerMetadataLookup": {
+                              "type": "object",
+                              "description": "Selects data associated with the developer metadata matching the criteria"
+                            }
+                          }
+                        },
+                        {
+                          "properties": {
+                            "a1Range": {
+                              "type": "string",
+                              "description": "Selects data that matches the specified A1 range."
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": ["dataFilters"]
+              },
+              "example": {
+                "dataFilters": [
+                  {
+                    "gridRange": {
+                      "sheetId": 0,
+                      "startRowIndex": 0,
+                      "endRowIndex": 5
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Spreadsheet data matching the provided filters.",
+            "example": {
+              "spreadsheetId": "abc123",
+              "sheets": [
+                {
+                  "properties": {
+                    "sheetId": 0,
+                    "title": "Sheet1"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "create_and_initialize_spreadsheet",
+      "title": "Create and Initialize Spreadsheet",
+      "description": "Creates a new spreadsheet and appends initial data, resulting in a ready-to-use spreadsheet.",
+      "actions": [
+        {
+          "id": "create_spreadsheet_compound",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_create"
+        },
+        {
+          "id": "append_initial_values",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_append"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "create_and_initialize_spreadsheet",
+            "fieldPath": "requestBody.create.properties.title"
+          },
+          "target": {
+            "actionId": "create_spreadsheet_compound",
+            "fieldPath": "requestBody.properties.title"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_and_initialize_spreadsheet",
+            "fieldPath": "requestBody.append.range"
+          },
+          "target": {
+            "actionId": "append_initial_values",
+            "fieldPath": "parameters.range"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_spreadsheet_compound",
+            "fieldPath": "responses.success.spreadsheetId"
+          },
+          "target": {
+            "actionId": "append_initial_values",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_and_initialize_spreadsheet",
+            "fieldPath": "requestBody.append.valueInputOption"
+          },
+          "target": {
+            "actionId": "append_initial_values",
+            "fieldPath": "parameters.valueInputOption"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_and_initialize_spreadsheet",
+            "fieldPath": "requestBody.append.values"
+          },
+          "target": {
+            "actionId": "append_initial_values",
+            "fieldPath": "requestBody.values"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "create_and_initialize_spreadsheet",
+            "fieldPath": "responses.success.spreadsheetId"
+          },
+          "target": {
+            "actionId": "append_initial_values",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Combined request body for creating and initializing a spreadsheet.",
+                "properties": {
+                  "create": {
+                    "type": "object",
+                    "description": "Spreadsheet creation details.",
+                    "properties": {
+                      "properties": {
+                        "type": "object",
+                        "description": "Spreadsheet properties.",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "description": "Title of the spreadsheet."
+                          }
+                        },
+                        "required": ["title"]
+                      }
+                    },
+                    "required": ["properties"]
+                  },
+                  "append": {
+                    "type": "object",
+                    "description": "Initial data to append.",
+                    "properties": {
+                      "range": {
+                        "type": "string",
+                        "description": "The range in A1 notation where data will be appended."
+                      },
+                      "values": {
+                        "type": "array",
+                        "description": "An array of rows to append.",
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "valueInputOption": {
+                        "type": "string",
+                        "description": "How the input data should be interpreted. Accepted values are: RAW or USER_ENTERED",
+                        "required": true,
+                        "enum": ["RAW", "USER_ENTERED"]
+                      }
+                    },
+                    "required": ["range", "values"]
+                  }
+                },
+                "required": ["create", "append"]
+              },
+              "example": {
+                "create": {
+                  "properties": {
+                    "title": "Initialized Spreadsheet"
+                  }
+                },
+                "append": {
+                  "range": "Sheet1!A1",
+                  "values": [
+                    ["Header1", "Header2"],
+                    ["Data1", "Data2"]
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Final output including the spreadsheet ID and the result of appending initial data.",
+            "properties": {
+              "spreadsheetId": {
+                "type": "string",
+                "description": "The ID of the created spreadsheet."
+              },
+              "appendResult": {
+                "type": "object",
+                "description": "Result from the append operation.",
+                "properties": {
+                  "updates": {
+                    "type": "object",
+                    "properties": {
+                      "updatedCells": {
+                        "type": "integer",
+                        "description": "Number of cells updated."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "spreadsheetId": "abc123",
+              "appendResult": {
+                "updates": {
+                  "updatedCells": 4
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_read_and_clear",
+      "title": "Read and Clear Spreadsheet Values",
+      "description": "Reads cell values from a specified range and then clears them.",
+      "actions": [
+        {
+          "id": "get_values_for_read_clear",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_get"
+        },
+        {
+          "id": "clear_values_for_read_clear",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_clear"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_read_and_clear",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "get_values_for_read_clear",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_read_and_clear",
+            "fieldPath": "parameters.range"
+          },
+          "target": {
+            "actionId": "get_values_for_read_clear",
+            "fieldPath": "parameters.range"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_read_and_clear",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "clear_values_for_read_clear",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_read_and_clear",
+            "fieldPath": "parameters.range"
+          },
+          "target": {
+            "actionId": "clear_values_for_read_clear",
+            "fieldPath": "parameters.range"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The ID of the spreadsheet.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range (in A1 notation) to read and clear.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Final output from the clear operation.",
+            "properties": {
+              "clearedRange": {
+                "type": "string",
+                "description": "The range that was cleared."
+              }
+            },
+            "example": {
+              "clearedRange": "Sheet1!A1:B2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_batch_update_and_get",
+      "title": "Batch Update and Retrieve Values",
+      "description": "Performs a batch update on a spreadsheet and then retrieves the updated values.",
+      "actions": [
+        {
+          "id": "batch_update_values_for_update_get",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_update"
+        },
+        {
+          "id": "batch_get_values_for_update_get",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_get"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_batch_update_and_get",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_update_values_for_update_get",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_batch_update_and_get",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_get_values_for_update_get",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_batch_update_and_get",
+            "fieldPath": "requestBody.valueInputOption"
+          },
+          "target": {
+            "actionId": "batch_update_values_for_update_get",
+            "fieldPath": "requestBody.valueInputOption"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet ID for update and retrieval.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "A list of update requests for the batch update.",
+                "properties": {
+                  "valueInputOption": {
+                    "type": "string",
+                    "description": "The input option for the update request. Accepted values are: RAW or USER_ENTERED",
+                    "enum": ["RAW", "USER_ENTERED"]
+                  },
+                  "data": {
+                    "type": "array",
+                    "description": "An array of update requests.",
+                    "items": {
+                      "type": "object",
+                      "description": "An update request specifying a range and new values.",
+                      "properties": {
+                        "range": {
+                          "type": "string",
+                          "description": "The range to update."
+                        },
+                        "values": {
+                          "type": "array",
+                          "description": "The new values as an array of rows.",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": ["range", "values"]
+                    }
+                  }
+                },
+                "required": ["data", "valueInputOption"]
+              },
+              "example": {
+                "data": [
+                  {
+                    "range": "Sheet1!A1:B1",
+                    "values": [
+                      ["UpdatedValue1", "UpdatedValue2"]
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Final output containing the updated values.",
+            "properties": {
+              "valueRanges": {
+                "type": "array",
+                "description": "Array of value ranges retrieved after update.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "range": {
+                      "type": "string",
+                      "description": "The range that was updated."
+                    },
+                    "values": {
+                      "type": "array",
+                      "description": "The updated values.",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "valueRanges": [
+                {
+                  "range": "Sheet1!A1:B1",
+                  "values": [
+                    ["UpdatedValue1", "UpdatedValue2"]
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_copy_and_update",
+      "title": "Copy Sheet and Update Values",
+      "description": "Copies a sheet from one spreadsheet to another and then updates values in the copied sheet.",
+      "actions": [
+        {
+          "id": "copy_sheet_for_copy_update",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_sheets_copy_to"
+        },
+        {
+          "id": "update_values_for_copy_update",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_update"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_copy_and_update",
+            "fieldPath": "parameters.sourceSpreadsheetId"
+          },
+          "target": {
+            "actionId": "copy_sheet_for_copy_update",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_copy_and_update",
+            "fieldPath": "parameters.sheetId"
+          },
+          "target": {
+            "actionId": "copy_sheet_for_copy_update",
+            "fieldPath": "parameters.sheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_copy_and_update",
+            "fieldPath": "parameters.destinationSpreadsheetId"
+          },
+          "target": {
+            "actionId": "copy_sheet_for_copy_update",
+            "fieldPath": "requestBody.destinationSpreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_copy_and_update",
+            "fieldPath": "parameters.destinationSpreadsheetId"
+          },
+          "target": {
+            "actionId": "update_values_for_copy_update",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "spreadsheets_copy_and_update",
+            "fieldPath": "parameters.range"
+          },
+          "target": {
+            "actionId": "update_values_for_copy_update",
+            "fieldPath": "parameters.range"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sourceSpreadsheetId",
+            "description": "The ID of the source spreadsheet.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sheetId",
+            "description": "The ID of the sheet to copy.",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "destinationSpreadsheetId",
+            "description": "The ID of the destination spreadsheet.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "range",
+            "description": "The range in the destination spreadsheet to update.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Destination details for copying the sheet.",
+                "properties": {
+                  "destinationSpreadsheetId": {
+                    "type": "string",
+                    "description": "The destination spreadsheet ID."
+                  }
+                },
+                "required": ["destinationSpreadsheetId"]
+              },
+              "example": {
+                "destinationSpreadsheetId": "dest123"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Final output containing information about the copied sheet and the update result.",
+            "properties": {
+              "copiedSheet": {
+                "type": "object",
+                "description": "Information about the copied sheet.",
+                "properties": {
+                  "sheetId": {
+                    "type": "integer",
+                    "description": "The ID of the copied sheet."
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "The title of the copied sheet."
+                  }
+                }
+              },
+              "updateResult": {
+                "type": "object",
+                "description": "The result of updating values in the copied sheet.",
+                "properties": {
+                  "updatedCells": {
+                    "type": "integer",
+                    "description": "The number of cells updated."
+                  }
+                }
+              }
+            },
+            "example": {
+              "copiedSheet": {
+                "sheetId": 98765,
+                "title": "Copied Sheet"
+              },
+              "updateResult": {
+                "updatedCells": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "spreadsheets_values_batch_clear_by_data_filter",
+      "title": "Batch Clear Spreadsheet Values by Data Filter",
+      "description": "Clears cell values from multiple ranges in one batch request based on specified data filters.",
+      "actions": [
+        {
+          "id": "batch_clear_values_by_filter_action",
+          "sourceId": "googlesheets",
+          "operationId": "googlesheets_sheets_spreadsheets_values_batch_clear_by_data_filter"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "spreadsheets_values_batch_clear_by_data_filter",
+            "fieldPath": "parameters.spreadsheetId"
+          },
+          "target": {
+            "actionId": "batch_clear_values_by_filter_action",
+            "fieldPath": "parameters.spreadsheetId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "spreadsheetId",
+            "description": "The spreadsheet identifier for the batch clear operation.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Data filters to select ranges from which to clear values.",
+                "properties": {
+                  "dataFilters": {
+                    "type": "array",
+                    "description": "An array of data filters.",
+                    "items": {
+                      "type": "object",
+                      "description": "A filter specifying what data should be selected or returned from a request.",
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "gridRange": {
+                              "type": "object",
+                              "description": "A grid range on a sheet.",
+                              "properties": {
+                                "sheetId": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The sheet ID."
+                                },
+                                "startRowIndex": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The start row index (inclusive)."
+                                },
+                                "endRowIndex": {
+                                  "type": "integer",
+                                  "format": "int32",
+                                  "description": "The end row index (exclusive)."
+                                }
+                              },
+                              "required": ["sheetId", "startRowIndex", "endRowIndex"]
+                            }
+                          }
+                        },
+                        {
+                          "properties": {
+                            "developerMetadataLookup": {
+                              "type": "object",
+                              "description": "Selects data associated with the developer metadata matching the criteria"
+                            }
+                          }
+                        },
+                        {
+                          "properties": {
+                            "a1Range": {
+                              "type": "string",
+                              "description": "Selects data that matches the specified A1 range."
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": ["dataFilters"]
+              },
+              "example": {
+                "dataFilters": [
+                  {
+                    "gridRange": {
+                      "sheetId": 0,
+                      "startRowIndex": 0,
+                      "endRowIndex": 2
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The result of the batch clear by data filter operation.",
+            "example": {
+              "clearedRanges": [
+                "Sheet1!A1:B2"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}
