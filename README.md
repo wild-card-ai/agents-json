@@ -22,15 +22,17 @@
 
 ### Use one of the quickstart notebooks to get started:
 
-→ [Stripe Agent](./examples/single.ipynb) \
-→ [Twitter + Giphy Agent](./examples/multiple.ipynb)
+| Agent | Auth | Notebook |
+| --- | --- | --- |
+| [Stripe](./examples/single.ipynb) | Bearer Token | `./examples/single.ipynb` |
+| [Twitter + Giphy](./examples/multiple.ipynb) | OAuth 1.0, API Key | `./examples/multiple.ipynb` |
 
 ## Demos
 
 |  |  |
 | --- | --- |
-| [Stripe Agent](https://wild-card.ai/stripe) | [![Stripe Agent](./static/demo/stripe-demo.png)](https://wild-card.ai/stripe) |
-| [Google Sheets Agent](https://wild-card.ai/googlesheets) | [![Google Sheets Agent](./static/demo/googlesheets-demo.png)](https://wild-card.ai/googlesheets) |
+| [Stripe Agent](https://wild-card.ai/stripe) | [<img src="./static/demo/stripe-demo.png" alt="Stripe Agent" width="300">](https://wild-card.ai/stripe) |
+| [Google Sheets Agent](https://wild-card.ai/googlesheets) | [<img src="./static/demo/googlesheets-demo.png" alt="Google Sheets Agent" width="300">](https://wild-card.ai/googlesheets) |
 
 ## agents.json Specification
 The `agents.json` Specification is an open specification that formally describes contracts for API and agent interactions, built on top of the OpenAPI standard.
@@ -76,7 +78,7 @@ To solve this, we introduce flows and links. Flows are contracts with a series o
 We propose the file placed in `/.well-known/agents.json` so it is easily discoverable by agents accessing web services. For now, we compose a GitHub repository as a registry for [available `agents.json` files](./agents_json/).
 
 <p align="center">
-<img style="text-align: center;" src="./static/diagram/LlmWorksDiagram.png" alt="LLMs with an Airgap" width="full" title="LLMs with an Airgap">
+<img style="text-align: center;" src="./static/diagram/LlmWorksDiagram.png" alt="LLMs and APIs with Agents.json" width="full" title="LLMs and APIs with Agents.json">
 </p>
 
 ### Wildcard Bridge
@@ -177,7 +179,9 @@ This project is started by [Wildcard AI](https://wild-card.ai). We're a team of 
 
 <br>
 
-<img width="full" align="center" src="./static/WildcardFoundersYC.jpg" alt="Wildcard AI Founders" width="100">
+<p align="center">
+<img align="center" src="./static/people/WildcardFoundersYC.jpg" alt="Wildcard AI Founders" width="500">
+</p>
 
 <br>
 
