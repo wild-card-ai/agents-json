@@ -1,0 +1,1564 @@
+{
+    "agentsJson": "1.0.0",
+    "info": {
+      "title": "Resend API Integration Agents",
+      "version": "1.1.0",
+      "description": "This agents.json specification integrates with the Resend Email API platform. It exposes operations for sending emails, managing domains, API Keys, audiences, contacts, and broadcasts. Each flow maps its input fields—using the proper prefixes (parameters. or requestBody.)—to the expected operation fields, ensuring the links adhere to the OpenAPI spec and validator expectations."
+    },
+    "sources": [
+      {
+        "id": "resend",
+        "path": "/Users/kaushik/Documents/OceanWater/agents-json/agents_json/resend/openapi.yaml",
+        "description": "The Resend OpenAPI specification covering emails, domains, API Keys, audiences, contacts, and broadcasts."
+      }
+    ],
+    "overrides": [],
+    "flows": [
+      {
+        "id": "resend_post_emails_flow",
+        "title": "Send Email",
+        "description": "Sends an email via the Resend API. Requires sender, recipients, subject, and (optionally) HTML/text content.",
+        "actions": [
+          {
+            "id": "send_email_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_emails"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_emails_flow",
+              "fieldPath": "requestBody.from"
+            },
+            "target": {
+              "actionId": "send_email_action",
+              "fieldPath": "requestBody.from"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_post_emails_flow",
+              "fieldPath": "requestBody.to"
+            },
+            "target": {
+              "actionId": "send_email_action",
+              "fieldPath": "requestBody.to"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_post_emails_flow",
+              "fieldPath": "requestBody.subject"
+            },
+            "target": {
+              "actionId": "send_email_action",
+              "fieldPath": "requestBody.subject"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "from": {
+                      "type": "string",
+                      "description": "Sender email address."
+                    },
+                    "to": {
+                      "type": "array",
+                      "description": "List of recipient email addresses.",
+                      "items": { "type": "string" }
+                    },
+                    "subject": {
+                      "type": "string",
+                      "description": "Email subject."
+                    },
+                    "html": {
+                      "type": "string",
+                      "description": "HTML content of the email."
+                    },
+                    "text": {
+                      "type": "string",
+                      "description": "Plain text content of the email."
+                    }
+                  },
+                  "required": ["from", "to", "subject"]
+                },
+                "example": {
+                  "from": "sender@example.com",
+                  "to": ["recipient@example.com"],
+                  "subject": "Hello",
+                  "html": "<p>Hello</p>"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Response containing the email ID.",
+              "example": {
+                "id": "email123"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_emails_by_email_id_flow",
+        "title": "Get Email by ID",
+        "description": "Retrieves email details using the email's unique ID.",
+        "actions": [
+          {
+            "id": "get_email_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_emails_by_email_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_get_emails_by_email_id_flow",
+              "fieldPath": "parameters.email_id"
+            },
+            "target": {
+              "actionId": "get_email_action",
+              "fieldPath": "parameters.email_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "email_id",
+              "description": "Unique identifier of the email.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Email details.",
+              "example": {
+                "id": "email123",
+                "status": "sent"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_patch_emails_by_email_id_flow",
+        "title": "Update Email by ID",
+        "description": "Updates properties of an existing email using its unique ID.",
+        "actions": [
+          {
+            "id": "patch_email_action",
+            "sourceId": "resend",
+            "operationId": "resend_patch_emails_by_email_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_patch_emails_by_email_id_flow",
+              "fieldPath": "parameters.email_id"
+            },
+            "target": {
+              "actionId": "patch_email_action",
+              "fieldPath": "parameters.email_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_patch_emails_by_email_id_flow",
+              "fieldPath": "requestBody.updates"
+            },
+            "target": {
+              "actionId": "patch_email_action",
+              "fieldPath": "requestBody.updates"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "email_id",
+              "description": "Unique identifier of the email to update.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "updates": {
+                      "type": "object",
+                      "description": "Fields to update in the email."
+                    }
+                  },
+                  "required": ["updates"]
+                },
+                "example": {
+                  "updates": {
+                    "subject": "Updated Subject"
+                  }
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Confirmation of email update.",
+              "example": {
+                "id": "email123"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_emails_cancel_by_email_id_flow",
+        "title": "Cancel Email",
+        "description": "Cancels an email using its unique ID.",
+        "actions": [
+          {
+            "id": "cancel_email_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_emails_cancel_by_email_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_emails_cancel_by_email_id_flow",
+              "fieldPath": "parameters.email_id"
+            },
+            "target": {
+              "actionId": "cancel_email_action",
+              "fieldPath": "parameters.email_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "email_id",
+              "description": "Unique identifier of the email to cancel.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Cancellation confirmation.",
+              "example": {
+                "id": "email123",
+                "status": "cancelled"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_emails_batch_flow",
+        "title": "Send Batch Emails",
+        "description": "Sends multiple emails in a single batch request.",
+        "actions": [
+          {
+            "id": "batch_email_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_emails_batch"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_emails_batch_flow",
+              "fieldPath": "requestBody.emails"
+            },
+            "target": {
+              "actionId": "batch_email_action",
+              "fieldPath": "requestBody.emails"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "emails": {
+                      "type": "array",
+                      "description": "Array of email objects to send.",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "required": ["emails"]
+                },
+                "example": {
+                  "emails": [
+                    {
+                      "from": "sender@example.com",
+                      "to": ["recipient@example.com"],
+                      "subject": "Batch Email"
+                    }
+                  ]
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Result of the batch email send.",
+              "example": {
+                "status": "batch_sent"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_domains_flow",
+        "title": "Create Domain",
+        "description": "Creates a new domain entry.",
+        "actions": [
+          {
+            "id": "create_domain_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_domains"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_domains_flow",
+              "fieldPath": "requestBody.domain"
+            },
+            "target": {
+              "actionId": "create_domain_action",
+              "fieldPath": "requestBody.domain"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "domain": {
+                      "type": "string",
+                      "description": "Domain name to create."
+                    }
+                  },
+                  "required": ["domain"]
+                },
+                "example": {
+                  "domain": "example.com"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Details of the created domain.",
+              "example": {
+                "id": "domain123",
+                "domain": "example.com"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_domains_flow",
+        "title": "List Domains",
+        "description": "Retrieves a list of domains.",
+        "actions": [
+          {
+            "id": "list_domains_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_domains"
+          }
+        ],
+        "links": [],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "List of domains.",
+              "example": {
+                "domains": [
+                  {
+                    "id": "domain123",
+                    "domain": "example.com"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_domains_by_domain_id_flow",
+        "title": "Get Domain by ID",
+        "description": "Retrieves details of a specific domain using its unique ID.",
+        "actions": [
+          {
+            "id": "get_domain_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_domains_by_domain_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_get_domains_by_domain_id_flow",
+              "fieldPath": "parameters.domain_id"
+            },
+            "target": {
+              "actionId": "get_domain_action",
+              "fieldPath": "parameters.domain_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "domain_id",
+              "description": "Unique identifier of the domain.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Domain details.",
+              "example": {
+                "id": "domain123",
+                "domain": "example.com"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_patch_domains_by_domain_id_flow",
+        "title": "Update Domain",
+        "description": "Updates a domain's details using its unique ID.",
+        "actions": [
+          {
+            "id": "patch_domain_action",
+            "sourceId": "resend",
+            "operationId": "resend_patch_domains_by_domain_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_patch_domains_by_domain_id_flow",
+              "fieldPath": "parameters.domain_id"
+            },
+            "target": {
+              "actionId": "patch_domain_action",
+              "fieldPath": "parameters.domain_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_patch_domains_by_domain_id_flow",
+              "fieldPath": "requestBody.updates"
+            },
+            "target": {
+              "actionId": "patch_domain_action",
+              "fieldPath": "requestBody.updates"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "domain_id",
+              "description": "Unique identifier of the domain to update.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "updates": {
+                      "type": "object",
+                      "description": "Domain properties to update."
+                    }
+                  },
+                  "required": ["updates"]
+                },
+                "example": {
+                  "updates": {
+                    "domain": "newexample.com"
+                  }
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Updated domain details.",
+              "example": {
+                "id": "domain123",
+                "domain": "newexample.com"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_delete_domains_by_domain_id_flow",
+        "title": "Delete Domain",
+        "description": "Deletes a domain identified by its unique ID.",
+        "actions": [
+          {
+            "id": "delete_domain_action",
+            "sourceId": "resend",
+            "operationId": "resend_delete_domains_by_domain_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_delete_domains_by_domain_id_flow",
+              "fieldPath": "parameters.domain_id"
+            },
+            "target": {
+              "actionId": "delete_domain_action",
+              "fieldPath": "parameters.domain_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "domain_id",
+              "description": "Unique identifier of the domain to delete.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Deletion confirmation.",
+              "example": {
+                "deleted": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_domains_verify_by_domain_id_flow",
+        "title": "Verify Domain",
+        "description": "Triggers the verification process for a domain identified by its unique ID.",
+        "actions": [
+          {
+            "id": "verify_domain_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_domains_verify_by_domain_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_domains_verify_by_domain_id_flow",
+              "fieldPath": "parameters.domain_id"
+            },
+            "target": {
+              "actionId": "verify_domain_action",
+              "fieldPath": "parameters.domain_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "domain_id",
+              "description": "Unique identifier of the domain to verify.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Verification result.",
+              "example": {
+                "verified": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_api_keys_flow",
+        "title": "Create API Key",
+        "description": "Creates a new API key.",
+        "actions": [
+          {
+            "id": "create_api_key_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_api_keys"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_api_keys_flow",
+              "fieldPath": "requestBody.name"
+            },
+            "target": {
+              "actionId": "create_api_key_action",
+              "fieldPath": "requestBody.name"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name for the new API key."
+                    }
+                  },
+                  "required": ["name"]
+                },
+                "example": {
+                  "name": "My API Key"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Details of the created API key.",
+              "example": {
+                "id": "apikey123",
+                "name": "My API Key"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_api_keys_flow",
+        "title": "List API Keys",
+        "description": "Retrieves a list of API keys.",
+        "actions": [
+          {
+            "id": "list_api_keys_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_api_keys"
+          }
+        ],
+        "links": [],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "List of API keys.",
+              "example": {
+                "apiKeys": [
+                  {
+                    "id": "apikey123",
+                    "name": "My API Key"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_delete_api_keys_by_api_key_id_flow",
+        "title": "Delete API Key",
+        "description": "Deletes an API key by its unique identifier.",
+        "actions": [
+          {
+            "id": "delete_api_key_action",
+            "sourceId": "resend",
+            "operationId": "resend_delete_api_keys_by_api_key_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_delete_api_keys_by_api_key_id_flow",
+              "fieldPath": "parameters.api_key_id"
+            },
+            "target": {
+              "actionId": "delete_api_key_action",
+              "fieldPath": "parameters.api_key_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "api_key_id",
+              "description": "Unique identifier of the API key to delete.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Deletion confirmation.",
+              "example": {
+                "deleted": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_audiences_flow",
+        "title": "Create Audience",
+        "description": "Creates a new audience.",
+        "actions": [
+          {
+            "id": "create_audience_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_audiences"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_audiences_flow",
+              "fieldPath": "requestBody.name"
+            },
+            "target": {
+              "actionId": "create_audience_action",
+              "fieldPath": "requestBody.name"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the audience."
+                    }
+                  },
+                  "required": ["name"]
+                },
+                "example": {
+                  "name": "Newsletter Subscribers"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Audience creation result.",
+              "example": {
+                "id": "audience123",
+                "name": "Newsletter Subscribers"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_audiences_flow",
+        "title": "List Audiences",
+        "description": "Retrieves a list of audiences.",
+        "actions": [
+          {
+            "id": "list_audiences_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_audiences"
+          }
+        ],
+        "links": [],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "List of audiences.",
+              "example": {
+                "audiences": [
+                  {
+                    "id": "audience123",
+                    "name": "Newsletter Subscribers"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_delete_audiences_by_id_flow",
+        "title": "Delete Audience",
+        "description": "Deletes an audience by its unique identifier.",
+        "actions": [
+          {
+            "id": "delete_audience_action",
+            "sourceId": "resend",
+            "operationId": "resend_delete_audiences_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_delete_audiences_by_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "delete_audience_action",
+              "fieldPath": "parameters.id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Deletion confirmation.",
+              "example": {
+                "deleted": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_audiences_by_id_flow",
+        "title": "Get Audience by ID",
+        "description": "Retrieves details of a specific audience by its unique identifier.",
+        "actions": [
+          {
+            "id": "get_audience_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_audiences_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_get_audiences_by_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "get_audience_action",
+              "fieldPath": "parameters.id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Audience details.",
+              "example": {
+                "id": "audience123",
+                "name": "Newsletter Subscribers"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_audiences_contacts_by_audience_id_flow",
+        "title": "Add Contact to Audience",
+        "description": "Adds a new contact to a specific audience.",
+        "actions": [
+          {
+            "id": "add_contact_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_audiences_contacts_by_audience_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_audiences_contacts_by_audience_id_flow",
+              "fieldPath": "parameters.audience_id"
+            },
+            "target": {
+              "actionId": "add_contact_action",
+              "fieldPath": "parameters.audience_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_post_audiences_contacts_by_audience_id_flow",
+              "fieldPath": "requestBody.email"
+            },
+            "target": {
+              "actionId": "add_contact_action",
+              "fieldPath": "requestBody.email"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "audience_id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "description": "Email address of the contact."
+                    }
+                  },
+                  "required": ["email"]
+                },
+                "example": {
+                  "email": "contact@example.com"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Result of adding the contact.",
+              "example": {
+                "id": "contact123",
+                "email": "contact@example.com"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_audiences_contacts_by_audience_id_flow",
+        "title": "List Audience Contacts",
+        "description": "Retrieves the contacts associated with a given audience.",
+        "actions": [
+          {
+            "id": "list_contacts_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_audiences_contacts_by_audience_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_get_audiences_contacts_by_audience_id_flow",
+              "fieldPath": "parameters.audience_id"
+            },
+            "target": {
+              "actionId": "list_contacts_action",
+              "fieldPath": "parameters.audience_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "audience_id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "List of contacts in the audience.",
+              "example": {
+                "contacts": [
+                  {
+                    "id": "contact123",
+                    "email": "contact@example.com"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_delete_audiences_contacts_by_audience_id_and_email_flow",
+        "title": "Delete Audience Contact by Email",
+        "description": "Removes a contact from an audience using the contact's email address.",
+        "actions": [
+          {
+            "id": "delete_contact_by_email_action",
+            "sourceId": "resend",
+            "operationId": "resend_delete_audiences_contacts_by_audience_id_and_email"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_delete_audiences_contacts_by_audience_id_and_email_flow",
+              "fieldPath": "parameters.audience_id"
+            },
+            "target": {
+              "actionId": "delete_contact_by_email_action",
+              "fieldPath": "parameters.audience_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_delete_audiences_contacts_by_audience_id_and_email_flow",
+              "fieldPath": "parameters.email"
+            },
+            "target": {
+              "actionId": "delete_contact_by_email_action",
+              "fieldPath": "parameters.email"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "audience_id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "email",
+              "description": "Email address of the contact to delete.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Deletion confirmation.",
+              "example": {
+                "deleted": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_delete_audiences_contacts_by_audience_id_and_id_flow",
+        "title": "Delete Audience Contact by ID",
+        "description": "Removes a contact from an audience using the contact's unique ID.",
+        "actions": [
+          {
+            "id": "delete_contact_by_id_action",
+            "sourceId": "resend",
+            "operationId": "resend_delete_audiences_contacts_by_audience_id_and_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_delete_audiences_contacts_by_audience_id_and_id_flow",
+              "fieldPath": "parameters.audience_id"
+            },
+            "target": {
+              "actionId": "delete_contact_by_id_action",
+              "fieldPath": "parameters.audience_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_delete_audiences_contacts_by_audience_id_and_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "delete_contact_by_id_action",
+              "fieldPath": "parameters.id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "audience_id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "id",
+              "description": "Unique identifier of the contact.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Deletion confirmation.",
+              "example": {
+                "deleted": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_audiences_contacts_by_audience_id_and_id_flow",
+        "title": "Get Audience Contact by ID",
+        "description": "Retrieves details of a contact from an audience using the contact's unique ID.",
+        "actions": [
+          {
+            "id": "get_contact_by_id_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_audiences_contacts_by_audience_id_and_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_get_audiences_contacts_by_audience_id_and_id_flow",
+              "fieldPath": "parameters.audience_id"
+            },
+            "target": {
+              "actionId": "get_contact_by_id_action",
+              "fieldPath": "parameters.audience_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_get_audiences_contacts_by_audience_id_and_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "get_contact_by_id_action",
+              "fieldPath": "parameters.id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "audience_id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "id",
+              "description": "Unique identifier of the contact.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Contact details.",
+              "example": {
+                "id": "contact123",
+                "email": "contact@example.com"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_patch_audiences_contacts_by_audience_id_and_id_flow",
+        "title": "Update Audience Contact",
+        "description": "Updates details of a contact in an audience using the contact's unique ID.",
+        "actions": [
+          {
+            "id": "update_contact_action",
+            "sourceId": "resend",
+            "operationId": "resend_patch_audiences_contacts_by_audience_id_and_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_patch_audiences_contacts_by_audience_id_and_id_flow",
+              "fieldPath": "parameters.audience_id"
+            },
+            "target": {
+              "actionId": "update_contact_action",
+              "fieldPath": "parameters.audience_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_patch_audiences_contacts_by_audience_id_and_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "update_contact_action",
+              "fieldPath": "parameters.id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_patch_audiences_contacts_by_audience_id_and_id_flow",
+              "fieldPath": "requestBody.updates"
+            },
+            "target": {
+              "actionId": "update_contact_action",
+              "fieldPath": "requestBody.updates"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "audience_id",
+              "description": "Unique identifier of the audience.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "id",
+              "description": "Unique identifier of the contact.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "updates": {
+                      "type": "object",
+                      "description": "Contact details to update."
+                    }
+                  },
+                  "required": ["updates"]
+                },
+                "example": {
+                  "updates": {
+                    "status": "active"
+                  }
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Updated contact details.",
+              "example": {
+                "id": "contact123",
+                "email": "contact@example.com",
+                "status": "active"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_broadcasts_flow",
+        "title": "Create Broadcast",
+        "description": "Creates a new broadcast campaign.",
+        "actions": [
+          {
+            "id": "create_broadcast_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_broadcasts"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_broadcasts_flow",
+              "fieldPath": "requestBody.subject"
+            },
+            "target": {
+              "actionId": "create_broadcast_action",
+              "fieldPath": "requestBody.subject"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_post_broadcasts_flow",
+              "fieldPath": "requestBody.content"
+            },
+            "target": {
+              "actionId": "create_broadcast_action",
+              "fieldPath": "requestBody.content"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subject": {
+                      "type": "string",
+                      "description": "Subject of the broadcast."
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content of the broadcast message."
+                    }
+                  },
+                  "required": ["subject", "content"]
+                },
+                "example": {
+                  "subject": "Big Sale!",
+                  "content": "Don't miss our big sale!"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Broadcast creation result.",
+              "example": {
+                "id": "broadcast123"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_broadcasts_flow",
+        "title": "List Broadcasts",
+        "description": "Retrieves a list of broadcast campaigns.",
+        "actions": [
+          {
+            "id": "list_broadcasts_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_broadcasts"
+          }
+        ],
+        "links": [],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "List of broadcasts.",
+              "example": {
+                "broadcasts": [
+                  {
+                    "id": "broadcast123",
+                    "subject": "Big Sale!"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_delete_broadcasts_by_id_flow",
+        "title": "Delete Broadcast",
+        "description": "Deletes a broadcast using its unique ID.",
+        "actions": [
+          {
+            "id": "delete_broadcast_action",
+            "sourceId": "resend",
+            "operationId": "resend_delete_broadcasts_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_delete_broadcasts_by_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "delete_broadcast_action",
+              "fieldPath": "parameters.id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "id",
+              "description": "Unique identifier of the broadcast.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Deletion confirmation.",
+              "example": {
+                "deleted": true
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_get_broadcasts_by_id_flow",
+        "title": "Get Broadcast by ID",
+        "description": "Retrieves details of a broadcast using its unique ID.",
+        "actions": [
+          {
+            "id": "get_broadcast_action",
+            "sourceId": "resend",
+            "operationId": "resend_get_broadcasts_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_get_broadcasts_by_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "get_broadcast_action",
+              "fieldPath": "parameters.id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "id",
+              "description": "Unique identifier of the broadcast.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Broadcast details.",
+              "example": {
+                "id": "broadcast123",
+                "subject": "Big Sale!"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "resend_post_broadcasts_send_by_id_flow",
+        "title": "Send Broadcast",
+        "description": "Sends an existing broadcast using its unique ID.",
+        "actions": [
+          {
+            "id": "send_broadcast_action",
+            "sourceId": "resend",
+            "operationId": "resend_post_broadcasts_send_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "resend_post_broadcasts_send_by_id_flow",
+              "fieldPath": "parameters.id"
+            },
+            "target": {
+              "actionId": "send_broadcast_action",
+              "fieldPath": "parameters.id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "id",
+              "description": "Unique identifier of the broadcast to send.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Result of the send operation.",
+              "example": {
+                "id": "broadcast123",
+                "status": "sent"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
