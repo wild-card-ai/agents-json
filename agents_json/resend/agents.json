@@ -1,14 +1,14 @@
 {
-    "agentsJson": "1.0.0",
+    "agentsJson": "0.1.0",
     "info": {
       "title": "Resend API Integration Agents",
-      "version": "1.1.0",
+      "version": "0.1.0",
       "description": "This agents.json specification integrates with the Resend Email API platform. It exposes operations for sending emails, managing domains, API Keys, audiences, contacts, and broadcasts. Each flow maps its input fields—using the proper prefixes (parameters. or requestBody.)—to the expected operation fields, ensuring the links adhere to the OpenAPI spec and validator expectations."
     },
     "sources": [
       {
         "id": "resend",
-        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/resend/agents_json/resend/openapi.yaml",
+        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/resend/openapi.yaml",
         "description": "The Resend OpenAPI specification covering emails, domains, API Keys, audiences, contacts, and broadcasts."
       }
     ],
