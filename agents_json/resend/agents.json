@@ -8,7 +8,7 @@
     "sources": [
       {
         "id": "resend",
-        "path": "/Users/kaushik/Documents/OceanWater/agents-json/agents_json/resend/openapi.yaml",
+        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/resend/agents_json/resend/openapi.yaml",
         "description": "The Resend OpenAPI specification covering emails, domains, API Keys, audiences, contacts, and broadcasts."
       }
     ],
@@ -29,31 +29,11 @@
           {
             "origin": {
               "actionId": "resend_post_emails_flow",
-              "fieldPath": "requestBody.from"
+              "fieldPath": "requestBody"
             },
             "target": {
               "actionId": "send_email_action",
-              "fieldPath": "requestBody.from"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "resend_post_emails_flow",
-              "fieldPath": "requestBody.to"
-            },
-            "target": {
-              "actionId": "send_email_action",
-              "fieldPath": "requestBody.to"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "resend_post_emails_flow",
-              "fieldPath": "requestBody.subject"
-            },
-            "target": {
-              "actionId": "send_email_action",
-              "fieldPath": "requestBody.subject"
+              "fieldPath": "requestBody"
             }
           }
         ],
@@ -353,11 +333,11 @@
           {
             "origin": {
               "actionId": "resend_post_domains_flow",
-              "fieldPath": "requestBody.domain"
+              "fieldPath": "requestBody.name"
             },
             "target": {
               "actionId": "create_domain_action",
-              "fieldPath": "requestBody.domain"
+              "fieldPath": "requestBody.name"
             }
           }
         ],
@@ -369,15 +349,15 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "domain": {
+                    "name": {
                       "type": "string",
                       "description": "Domain name to create."
                     }
                   },
-                  "required": ["domain"]
+                  "required": ["name"]
                 },
                 "example": {
-                  "domain": "example.com"
+                  "name": "example.com"
                 }
               }
             },
@@ -1359,6 +1339,26 @@
               "actionId": "create_broadcast_action",
               "fieldPath": "requestBody.content"
             }
+          },
+          {
+            "origin": {
+              "actionId": "resend_post_broadcasts_flow",
+              "fieldPath": "requestBody.from"
+            },
+            "target": {
+              "actionId": "create_broadcast_action",
+              "fieldPath": "requestBody.from"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "resend_post_broadcasts_flow",
+              "fieldPath": "requestBody.audience_id"
+            },
+            "target": {
+              "actionId": "create_broadcast_action",
+              "fieldPath": "requestBody.audience_id"
+            }
           }
         ],
         "fields": {
@@ -1376,13 +1376,23 @@
                     "content": {
                       "type": "string",
                       "description": "Content of the broadcast message."
+                    },
+                    "from": {
+                      "type": "string",
+                      "description": "Sender email address."
+                    },
+                    "audience_id": {
+                      "type": "string",
+                      "description": "ID of the audience to send the broadcast to."
                     }
                   },
-                  "required": ["subject", "content"]
+                  "required": ["subject", "content", "from", "audience_id"]
                 },
                 "example": {
                   "subject": "Big Sale!",
-                  "content": "Don't miss our big sale!"
+                  "content": "Don't miss our big sale!",
+                  "from": "sender@example.com",
+                  "audience_id": "audience123"
                 }
               }
             },
