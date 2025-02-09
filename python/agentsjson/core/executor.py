@@ -3,6 +3,8 @@ from typing import Any, Dict, List, Tuple, Union
 import importlib
 from benedict import benedict
 import re
+import sys
+from collections.abc import Sized
 
 from .models.bundle import Bundle
 from .utils import convert_dot_digits_to_brackets
@@ -62,14 +64,42 @@ def resolve_auth(auth: AuthConfig) -> Union[str, Tuple[str, str], OAuth1AuthConf
     else:
         raise ValueError(f"Unsupported auth type: {auth.type}")
 
-def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, Any], requestBody: Dict[str, Any]) -> Dict[str, Any]:
+def get_size(obj: Any) -> int:
+    """
+    Efficiently estimate the size of an object and its nested contents.
+    """
+    seen = set()  # Track objects to handle circular references
+    
+    def inner_size(obj: Any) -> int:
+        obj_id = id(obj)
+        if obj_id in seen:
+            return 0
+        seen.add(obj_id)
+        
+        size = sys.getsizeof(obj)
+        
+        if isinstance(obj, dict):
+            size += sum(inner_size(k) + inner_size(v) for k, v in obj.items())
+        elif isinstance(obj, (list, tuple, set)):
+            size += sum(inner_size(i) for i in obj)
+        
+        return size
+    
+    return inner_size(obj)
+
+def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, Any], requestBody: Dict[str, Any], manageMemory: bool = False) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """
     Executes a flow of Actions in order, applying link-based parameter link.
     Each new link is deep-merged so we don't overwrite nested structures.
+    
+    Returns:
+        Tuple containing two dictionaries:
+        - First dict: Small responses (if manageMemory=True) or all responses (if manageMemory=False)
+        - Second dict: Large responses (if manageMemory=True) or empty dict (if manageMemory=False)
     """
     
     if not flow.actions:
-        return {}
+        return {}, {}
         
     # Initialize execution trace with flow parameters
     execution_trace = benedict({})
@@ -118,8 +148,8 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         execution_trace[action.id] = {
             "parameters": action_parameters,
             "requestBody": action_requestBody
-        }     
-           
+        }
+        
         # Get authentication
         auth_key = resolve_auth(auth)
         
@@ -132,7 +162,26 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         if "responses" not in execution_trace[action.id]:
             execution_trace[action.id]["responses"] = {}
         execution_trace[action.id]["responses"]["success"] = result
+
+    def manage_memory(execution_trace: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+        # Define size threshold (e.g., 10Kb)
+        SIZE_THRESHOLD = 10
+        
+        small_responses = benedict({})
+        large_responses = benedict({})
+        
+        # Split responses based on size
+        for key, value in dict(execution_trace).items():
+            # More efficient size calculation
+            approx_size = get_size(value)
             
+            if approx_size < SIZE_THRESHOLD:
+                small_responses[key] = value
+            else:
+                large_responses[key] = value
+                
+        return dict(small_responses), dict(large_responses)
+    
     # Process flow response links
     flow_response_links = []
     if flow.links:
@@ -145,7 +194,10 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
     if not flow_response_links:
         # If no response links defined, return the last action's response
         last_action = flow.actions[-1]
-        return execution_trace[last_action.id]["responses"]
+        if manageMemory:
+            return manage_memory(execution_trace[last_action.id]["responses"])
+        else:
+            return execution_trace[last_action.id]["responses"], {}
     
     # Merge all flow response links
     flow_responses = benedict(execution_trace[flow.id]["responses"])
@@ -153,11 +205,14 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         apply = apply_link(link, execution_trace)
         if "responses" in apply:
             flow_responses.merge(apply["responses"], overwrite=True)
-    
-    return dict(flow_responses)
+
+    if manageMemory:
+        return manage_memory(flow_responses)
+    else:
+        return dict(flow_responses), {}
 
 
-def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List[Flow], auth: AuthConfig) -> Dict[str, Any]:
+def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List[Flow], auth: AuthConfig, manageMemory: bool = False) -> Dict[str, Any]:
     """
     Wrapper around `execute` that parses a tool call response to execute the flows.
     
@@ -167,7 +222,7 @@ def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List
         raise ValueError(f"Unsupported tool format: {format}")
         
     results = {}
-        
+    results_large = {}
     if not response.choices[0].message.tool_calls:
         return {"message": response.choices[0].message.content}
     
@@ -188,6 +243,11 @@ def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List
         else:
             parameters = args_dict.get("parameters", {})
             requestBody = args_dict.get("requestBody", {})
-        results[flow.id] = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody)
-                
-    return results
+        if manageMemory:
+            small_results, large_results = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody, manageMemory=manageMemory)
+            results[flow.id] = small_results
+            results_large[flow.id] = large_results
+        else:
+            results[flow.id] = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody, manageMemory=manageMemory)
+
+    return results, results_large
