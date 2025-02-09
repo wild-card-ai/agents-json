@@ -1,8 +1,11 @@
 from typing import Any, Callable, Dict
 from .tools import Executor
+from ..types import ExecutorType
 
 def get_lambda(method_name: str) -> Callable[[], Dict[str, Any]]:
     return lambda api_key, **kwargs: Executor.run_method(api_key, method_name, **kwargs)
+
+map_type = ExecutorType.SDK
 
 map = {
     'giphy_get_gifs_trending': get_lambda('giphy_get_gifs_trending'),

@@ -1,4 +1,7 @@
 from .tools import Executor
+from ..types import ExecutorType
+
+map_type = ExecutorType.SDK
 
 map = {
     "googlesheets_sheets_spreadsheets_create": Executor.googlesheets_sheets_spreadsheets_create,
