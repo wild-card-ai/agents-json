@@ -1,4 +1,7 @@
 from .tools import Executor
+from ..types import ExecutorType
+
+map_type = ExecutorType.SDK
 
 map = {
     "twitter_tweets_id_get": Executor.twitter_tweets_id_get,

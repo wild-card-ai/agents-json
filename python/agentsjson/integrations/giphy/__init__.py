@@ -1,3 +1,3 @@
-from .map import map
+from .map import map, map_type
 
-__all__ = ['map'] 
+__all__ = ['map', 'map_type'] 

@@ -1,5 +1,8 @@
 
 from .tools import Executor
+from ..types import ExecutorType
+
+map_type = ExecutorType.SDK
 
 map = {
     "stripe_post_customers": Executor.stripe_post_customers,

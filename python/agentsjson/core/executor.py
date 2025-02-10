@@ -1,6 +1,7 @@
 import json
 from typing import Any, Dict, List, Tuple, Union
 import importlib
+from agentsjson.integrations.types import ExecutorType
 from benedict import benedict
 import re
 import sys
@@ -116,6 +117,7 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
             f".{action.sourceId}",
             package="agentsjson.integrations"
         )
+        operation_map_type = integration_module.map_type # Describes the type of executor to use
         operation_map = integration_module.map
         operation = operation_map[action.operationId]
         
@@ -154,10 +156,13 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         auth_key = resolve_auth(auth)
         
         # Execute the operation
-        if isinstance(auth_key, tuple):
-            result = operation(auth_key[0], auth_key[1], **action_parameters, **action_requestBody)
+        if operation_map_type == ExecutorType.RESTAPIHANDLER:
+            result = operation(auth, parameters=action_parameters, requestBody=action_requestBody)
         else:
-            result = operation(auth_key, **action_parameters, **action_requestBody)
+            if isinstance(auth_key, tuple):
+                result = operation(auth_key[0], auth_key[1], **action_parameters, **action_requestBody)
+            else:
+                result = operation(auth_key, **action_parameters, **action_requestBody)
         
         if "responses" not in execution_trace[action.id]:
             execution_trace[action.id]["responses"] = {}
