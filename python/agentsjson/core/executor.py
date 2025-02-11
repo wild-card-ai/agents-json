@@ -1,14 +1,15 @@
 import json
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, TypedDict
 import importlib
 from agentsjson.integrations.types import ExecutorType
 from benedict import benedict
 import re
 import sys
-from collections.abc import Sized
+
+from .models.exec_types import ExecuteResult, ExecutorSettings, ExecuteFlowsResult
 
 from .models.bundle import Bundle
-from .utils import convert_dot_digits_to_brackets
+from .utils import convert_dot_digits_to_brackets, split_responses
 from .models.auth import AuthConfig, AuthType, OAuth1AuthConfig, UserPassCredentials, OAuth2AuthConfig
 from .parsetools import ToolFormat
 from .models.schema import Flow, Link
@@ -88,19 +89,20 @@ def get_size(obj: Any) -> int:
     
     return inner_size(obj)
 
-def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, Any], requestBody: Dict[str, Any], manageMemory: bool = False) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, Any],
+            requestBody: Dict[str, Any],
+            settings: ExecutorSettings = ExecutorSettings()) -> ExecuteResult:
     """
-    Executes a flow of Actions in order, applying link-based parameter link.
-    Each new link is deep-merged so we don't overwrite nested structures.
+    Executes a flow of Actions in order, applying link-based parameter linking.
+    Each new link is deep-merged so that nested structures are not overwritten.
     
-    Returns:
-        Tuple containing two dictionaries:
-        - First dict: Small responses (if manageMemory=True) or all responses (if manageMemory=False)
-        - Second dict: Large responses (if manageMemory=True) or empty dict (if manageMemory=False)
+    Returns a dictionary with two keys:
+      - 'small_responses': responses below the configured size threshold, and
+      - 'large_responses': responses equal to or above the threshold.
     """
     
     if not flow.actions:
-        return {}, {}
+        return {"small_responses": {}, "large_responses": {}}
         
     # Initialize execution trace with flow parameters
     execution_trace = benedict({})
@@ -117,13 +119,12 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
             f".{action.sourceId}",
             package="agentsjson.integrations"
         )
-        operation_map_type = integration_module.map_type # Describes the type of executor to use
+        operation_map_type = integration_module.map_type  # Describes the type of executor to use
         operation_map = integration_module.map
         operation = operation_map[action.operationId]
         
         # Find all links targeting this action
         action_links = []
-        
         if flow.links:
             action_links = [
                 m for m in flow.links 
@@ -136,11 +137,10 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
         
         # Apply each link and merge the results
         for link in action_links:
-            apply = apply_link(link, execution_trace)
-        
+            applied = apply_link(link, execution_trace)
             # Deep merge parameters and requestBody
-            action_parameters.merge(apply.get("parameters", {}), overwrite=True)
-            action_requestBody.merge(apply.get("requestBody", {}), overwrite=True)
+            action_parameters.merge(applied.get("parameters", {}), overwrite=True)
+            action_requestBody.merge(applied.get("requestBody", {}), overwrite=True)
                     
         # Convert benedict objects back to plain dicts
         action_parameters = dict(action_parameters)
@@ -168,73 +168,60 @@ def execute(bundle: Bundle, flow: Flow, auth: AuthConfig, parameters: Dict[str, 
             execution_trace[action.id]["responses"] = {}
         execution_trace[action.id]["responses"]["success"] = result
 
-    def manage_memory(execution_trace: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-        # Define size threshold (e.g., 10Kb)
-        SIZE_THRESHOLD = 10
-        
-        small_responses = benedict({})
-        large_responses = benedict({})
-        
-        # Split responses based on size
-        for key, value in dict(execution_trace).items():
-            # More efficient size calculation
-            approx_size = get_size(value)
-            
-            if approx_size < SIZE_THRESHOLD:
-                small_responses[key] = value
-            else:
-                large_responses[key] = value
-                
-        return dict(small_responses), dict(large_responses)
-    
     # Process flow response links
     flow_response_links = []
     if flow.links:
         flow_response_links = [
             m for m in flow.links 
-            if m.target and m.target.actionId == flow.id 
-            and m.target.fieldPath.startswith("responses")
+            if m.target and m.target.actionId == flow.id and m.target.fieldPath.startswith("responses")
         ]
     
     if not flow_response_links:
         # If no response links defined, return the last action's response
         last_action = flow.actions[-1]
-        if manageMemory:
-            return manage_memory(execution_trace[last_action.id]["responses"])
+        responses = execution_trace[last_action.id]["responses"]
+        if settings.split_large_responses:
+            small, large = split_responses(responses, threshold=settings.size_threshold)
+            return {"small_responses": small, "large_responses": large}
         else:
-            return execution_trace[last_action.id]["responses"], {}
+            return {"small_responses": responses, "large_responses": {}}
     
     # Merge all flow response links
     flow_responses = benedict(execution_trace[flow.id]["responses"])
     for link in flow_response_links:
-        apply = apply_link(link, execution_trace)
-        if "responses" in apply:
-            flow_responses.merge(apply["responses"], overwrite=True)
+        applied = apply_link(link, execution_trace)
+        if "responses" in applied:
+            flow_responses.merge(applied["responses"], overwrite=True)
 
-    if manageMemory:
-        return manage_memory(flow_responses)
+    if settings.split_large_responses:
+        small, large = split_responses(dict(flow_responses), threshold=settings.size_threshold)
+        return {"small_responses": small, "large_responses": large}
     else:
-        return dict(flow_responses), {}
+        return {"small_responses": dict(flow_responses), "large_responses": {}}
 
-
-def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List[Flow], auth: AuthConfig, manageMemory: bool = False) -> Dict[str, Any]:
+def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List[Flow],
+                  auth: AuthConfig,
+                  settings: ExecutorSettings = ExecutorSettings()) -> Union[ExecuteFlowsResult, Dict[str, Any]]:
     """
     Wrapper around `execute` that parses a tool call response to execute the flows.
     
-    Returns a dictionary of flow ids and their results.
+    Returns:
+      - If no tool calls are defined, a simple dict with a message is returned.
+      - Otherwise, a typed dictionary with keys:
+          'results'       : Aggregated small responses keyed by flow id.
+          'large_results' : Aggregated large responses keyed by flow id.
     """
     if format != ToolFormat.OPENAI:
         raise ValueError(f"Unsupported tool format: {format}")
         
-    results = {}
-    results_large = {}
+    results: Dict[str, Any] = {}
+    results_large: Dict[str, Any] = {}
+
     if not response.choices[0].message.tool_calls:
         return {"message": response.choices[0].message.content}
     
     for tool_call in response.choices[0].message.tool_calls:
         args_dict = json.loads(tool_call.function.arguments)
-
-        # Account for missing "parameters" and "requestBody" keys
         flow = next(f for f in flows if f.id == tool_call.function.name)
         if "parameters" not in args_dict and "requestBody" not in args_dict:
             parameters = args_dict
@@ -248,11 +235,11 @@ def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List
         else:
             parameters = args_dict.get("parameters", {})
             requestBody = args_dict.get("requestBody", {})
-        if manageMemory:
-            small_results, large_results = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody, manageMemory=manageMemory)
-            results[flow.id] = small_results
-            results_large[flow.id] = large_results
-        else:
-            results[flow.id] = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody, manageMemory=manageMemory)
+        
+        flow_result = execute(bundle=bundle, flow=flow, auth=auth, 
+                              parameters=parameters, requestBody=requestBody, 
+                              settings=settings)
+        results[flow.id] = flow_result["small_responses"]
+        results_large[flow.id] = flow_result["large_responses"]
 
-    return results, results_large
+    return {"results": results, "large_results": results_large}
