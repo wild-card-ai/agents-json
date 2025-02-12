@@ -137,6 +137,10 @@ class Parameter(BaseModel):
         None,
         description='The type of the parameter. This can be a primitive type (e.g., `string`, `number`, `boolean`, `array`, `object`) or a complex type (e.g., `array`, `object`). If not provided, the type is inferred from the context.',
     )
+    enum: Optional[List[str]] = Field(
+        None,
+        description='OPTIONAL. An array of allowed values for the parameter. If provided, the parameter must be one of the values in the array.',
+    )
 
 
 class Content(BaseModel):

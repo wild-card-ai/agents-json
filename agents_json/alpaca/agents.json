@@ -1,19 +1,18 @@
-
 {
     "agentsJson": "0.1.0",
     "info": {
       "title": "Alpaca Trading and Market Data API Flows",
       "version": "1.0.0",
-      "description": "This file defines flows for calling the Alpaca Trading and Market Data APIs. Each flow maps directly to an OpenAPI operationId from either the trading or marketdata OpenAPI specification. In addition to simple flows, several compound flows are provided (for example, exercising an option only after verifying funds). Every flow includes detailed parameters, requestBody (if applicable), links mapping inputs to action inputs, and response examples drawn from the OpenAPI documentation."
+      "description": "This specification defines flows for the Alpaca Trading and Market Data APIs."
     },
     "sources": [
       {
         "id": "alpacatrading",
-        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/alpaca/trading_openapi.json"
+        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/trading_openapi.json"
       },
       {
         "id": "alpacamarketdata",
-        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/alpaca/marketdata_openapi.json"
+        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/marketdata_openapi.json"
       }
     ],
     "overrides": [],
@@ -21,7 +20,7 @@
       {
         "id": "alpacamarketdata_corporate_actions_flow",
         "title": "Get Corporate Actions",
-        "description": "Retrieves corporate actions data including reverse splits, forward splits, unit splits, and dividends.",
+        "description": "Retrieves corporate actions data.",
         "actions": [
           {
             "id": "alpacamarketdata_corporate_actions_action",
@@ -39,165 +38,29 @@
               "actionId": "alpacamarketdata_corporate_actions_action",
               "fieldPath": "parameters.symbols"
             }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_corporate_actions_flow",
-              "fieldPath": "parameters.types"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_corporate_actions_action",
-              "fieldPath": "parameters.types"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_corporate_actions_flow",
-              "fieldPath": "parameters.start"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_corporate_actions_action",
-              "fieldPath": "parameters.start"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_corporate_actions_flow",
-              "fieldPath": "parameters.end"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_corporate_actions_action",
-              "fieldPath": "parameters.end"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_corporate_actions_flow",
-              "fieldPath": "parameters.limit"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_corporate_actions_action",
-              "fieldPath": "parameters.limit"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_corporate_actions_flow",
-              "fieldPath": "parameters.page_token"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_corporate_actions_action",
-              "fieldPath": "parameters.page_token"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_corporate_actions_flow",
-              "fieldPath": "parameters.sort"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_corporate_actions_action",
-              "fieldPath": "parameters.sort"
-            }
           }
         ],
         "fields": {
           "parameters": [
             {
               "name": "symbols",
-              "description": "A comma-separated list of symbols.",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "types",
-              "description": "A comma-separated list of action types (e.g., reverse_split, forward_split).",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "start",
-              "description": "Inclusive start date (YYYY-MM-DD).",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "end",
-              "description": "Inclusive end date (YYYY-MM-DD).",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "limit",
-              "description": "Maximum number of corporate actions to return.",
-              "required": false,
-              "type": "integer"
-            },
-            {
-              "name": "page_token",
-              "description": "Pagination token for next results.",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "sort",
-              "description": "Sort order: asc or desc.",
-              "required": false,
+              "description": "A comma‐separated list of symbols.",
+              "required": true,
               "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Corporate actions data including splits and dividends.",
+              "description": "Corporate actions data.",
               "example": {
-                "corporate_actions": {
-                  "reverse_splits": [
-                    {
-                      "symbol": "MNTS",
-                      "new_rate": 1,
-                      "old_rate": 50,
-                      "process_date": "2023-08-24",
-                      "ex_date": "2023-08-24",
-                      "record_date": "2023-08-24"
-                    }
-                  ],
-                  "forward_splits": [
-                    {
-                      "symbol": "SRE",
-                      "new_rate": 2,
-                      "old_rate": 1,
-                      "process_date": "2023-08-22",
-                      "ex_date": "2023-08-22",
-                      "record_date": "2023-08-14",
-                      "payable_date": "2023-08-21",
-                      "due_bill_redemption_date": "2023-08-23"
-                    }
-                  ],
-                  "unit_splits": [
-                    {
-                      "old_symbol": "TPBAU",
-                      "old_rate": 1,
-                      "new_symbol": "LVRO",
-                      "new_rate": 1,
-                      "alternate_symbol": "LVROW",
-                      "alternate_rate": 0.3333,
-                      "process_date": "2023-03-01",
-                      "effective_date": "2023-03-01",
-                      "payable_date": "2023-03-01"
-                    }
-                  ],
-                  "stock_dividends": [
-                    {
-                      "symbol": "MSBC",
-                      "rate": 0.05,
-                      "process_date": "2023-05-19",
-                      "ex_date": "2023-05-19",
-                      "record_date": "2023-05-22",
-                      "payable_date": "2023-05-05"
-                    }
-                  ]
-                }
+                "actions": [
+                  {
+                    "symbol": "AAPL",
+                    "action": "split",
+                    "ratio": "4:1"
+                  }
+                ]
               }
             }
           }
@@ -205,8 +68,8 @@
       },
       {
         "id": "alpacamarketdata_latest_rates_flow",
-        "title": "Get Latest Forex Rates",
-        "description": "Retrieves the latest forex rates from Alpaca Market Data API.",
+        "title": "Get Latest Rates",
+        "description": "Retrieves the latest market rates.",
         "actions": [
           {
             "id": "alpacamarketdata_latest_rates_action",
@@ -230,7 +93,7 @@
           "parameters": [
             {
               "name": "currency_pairs",
-              "description": "Comma-separated currency pairs (e.g., USDJPY,EURUSD).",
+              "description": "A comma‐separated list of currency pairs.",
               "required": true,
               "type": "string"
             }
@@ -238,11 +101,11 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest forex rates by currency pair.",
+              "description": "Latest forex rates.",
               "example": {
                 "rates": {
-                  "USDJPY": 110.05,
-                  "EURUSD": 1.095
+                  "USD/EUR": 0.89,
+                  "USD/JPY": 110.5
                 }
               }
             }
@@ -251,8 +114,8 @@
       },
       {
         "id": "alpacamarketdata_rates_flow",
-        "title": "Get Forex Rates",
-        "description": "Retrieves historical or filtered forex rates from Alpaca Market Data API.",
+        "title": "Get Historical Rates",
+        "description": "Retrieves historical forex rates.",
         "actions": [
           {
             "id": "alpacamarketdata_rates_action",
@@ -296,7 +159,7 @@
           "parameters": [
             {
               "name": "currency_pairs",
-              "description": "Comma-separated currency pairs (e.g., USDJPY,EURUSD).",
+              "description": "A comma‐separated list of currency pairs.",
               "required": true,
               "type": "string"
             },
@@ -316,11 +179,11 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Forex rates data over the specified date range.",
+              "description": "Historical forex rates.",
               "example": {
                 "rates": {
-                  "USDJPY": 110.05,
-                  "EURUSD": 1.095
+                  "USD/EUR": 0.88,
+                  "USD/JPY": 111.2
                 }
               }
             }
@@ -354,7 +217,7 @@
           "parameters": [
             {
               "name": "symbol",
-              "description": "The symbol to retrieve the logo for.",
+              "description": "The symbol of the company.",
               "required": true,
               "type": "string"
             }
@@ -362,9 +225,9 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Logo URL for the specified symbol.",
+              "description": "Logo URL.",
               "example": {
-                "logo_url": "https://logo.example.com/AAPL.png"
+                "logo": "https://logo.example.com/AAPL.png"
               }
             }
           }
@@ -373,7 +236,7 @@
       {
         "id": "alpacamarketdata_news_flow",
         "title": "Get Market News",
-        "description": "Fetches the latest market news articles.",
+        "description": "Retrieves the latest market news articles.",
         "actions": [
           {
             "id": "alpacamarketdata_news_action",
@@ -401,51 +264,19 @@
               "actionId": "alpacamarketdata_news_action",
               "fieldPath": "parameters.end"
             }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_news_flow",
-              "fieldPath": "parameters.limit"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_news_action",
-              "fieldPath": "parameters.limit"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_news_flow",
-              "fieldPath": "parameters.page_token"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_news_action",
-              "fieldPath": "parameters.page_token"
-            }
           }
         ],
         "fields": {
           "parameters": [
             {
               "name": "start",
-              "description": "Start date/time (RFC-3339).",
+              "description": "Start date/time (RFC3339).",
               "required": false,
               "type": "string"
             },
             {
               "name": "end",
-              "description": "End date/time (RFC-3339).",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "limit",
-              "description": "Maximum number of news articles to return.",
-              "required": false,
-              "type": "integer"
-            },
-            {
-              "name": "page_token",
-              "description": "Pagination token for additional results.",
+              "description": "End date/time (RFC3339).",
               "required": false,
               "type": "string"
             }
@@ -453,7 +284,7 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest market news articles.",
+              "description": "Market news articles.",
               "example": {
                 "news": [
                   {
@@ -482,19 +313,35 @@
           {
             "origin": {
               "actionId": "alpacamarketdata_option_bars_flow",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
             },
             "target": {
               "actionId": "alpacamarketdata_option_bars_action",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_option_bars_flow",
+              "fieldPath": "parameters.timeframe"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_option_bars_action",
+              "fieldPath": "parameters.timeframe"
             }
           }
         ],
         "fields": {
           "parameters": [
             {
-              "name": "symbol",
-              "description": "Underlying symbol for the option bars.",
+              "name": "symbols",
+              "description": "Underlying option symbols.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "timeframe",
+              "description": "Timeframe for bar aggregation (e.g. 1Min, 5Min).",
               "required": true,
               "type": "string"
             }
@@ -502,7 +349,7 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Option bar data including OHLC values.",
+              "description": "Aggregated option bar data.",
               "example": {
                 "bars": [
                   {
@@ -513,82 +360,6 @@
                     "c": 5,
                     "v": 1000
                   }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_option_meta_conditions_flow",
-        "title": "Get Option Market Conditions",
-        "description": "Retrieves metadata on option conditions by ticktype.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_option_meta_conditions_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_option_meta_conditions"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_option_meta_conditions_flow",
-              "fieldPath": "parameters.ticktype"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_option_meta_conditions_action",
-              "fieldPath": "parameters.ticktype"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "ticktype",
-              "description": "Tick type for option conditions.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Option condition metadata.",
-              "example": {
-                "conditions": [
-                  "A",
-                  "B",
-                  "C"
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_option_meta_exchanges_flow",
-        "title": "Get Option Exchanges",
-        "description": "Retrieves metadata about available option exchanges.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_option_meta_exchanges_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_option_meta_exchanges"
-          }
-        ],
-        "links": [],
-        "fields": {
-          "parameters": [],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "List of option exchanges.",
-              "example": {
-                "exchanges": [
-                  "CBOE",
-                  "AMEX",
-                  "NYSE"
                 ]
               }
             }
@@ -610,19 +381,19 @@
           {
             "origin": {
               "actionId": "alpacamarketdata_option_latest_quotes_flow",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
             },
             "target": {
               "actionId": "alpacamarketdata_option_latest_quotes_action",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
             }
           }
         ],
         "fields": {
           "parameters": [
             {
-              "name": "symbol",
-              "description": "Option symbol identifier.",
+              "name": "symbols",
+              "description": "Option symbols to retrieve quotes for.",
               "required": true,
               "type": "string"
             }
@@ -645,106 +416,9 @@
         }
       },
       {
-        "id": "alpacamarketdata_option_snapshots_flow",
-        "title": "Get Option Snapshots",
-        "description": "Retrieves snapshot data for options.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_option_snapshots_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_option_snapshots"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_option_snapshots_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_option_snapshots_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated option symbols.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Option snapshots with last price and volume.",
-              "example": {
-                "snapshots": [
-                  {
-                    "symbol": "AAPL210416C00130000",
-                    "last": 2.6,
-                    "volume": 500
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_option_chain_flow",
-        "title": "Get Option Chain",
-        "description": "Retrieves the option chain snapshots for a given underlying symbol.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_option_chain_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_option_chain"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_option_chain_flow",
-              "fieldPath": "parameters.underlying_symbol"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_option_chain_action",
-              "fieldPath": "parameters.underlying_symbol"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "underlying_symbol",
-              "description": "The underlying symbol for which to retrieve the option chain.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Option chain snapshots data.",
-              "example": {
-                "chain": [
-                  {
-                    "symbol": "AAPL210416C00130000",
-                    "last": 2.6
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
         "id": "alpacamarketdata_option_trades_flow",
         "title": "Get Option Trades",
-        "description": "Retrieves trades for options.",
+        "description": "Retrieves option trades data.",
         "actions": [
           {
             "id": "alpacamarketdata_option_trades_action",
@@ -756,19 +430,19 @@
           {
             "origin": {
               "actionId": "alpacamarketdata_option_trades_flow",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
             },
             "target": {
               "actionId": "alpacamarketdata_option_trades_action",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
             }
           }
         ],
         "fields": {
           "parameters": [
             {
-              "name": "symbol",
-              "description": "Option symbol.",
+              "name": "symbols",
+              "description": "Option symbols.",
               "required": true,
               "type": "string"
             }
@@ -793,7 +467,7 @@
       {
         "id": "alpacamarketdata_option_latest_trades_flow",
         "title": "Get Latest Option Trades",
-        "description": "Retrieves the latest trades for options.",
+        "description": "Retrieves the latest option trades.",
         "actions": [
           {
             "id": "alpacamarketdata_option_latest_trades_action",
@@ -805,19 +479,19 @@
           {
             "origin": {
               "actionId": "alpacamarketdata_option_latest_trades_flow",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
             },
             "target": {
               "actionId": "alpacamarketdata_option_latest_trades_action",
-              "fieldPath": "parameters.symbol"
+              "fieldPath": "parameters.symbols"
             }
           }
         ],
         "fields": {
           "parameters": [
             {
-              "name": "symbol",
-              "description": "Option symbol.",
+              "name": "symbols",
+              "description": "Option symbols.",
               "required": true,
               "type": "string"
             }
@@ -840,121 +514,9 @@
         }
       },
       {
-        "id": "alpacamarketdata_most_actives_flow",
-        "title": "Get Most Active Stocks",
-        "description": "Retrieves the most active stocks by trading volume.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_most_actives_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_most_actives"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_most_actives_flow",
-              "fieldPath": "parameters.limit"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_most_actives_action",
-              "fieldPath": "parameters.limit"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "limit",
-              "description": "Number of records to return.",
-              "required": false,
-              "type": "integer"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Most active stocks list.",
-              "example": {
-                "most_actives": [
-                  {
-                    "symbol": "AAPL",
-                    "volume": 1000000
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_movers_flow",
-        "title": "Get Market Movers",
-        "description": "Retrieves market movers for a specified market type.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_movers_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_movers"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_movers_flow",
-              "fieldPath": "parameters.market_type"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_movers_action",
-              "fieldPath": "parameters.market_type"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_movers_flow",
-              "fieldPath": "parameters.limit"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_movers_action",
-              "fieldPath": "parameters.limit"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "market_type",
-              "description": "Market type identifier.",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "limit",
-              "description": "Limit for number of movers.",
-              "required": false,
-              "type": "integer"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "List of market movers with price changes.",
-              "example": {
-                "movers": [
-                  {
-                    "symbol": "TSLA",
-                    "change": -5
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
         "id": "alpacamarketdata_crypto_perp_latest_bars_flow",
         "title": "Get Latest Crypto Perpetual Bars",
-        "description": "Retrieves the latest aggregated bars for crypto perpetual futures.",
+        "description": "Retrieves the latest crypto perpetual bars.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_perp_latest_bars_action",
@@ -972,6 +534,16 @@
               "actionId": "alpacamarketdata_crypto_perp_latest_bars_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_bars_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_bars_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -981,12 +553,18 @@
               "description": "Location identifier for the crypto perpetual market.",
               "required": true,
               "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Comma‐separated crypto symbols.",
+              "required": true,
+              "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest bar for crypto perpetual futures.",
+              "description": "Latest crypto perpetual bar data.",
               "example": {
                 "bar": {
                   "t": "2022-01-03T09:00:00Z",
@@ -1003,8 +581,8 @@
       },
       {
         "id": "alpacamarketdata_crypto_perp_latest_orderbooks_flow",
-        "title": "Get Latest Crypto Perpetual Order Books",
-        "description": "Retrieves the latest order book for crypto perpetual futures.",
+        "title": "Get Latest Crypto Perpetual Orderbooks",
+        "description": "Retrieves the latest crypto perpetual orderbooks.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_perp_latest_orderbooks_action",
@@ -1022,6 +600,16 @@
               "actionId": "alpacamarketdata_crypto_perp_latest_orderbooks_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_orderbooks_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_orderbooks_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1031,12 +619,18 @@
               "description": "Location identifier for the crypto perpetual market.",
               "required": true,
               "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Comma‐separated crypto symbols.",
+              "required": true,
+              "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest order book for crypto perpetual futures.",
+              "description": "Latest crypto perpetual orderbook data.",
               "example": {
                 "orderbook": {
                   "bids": [
@@ -1060,7 +654,7 @@
       {
         "id": "alpacamarketdata_crypto_perp_latest_quotes_flow",
         "title": "Get Latest Crypto Perpetual Quotes",
-        "description": "Retrieves the latest quotes for crypto perpetual futures.",
+        "description": "Retrieves the latest crypto perpetual quotes.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_perp_latest_quotes_action",
@@ -1078,6 +672,16 @@
               "actionId": "alpacamarketdata_crypto_perp_latest_quotes_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_quotes_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_quotes_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1087,12 +691,18 @@
               "description": "Location identifier for the crypto perpetual market.",
               "required": true,
               "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Comma‐separated crypto symbols.",
+              "required": true,
+              "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest quotes for crypto perpetual futures.",
+              "description": "Latest crypto perpetual quotes.",
               "example": {
                 "quote": {
                   "bid": 30000,
@@ -1106,7 +716,7 @@
       {
         "id": "alpacamarketdata_crypto_perp_latest_trades_flow",
         "title": "Get Latest Crypto Perpetual Trades",
-        "description": "Retrieves the latest trades for crypto perpetual futures.",
+        "description": "Retrieves the latest crypto perpetual trades.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_perp_latest_trades_action",
@@ -1124,6 +734,16 @@
               "actionId": "alpacamarketdata_crypto_perp_latest_trades_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_trades_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_perp_latest_trades_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1133,12 +753,18 @@
               "description": "Location identifier for the crypto perpetual market.",
               "required": true,
               "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Comma‐separated crypto symbols.",
+              "required": true,
+              "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest trades for crypto perpetual futures.",
+              "description": "Latest crypto perpetual trades.",
               "example": {
                 "trades": [
                   {
@@ -1154,7 +780,7 @@
       {
         "id": "alpacamarketdata_crypto_bars_flow",
         "title": "Get Cryptocurrency Bars",
-        "description": "Retrieves historical bars for cryptocurrencies.",
+        "description": "Retrieves historical cryptocurrency bars.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_bars_action",
@@ -1172,6 +798,26 @@
               "actionId": "alpacamarketdata_crypto_bars_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_bars_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_bars_action",
+              "fieldPath": "parameters.symbols"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_bars_flow",
+              "fieldPath": "parameters.timeframe"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_bars_action",
+              "fieldPath": "parameters.timeframe"
+            }
           }
         ],
         "fields": {
@@ -1179,6 +825,18 @@
             {
               "name": "loc",
               "description": "Location identifier for the cryptocurrency.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols (comma‐separated).",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "timeframe",
+              "description": "Timeframe for bars (e.g. 1Min, 5Min, 1D).",
               "required": true,
               "type": "string"
             }
@@ -1206,7 +864,7 @@
       {
         "id": "alpacamarketdata_crypto_latest_bars_flow",
         "title": "Get Latest Cryptocurrency Bars",
-        "description": "Retrieves the latest bar for cryptocurrencies.",
+        "description": "Retrieves the latest cryptocurrency bar.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_latest_bars_action",
@@ -1224,6 +882,16 @@
               "actionId": "alpacamarketdata_crypto_latest_bars_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_latest_bars_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_latest_bars_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1231,6 +899,12 @@
             {
               "name": "loc",
               "description": "Location identifier for the cryptocurrency.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols.",
               "required": true,
               "type": "string"
             }
@@ -1257,8 +931,8 @@
       },
       {
         "id": "alpacamarketdata_crypto_latest_orderbooks_flow",
-        "title": "Get Latest Cryptocurrency Order Books",
-        "description": "Retrieves the latest order book for a cryptocurrency.",
+        "title": "Get Latest Cryptocurrency Orderbooks",
+        "description": "Retrieves the latest cryptocurrency orderbooks.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_latest_orderbooks_action",
@@ -1276,6 +950,16 @@
               "actionId": "alpacamarketdata_crypto_latest_orderbooks_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_latest_orderbooks_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_latest_orderbooks_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1285,12 +969,18 @@
               "description": "Location identifier for the cryptocurrency.",
               "required": true,
               "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols.",
+              "required": true,
+              "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest order book for cryptocurrency.",
+              "description": "Latest cryptocurrency orderbook data.",
               "example": {
                 "orderbook": {
                   "bids": [
@@ -1314,7 +1004,7 @@
       {
         "id": "alpacamarketdata_crypto_latest_quotes_flow",
         "title": "Get Latest Cryptocurrency Quotes",
-        "description": "Retrieves the latest quotes for a cryptocurrency.",
+        "description": "Retrieves the latest cryptocurrency quotes.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_latest_quotes_action",
@@ -1332,6 +1022,16 @@
               "actionId": "alpacamarketdata_crypto_latest_quotes_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_latest_quotes_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_latest_quotes_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1339,6 +1039,12 @@
             {
               "name": "loc",
               "description": "Location identifier for the cryptocurrency.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols.",
               "required": true,
               "type": "string"
             }
@@ -1360,7 +1066,7 @@
       {
         "id": "alpacamarketdata_crypto_latest_trades_flow",
         "title": "Get Latest Cryptocurrency Trades",
-        "description": "Retrieves the latest trades for a cryptocurrency.",
+        "description": "Retrieves the latest cryptocurrency trades.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_latest_trades_action",
@@ -1378,6 +1084,16 @@
               "actionId": "alpacamarketdata_crypto_latest_trades_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_latest_trades_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_latest_trades_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1387,12 +1103,18 @@
               "description": "Location identifier for the cryptocurrency.",
               "required": true,
               "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols.",
+              "required": true,
+              "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest trades for cryptocurrency.",
+              "description": "Latest cryptocurrency trades.",
               "example": {
                 "trades": [
                   {
@@ -1408,7 +1130,7 @@
       {
         "id": "alpacamarketdata_crypto_quotes_flow",
         "title": "Get Cryptocurrency Quotes",
-        "description": "Retrieves quotes for a specified cryptocurrency.",
+        "description": "Retrieves cryptocurrency quotes.",
         "actions": [
           {
             "id": "alpacamarketdata_crypto_quotes_action",
@@ -1426,6 +1148,16 @@
               "actionId": "alpacamarketdata_crypto_quotes_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_quotes_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_quotes_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1433,6 +1165,12 @@
             {
               "name": "loc",
               "description": "Location identifier for the cryptocurrency.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols.",
               "required": true,
               "type": "string"
             }
@@ -1474,6 +1212,16 @@
               "actionId": "alpacamarketdata_crypto_snapshots_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_snapshots_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_snapshots_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1481,6 +1229,12 @@
             {
               "name": "loc",
               "description": "Location identifier for the cryptocurrency.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols.",
               "required": true,
               "type": "string"
             }
@@ -1520,6 +1274,16 @@
               "actionId": "alpacamarketdata_crypto_trades_action",
               "fieldPath": "parameters.loc"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_crypto_trades_flow",
+              "fieldPath": "parameters.symbols"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_crypto_trades_action",
+              "fieldPath": "parameters.symbols"
+            }
           }
         ],
         "fields": {
@@ -1529,12 +1293,18 @@
               "description": "Location identifier for the cryptocurrency.",
               "required": true,
               "type": "string"
+            },
+            {
+              "name": "symbols",
+              "description": "Cryptocurrency symbols.",
+              "required": true,
+              "type": "string"
             }
           ],
           "responses": {
             "success": {
               "type": "object",
-              "description": "Trades for the specified cryptocurrency.",
+              "description": "Cryptocurrency trades data.",
               "example": {
                 "trades": [
                   {
@@ -1548,179 +1318,9 @@
         }
       },
       {
-        "id": "alpacamarketdata_stock_auctions_flow",
-        "title": "Get Stock Auctions",
-        "description": "Retrieves auction information for stocks.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_auctions_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_auctions"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_auctions_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_auctions_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": false,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Stock auction data.",
-              "example": {
-                "auctions": [
-                  {
-                    "symbol": "AAPL",
-                    "auction_price": 150,
-                    "auction_time": "2024-01-01T09:30:00Z"
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_bars_flow",
-        "title": "Get Stock Bars",
-        "description": "Retrieves historical stock price bars.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_bars_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_bars"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_bars_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_bars_action",
-              "fieldPath": "parameters.symbols"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_bars_flow",
-              "fieldPath": "parameters.timeframe"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_bars_action",
-              "fieldPath": "parameters.timeframe"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "timeframe",
-              "description": "Timeframe for bars (e.g., 1Min, 5Min, 1D).",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Historical stock bars data.",
-              "example": {
-                "bars": [
-                  {
-                    "t": "2024-01-01T09:30:00Z",
-                    "o": 150,
-                    "h": 155,
-                    "l": 149,
-                    "c": 154,
-                    "v": 10000
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_latest_bars_flow",
-        "title": "Get Latest Stock Bars",
-        "description": "Retrieves the latest bar data for stocks.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_latest_bars_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_latest_bars"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_latest_bars_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_latest_bars_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Latest stock bar data.",
-              "example": {
-                "bars": [
-                  {
-                    "symbol": "AAPL",
-                    "t": "2024-01-01T09:30:00Z",
-                    "o": 150,
-                    "h": 155,
-                    "l": 149,
-                    "c": 154,
-                    "v": 10000
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
         "id": "alpacamarketdata_stock_meta_conditions_flow",
         "title": "Get Stock Market Conditions",
-        "description": "Retrieves metadata on stock market conditions for a specific tick type.",
+        "description": "Retrieves metadata on stock market conditions.",
         "actions": [
           {
             "id": "alpacamarketdata_stock_meta_conditions_action",
@@ -1738,6 +1338,16 @@
               "actionId": "alpacamarketdata_stock_meta_conditions_action",
               "fieldPath": "parameters.ticktype"
             }
+          },
+          {
+            "origin": {
+              "actionId": "alpacamarketdata_stock_meta_conditions_flow",
+              "fieldPath": "parameters.tape"
+            },
+            "target": {
+              "actionId": "alpacamarketdata_stock_meta_conditions_action",
+              "fieldPath": "parameters.tape"
+            }
           }
         ],
         "fields": {
@@ -1745,6 +1355,12 @@
             {
               "name": "ticktype",
               "description": "Tick type for market conditions.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "tape",
+              "description": "Tape identifier.",
               "required": true,
               "type": "string"
             }
@@ -1764,354 +1380,85 @@
         }
       },
       {
-        "id": "alpacamarketdata_stock_meta_exchanges_flow",
-        "title": "Get Stock Exchanges Metadata",
-        "description": "Retrieves metadata for stock exchanges.",
+        "id": "alpacatrading_post_order_flow",
+        "title": "Create Trading Order",
+        "description": "Submits a new trading order.",
         "actions": [
           {
-            "id": "alpacamarketdata_stock_meta_exchanges_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_meta_exchanges"
-          }
-        ],
-        "links": [],
-        "fields": {
-          "parameters": [],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "List of stock exchanges.",
-              "example": {
-                "exchanges": [
-                  "NYSE",
-                  "NASDAQ"
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_quotes_flow",
-        "title": "Get Stock Quotes",
-        "description": "Retrieves current quotes for stocks.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_quotes_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_quotes"
+            "id": "alpacatrading_post_order_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_post_order"
           }
         ],
         "links": [
           {
             "origin": {
-              "actionId": "alpacamarketdata_stock_quotes_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_quotes_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Stock quotes data.",
-              "example": {
-                "quotes": [
-                  {
-                    "symbol": "AAPL",
-                    "bid": 150,
-                    "ask": 151
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_latest_quotes_flow",
-        "title": "Get Latest Stock Quotes",
-        "description": "Retrieves the latest quotes for stocks.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_latest_quotes_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_latest_quotes"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_latest_quotes_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_latest_quotes_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Latest stock quotes data.",
-              "example": {
-                "quotes": [
-                  {
-                    "symbol": "AAPL",
-                    "bid": 150.5,
-                    "ask": 151.5
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_snapshots_flow",
-        "title": "Get Stock Snapshots",
-        "description": "Retrieves snapshot data for stocks.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_snapshots_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_snapshots"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_snapshots_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_snapshots_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Stock snapshot data.",
-              "example": {
-                "snapshots": [
-                  {
-                    "symbol": "AAPL",
-                    "last": 151
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_trades_flow",
-        "title": "Get Stock Trades",
-        "description": "Retrieves trades data for stocks.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_trades_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_trades"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_trades_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_trades_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Stock trades data.",
-              "example": {
-                "trades": [
-                  {
-                    "symbol": "AAPL",
-                    "price": 151,
-                    "size": 100
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_latest_trades_flow",
-        "title": "Get Latest Stock Trades",
-        "description": "Retrieves the latest trades for stocks.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_latest_trades_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_latest_trades"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_latest_trades_flow",
-              "fieldPath": "parameters.symbols"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_latest_trades_action",
-              "fieldPath": "parameters.symbols"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbols",
-              "description": "Comma-separated stock symbols.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Latest stock trades data.",
-              "example": {
-                "trades": [
-                  {
-                    "symbol": "AAPL",
-                    "price": 151,
-                    "size": 50
-                  }
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_auction_single_flow",
-        "title": "Get Stock Auction for a Symbol",
-        "description": "Retrieves auction data for a specific stock symbol.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_auction_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_auction_single"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_auction_single_flow",
+              "actionId": "alpacatrading_post_order_flow",
               "fieldPath": "parameters.symbol"
             },
             "target": {
-              "actionId": "alpacamarketdata_stock_auction_single_action",
-              "fieldPath": "parameters.symbol"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbol",
-              "description": "Stock symbol.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Stock auction data for the symbol.",
-              "example": {
-                "auction": {
-                  "symbol": "AAPL",
-                  "auction_price": 150,
-                  "auction_time": "2024-01-01T09:30:00Z"
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_bar_single_flow",
-        "title": "Get Stock Bars for a Single Symbol",
-        "description": "Retrieves historical bar data for a single stock symbol.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_bar_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_bar_single"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_bar_single_flow",
-              "fieldPath": "parameters.symbol"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_bar_single_action",
-              "fieldPath": "parameters.symbol"
+              "actionId": "alpacatrading_post_order_action",
+              "fieldPath": "requestBody.symbol"
             }
           },
           {
             "origin": {
-              "actionId": "alpacamarketdata_stock_bar_single_flow",
-              "fieldPath": "parameters.timeframe"
+              "actionId": "alpacatrading_post_order_flow",
+              "fieldPath": "parameters.qty"
             },
             "target": {
-              "actionId": "alpacamarketdata_stock_bar_single_action",
-              "fieldPath": "parameters.timeframe"
+              "actionId": "alpacatrading_post_order_action",
+              "fieldPath": "requestBody.qty"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_post_order_flow",
+              "fieldPath": "parameters.side"
+            },
+            "target": {
+              "actionId": "alpacatrading_post_order_action",
+              "fieldPath": "requestBody.side"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_post_order_flow",
+              "fieldPath": "parameters.order_type"
+            },
+            "target": {
+              "actionId": "alpacatrading_post_order_action",
+              "fieldPath": "requestBody.type"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_post_order_flow",
+              "fieldPath": "parameters.time_in_force"
+            },
+            "target": {
+              "actionId": "alpacatrading_post_order_action",
+              "fieldPath": "requestBody.time_in_force"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_post_order_flow",
+              "fieldPath": "parameters.limit_price"
+            },
+            "target": {
+              "actionId": "alpacatrading_post_order_action",
+              "fieldPath": "requestBody.limit_price"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_post_order_flow",
+              "fieldPath": "parameters.stop_price"
+            },
+            "target": {
+              "actionId": "alpacatrading_post_order_action",
+              "fieldPath": "requestBody.stop_price"
             }
           }
         ],
@@ -2119,13 +1466,92 @@
           "parameters": [
             {
               "name": "symbol",
-              "description": "Stock symbol.",
+              "description": "Trading symbol (e.g. AAPL).",
               "required": true,
               "type": "string"
             },
             {
-              "name": "timeframe",
-              "description": "Timeframe for bars (e.g., 1Min, 5Min, 1D).",
+              "name": "qty",
+              "description": "Quantity of shares.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "side",
+              "description": "Order side (buy or sell).",
+              "required": true,
+              "type": "string",
+              "enum": ["buy", "sell"]
+            },
+            {
+              "name": "order_type",
+              "description": "Type of order (market, limit, stop, stop_limit, trailing_stop).",
+              "required": true,
+              "type": "string",
+              "enum": ["market", "limit", "stop", "stop_limit", "trailing_stop"]
+            },
+            {
+              "name": "time_in_force",
+              "description": "Time in force (day, gtc, opg, cls, ioc, fok).",
+              "required": true,
+              "type": "string",
+              "enum": ["day", "gtc", "opg", "cls", "ioc", "fok"]
+            },
+            {
+              "name": "limit_price",
+              "description": "Limit price for limit orders.",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "stop_price",
+              "description": "Stop price for stop orders.",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Order confirmation with details.",
+              "example": {
+                "order_id": "ord123",
+                "symbol": "AAPL",
+                "qty": "10",
+                "status": "accepted"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "alpacatrading_option_exercise_flow",
+        "title": "Exercise Option Contract",
+        "description": "Exercises an Options Position. This endpoint enables users to exercise a held option contract, converting it into the underlying asset. All available held shares of this option contract will be exercised.",
+        "actions": [
+          {
+            "id": "alpacatrading_option_exercise_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_option_exercise"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "alpacatrading_option_exercise_flow",
+              "fieldPath": "parameters.symbol_or_contract_id"
+            },
+            "target": {
+              "actionId": "alpacatrading_option_exercise_action",
+              "fieldPath": "parameters.symbol_or_contract_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "symbol_or_contract_id",
+              "description": "Option contract symbol or ID.",
               "required": true,
               "type": "string"
             }
@@ -2133,18 +1559,83 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Historical bar data for the specified stock.",
+              "description": "Exercise instruction successfully submitted.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "alpacatrading_post_watchlist_flow",
+        "title": "Create Watchlist",
+        "description": "Creates a new watchlist with the provided details.",
+        "actions": [
+          {
+            "id": "alpacatrading_post_watchlist_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_post_watchlist"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "alpacatrading_post_watchlist_flow",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "alpacatrading_post_watchlist_action",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "name",
+              "description": "The name of the watchlist.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "assets": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                },
+                "example": {
+                  "name": "My Watchlist",
+                  "assets": [
+                    "AAPL"
+                  ]
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Details of the created watchlist.",
               "example": {
-                "bars": [
-                  {
-                    "symbol": "AAPL",
-                    "t": "2024-01-01T09:30:00Z",
-                    "o": 150,
-                    "h": 155,
-                    "l": 149,
-                    "c": 154,
-                    "v": 10000
-                  }
+                "watchlist_id": "wl1",
+                "name": "My Watchlist",
+                "assets": [
+                  "AAPL"
                 ]
               }
             }
@@ -2152,33 +1643,33 @@
         }
       },
       {
-        "id": "alpacamarketdata_stock_latest_bar_single_flow",
-        "title": "Get Latest Stock Bar for a Single Symbol",
-        "description": "Retrieves the latest bar data for a single stock symbol.",
+        "id": "alpacatrading_get_watchlist_by_id_flow",
+        "title": "Get Watchlist by ID",
+        "description": "Retrieves a watchlist by its unique ID.",
         "actions": [
           {
-            "id": "alpacamarketdata_stock_latest_bar_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_latest_bar_single"
+            "id": "alpacatrading_get_watchlist_by_id_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_get_watchlist_by_id"
           }
         ],
         "links": [
           {
             "origin": {
-              "actionId": "alpacamarketdata_stock_latest_bar_single_flow",
-              "fieldPath": "parameters.symbol"
+              "actionId": "alpacatrading_get_watchlist_by_id_flow",
+              "fieldPath": "parameters.watchlist_id"
             },
             "target": {
-              "actionId": "alpacamarketdata_stock_latest_bar_single_action",
-              "fieldPath": "parameters.symbol"
+              "actionId": "alpacatrading_get_watchlist_by_id_action",
+              "fieldPath": "parameters.watchlist_id"
             }
           }
         ],
         "fields": {
           "parameters": [
             {
-              "name": "symbol",
-              "description": "Stock symbol.",
+              "name": "watchlist_id",
+              "description": "Unique identifier of the watchlist.",
               "required": true,
               "type": "string"
             }
@@ -2186,206 +1677,13 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest bar data for the specified stock.",
+              "description": "Watchlist details.",
               "example": {
-                "bar": {
-                  "symbol": "AAPL",
-                  "t": "2024-01-01T09:30:00Z",
-                  "o": 150,
-                  "h": 155,
-                  "l": 149,
-                  "c": 154,
-                  "v": 10000
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_quote_single_flow",
-        "title": "Get Stock Quote for a Single Symbol",
-        "description": "Retrieves current quote for a single stock symbol.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_quote_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_quote_single"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_quote_single_flow",
-              "fieldPath": "parameters.symbol"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_quote_single_action",
-              "fieldPath": "parameters.symbol"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbol",
-              "description": "Stock symbol.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Current stock quote.",
-              "example": {
-                "quote": {
-                  "symbol": "AAPL",
-                  "bid": 150,
-                  "ask": 151
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_latest_quote_single_flow",
-        "title": "Get Latest Stock Quote for a Single Symbol",
-        "description": "Retrieves the latest quote for a single stock symbol.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_latest_quote_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_latest_quote_single"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_latest_quote_single_flow",
-              "fieldPath": "parameters.symbol"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_latest_quote_single_action",
-              "fieldPath": "parameters.symbol"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbol",
-              "description": "Stock symbol.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Latest stock quote.",
-              "example": {
-                "quote": {
-                  "symbol": "AAPL",
-                  "bid": 150.5,
-                  "ask": 151.5
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_snapshot_single_flow",
-        "title": "Get Stock Snapshot for a Single Symbol",
-        "description": "Retrieves snapshot data for a single stock symbol.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_snapshot_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_snapshot_single"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_snapshot_single_flow",
-              "fieldPath": "parameters.symbol"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_snapshot_single_action",
-              "fieldPath": "parameters.symbol"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbol",
-              "description": "Stock symbol.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Stock snapshot data.",
-              "example": {
-                "snapshot": {
-                  "symbol": "AAPL",
-                  "last": 151,
-                  "volume": 10000
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacamarketdata_stock_trade_single_flow",
-        "title": "Get Stock Trades for a Single Symbol",
-        "description": "Retrieves trade data for a single stock symbol.",
-        "actions": [
-          {
-            "id": "alpacamarketdata_stock_trade_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_trade_single"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacamarketdata_stock_trade_single_flow",
-              "fieldPath": "parameters.symbol"
-            },
-            "target": {
-              "actionId": "alpacamarketdata_stock_trade_single_action",
-              "fieldPath": "parameters.symbol"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbol",
-              "description": "Stock symbol.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Trade data for the specified stock.",
-              "example": {
-                "trades": [
-                  {
-                    "symbol": "AAPL",
-                    "price": 151,
-                    "size": 100
-                  }
+                "watchlist_id": "wl1",
+                "name": "My Watchlist",
+                "assets": [
+                  "AAPL",
+                  "TSLA"
                 ]
               }
             }
@@ -2393,33 +1691,128 @@
         }
       },
       {
-        "id": "alpacamarketdata_stock_latest_trade_single_flow",
-        "title": "Get Latest Stock Trade for a Single Symbol",
-        "description": "Retrieves the latest trade for a single stock symbol.",
+        "id": "alpacatrading_update_watchlist_by_id_flow",
+        "title": "Update Watchlist by ID",
+        "description": "Updates an existing watchlist identified by its ID.",
         "actions": [
           {
-            "id": "alpacamarketdata_stock_latest_trade_single_action",
-            "sourceId": "alpacamarketdata",
-            "operationId": "alpacamarketdata_stock_latest_trade_single"
+            "id": "alpacatrading_update_watchlist_by_id_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_update_watchlist_by_id"
           }
         ],
         "links": [
           {
             "origin": {
-              "actionId": "alpacamarketdata_stock_latest_trade_single_flow",
-              "fieldPath": "parameters.symbol"
+              "actionId": "alpacatrading_update_watchlist_by_id_flow",
+              "fieldPath": "parameters.watchlist_id"
             },
             "target": {
-              "actionId": "alpacamarketdata_stock_latest_trade_single_action",
-              "fieldPath": "parameters.symbol"
+              "actionId": "alpacatrading_update_watchlist_by_id_action",
+              "fieldPath": "parameters.watchlist_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_update_watchlist_by_id_flow",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "alpacatrading_update_watchlist_by_id_action",
+              "fieldPath": "requestBody"
             }
           }
         ],
         "fields": {
           "parameters": [
             {
-              "name": "symbol",
-              "description": "Stock symbol.",
+              "name": "watchlist_id",
+              "description": "Unique identifier of the watchlist.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "name",
+              "description": "Name of the watchlist.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "assets": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ]
+                },
+                "example": {
+                  "name": "Updated Watchlist",
+                  "assets": [
+                    "AAPL",
+                    "TSLA"
+                  ]
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Updated watchlist details.",
+              "example": {
+                "watchlist_id": "wl1",
+                "name": "Updated Watchlist",
+                "assets": [
+                  "AAPL",
+                  "TSLA"
+                ]
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "alpacatrading_get_watchlist_by_name_flow",
+        "title": "Get Watchlist by Name",
+        "description": "Retrieves a watchlist by its name.",
+        "actions": [
+          {
+            "id": "alpacatrading_get_watchlist_by_name_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_get_watchlist_by_name"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "alpacatrading_get_watchlist_by_name_flow",
+              "fieldPath": "parameters.name"
+            },
+            "target": {
+              "actionId": "alpacatrading_get_watchlist_by_name_action",
+              "fieldPath": "parameters.name"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "name",
+              "description": "Name of the watchlist.",
               "required": true,
               "type": "string"
             }
@@ -2427,13 +1820,140 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Latest trade data for the specified stock.",
+              "description": "Watchlist details.",
               "example": {
-                "trade": {
-                  "symbol": "AAPL",
-                  "price": 151,
-                  "size": 50
+                "watchlist": {
+                  "watchlist_id": "wl1",
+                  "name": "My Watchlist",
+                  "assets": [
+                    "AAPL"
+                  ]
                 }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "alpacatrading_add_asset_to_watchlist_flow",
+        "title": "Add Asset to Watchlist",
+        "description": "Adds an asset to an existing watchlist by ID.",
+        "actions": [
+          {
+            "id": "alpacatrading_add_asset_to_watchlist_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_add_asset_to_watchlist"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "alpacatrading_add_asset_to_watchlist_flow",
+              "fieldPath": "parameters.watchlist_id"
+            },
+            "target": {
+              "actionId": "alpacatrading_add_asset_to_watchlist_action",
+              "fieldPath": "parameters.watchlist_id"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_add_asset_to_watchlist_flow",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "alpacatrading_add_asset_to_watchlist_action",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "watchlist_id",
+              "description": "The ID of the watchlist.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "asset": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "asset"
+                  ]
+                },
+                "example": {
+                  "asset": "GOOGL"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Updated watchlist after asset addition.",
+              "example": {
+                "watchlist": {
+                  "watchlist_id": "wl1",
+                  "assets": [
+                    "AAPL",
+                    "TSLA",
+                    "GOOGL"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "alpacatrading_delete_watchlist_by_id_flow",
+        "title": "Delete Watchlist by ID",
+        "description": "Deletes a watchlist by its unique ID.",
+        "actions": [
+          {
+            "id": "alpacatrading_delete_watchlist_by_id_action",
+            "sourceId": "alpacatrading",
+            "operationId": "alpacatrading_delete_watchlist_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "alpacatrading_delete_watchlist_by_id_flow",
+              "fieldPath": "parameters.watchlist_id"
+            },
+            "target": {
+              "actionId": "alpacatrading_delete_watchlist_by_id_action",
+              "fieldPath": "parameters.watchlist_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "watchlist_id",
+              "description": "The unique ID of the watchlist to delete.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Confirmation of deletion.",
+              "example": {
+                "watchlist_id": "wl1",
+                "deleted": true
               }
             }
           }
@@ -2442,7 +1962,7 @@
       {
         "id": "alpacatrading_get_account_flow",
         "title": "Get Trading Account Info",
-        "description": "Retrieves the current trading account details including funds and portfolio info.",
+        "description": "Retrieves the current trading account details.",
         "actions": [
           {
             "id": "alpacatrading_get_account_action",
@@ -2467,138 +1987,12 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Trading account details including balance and status.",
+              "description": "Trading account details.",
               "example": {
                 "account_id": "acct123",
                 "status": "ACTIVE",
                 "cash": "10000.00",
                 "portfolio_value": "15000.00"
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_post_order_flow",
-        "title": "Create Trading Order",
-        "description": "Submits a new trading order with specified parameters.",
-        "actions": [
-          {
-            "id": "alpacatrading_post_order_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_post_order"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_post_order_flow",
-              "fieldPath": "parameters.symbol"
-            },
-            "target": {
-              "actionId": "alpacatrading_post_order_action",
-              "fieldPath": "parameters.symbol"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_post_order_flow",
-              "fieldPath": "parameters.qty"
-            },
-            "target": {
-              "actionId": "alpacatrading_post_order_action",
-              "fieldPath": "parameters.qty"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_post_order_flow",
-              "fieldPath": "parameters.order_type"
-            },
-            "target": {
-              "actionId": "alpacatrading_post_order_action",
-              "fieldPath": "parameters.order_type"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_post_order_flow",
-              "fieldPath": "parameters.time_in_force"
-            },
-            "target": {
-              "actionId": "alpacatrading_post_order_action",
-              "fieldPath": "parameters.time_in_force"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_post_order_flow",
-              "fieldPath": "parameters.limit_price"
-            },
-            "target": {
-              "actionId": "alpacatrading_post_order_action",
-              "fieldPath": "parameters.limit_price"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_post_order_flow",
-              "fieldPath": "parameters.stop_price"
-            },
-            "target": {
-              "actionId": "alpacatrading_post_order_action",
-              "fieldPath": "parameters.stop_price"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbol",
-              "description": "Trading symbol (e.g., AAPL).",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "qty",
-              "description": "Quantity of shares (as a string).",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "order_type",
-              "description": "Type of order (e.g., market, limit, stop).",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "time_in_force",
-              "description": "Time in force (e.g., day, gtc).",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "name": "limit_price",
-              "description": "Limit price for limit orders.",
-              "required": false,
-              "type": "string"
-            },
-            {
-              "name": "stop_price",
-              "description": "Stop price for stop orders.",
-              "required": false,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Order confirmation with order details.",
-              "example": {
-                "order_id": "ord123",
-                "symbol": "AAPL",
-                "qty": "10",
-                "status": "accepted"
               }
             }
           }
@@ -2663,7 +2057,7 @@
             },
             {
               "name": "page_token",
-              "description": "Pagination token for next set of orders.",
+              "description": "Pagination token for additional orders.",
               "required": false,
               "type": "string"
             }
@@ -2671,7 +2065,7 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "List of trading orders with pagination.",
+              "description": "List of trading orders.",
               "example": {
                 "orders": [
                   {
@@ -2927,7 +2321,7 @@
       {
         "id": "alpacatrading_get_open_position_flow",
         "title": "Get Open Position for a Symbol or Asset",
-        "description": "Retrieves the open position for a specified symbol or asset ID.",
+        "description": "Retrieves the open position for a specified symbol or asset.",
         "actions": [
           {
             "id": "alpacatrading_get_open_position_action",
@@ -2959,7 +2353,7 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Open position details for the specified symbol or asset.",
+              "description": "Open position details.",
               "example": {
                 "position": {
                   "symbol": "AAPL",
@@ -3016,77 +2410,9 @@
         }
       },
       {
-        "id": "alpacatrading_option_exercise_flow",
-        "title": "Exercise Option Contract",
-        "description": "Exercises an option contract for a specified symbol or contract ID.",
-        "actions": [
-          {
-            "id": "alpacatrading_option_exercise_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_option_exercise"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_option_exercise_flow",
-              "fieldPath": "parameters.symbol_or_contract_id"
-            },
-            "target": {
-              "actionId": "alpacatrading_option_exercise_action",
-              "fieldPath": "parameters.symbol_or_contract_id"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_option_exercise_flow",
-              "fieldPath": "requestBody"
-            },
-            "target": {
-              "actionId": "alpacatrading_option_exercise_action",
-              "fieldPath": "requestBody"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "symbol_or_contract_id",
-              "description": "Identifier of the option contract to exercise.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "Exercise options details."
-                },
-                "example": {
-                  "quantity": "1"
-                }
-              }
-            },
-            "required": true
-          },
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Result of the option exercise operation.",
-              "example": {
-                "symbol": "AAPL210416C00130000",
-                "status": "exercised"
-              }
-            }
-          }
-        }
-      },
-      {
         "id": "alpacatrading_get_account_portfolio_history_flow",
         "title": "Get Portfolio History",
-        "description": "Retrieves the historical portfolio performance of the trading account.",
+        "description": "Retrieves the historical portfolio performance.",
         "actions": [
           {
             "id": "alpacatrading_get_account_portfolio_history_action",
@@ -3120,13 +2446,13 @@
           "parameters": [
             {
               "name": "period",
-              "description": "Time period for the history (e.g., 1D, 1M, 1Y).",
+              "description": "Time period (e.g. 1D, 1M, 1Y).",
               "required": false,
               "type": "string"
             },
             {
               "name": "date_end",
-              "description": "End date for the history (YYYY-MM-DD).",
+              "description": "End date (YYYY-MM-DD).",
               "required": false,
               "type": "string"
             }
@@ -3134,7 +2460,7 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Account portfolio history data.",
+              "description": "Portfolio history data.",
               "example": {
                 "history": {
                   "timestamp": "2024-01-01",
@@ -3174,430 +2500,6 @@
                     ]
                   }
                 ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_post_watchlist_flow",
-        "title": "Create Watchlist",
-        "description": "Creates a new watchlist with provided details.",
-        "actions": [
-          {
-            "id": "alpacatrading_post_watchlist_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_post_watchlist"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_post_watchlist_flow",
-              "fieldPath": "requestBody"
-            },
-            "target": {
-              "actionId": "alpacatrading_post_watchlist_action",
-              "fieldPath": "requestBody"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "Watchlist details."
-                },
-                "example": {
-                  "name": "My Watchlist",
-                  "assets": [
-                    "AAPL"
-                  ]
-                }
-              }
-            },
-            "required": true
-          },
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Details of the created watchlist.",
-              "example": {
-                "watchlist_id": "wl1",
-                "name": "My Watchlist",
-                "assets": [
-                  "AAPL"
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_get_watchlist_by_id_flow",
-        "title": "Get Watchlist by ID",
-        "description": "Retrieves a watchlist by its unique ID.",
-        "actions": [
-          {
-            "id": "alpacatrading_get_watchlist_by_id_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_get_watchlist_by_id"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_get_watchlist_by_id_flow",
-              "fieldPath": "parameters.watchlist_id"
-            },
-            "target": {
-              "actionId": "alpacatrading_get_watchlist_by_id_action",
-              "fieldPath": "parameters.watchlist_id"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "watchlist_id",
-              "description": "Unique identifier for the watchlist.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Watchlist details.",
-              "example": {
-                "watchlist_id": "wl1",
-                "name": "My Watchlist",
-                "assets": [
-                  "AAPL",
-                  "TSLA"
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_update_watchlist_by_id_flow",
-        "title": "Update Watchlist by ID",
-        "description": "Updates an existing watchlist by its ID.",
-        "actions": [
-          {
-            "id": "alpacatrading_update_watchlist_by_id_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_update_watchlist_by_id"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_update_watchlist_by_id_flow",
-              "fieldPath": "parameters.watchlist_id"
-            },
-            "target": {
-              "actionId": "alpacatrading_update_watchlist_by_id_action",
-              "fieldPath": "parameters.watchlist_id"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_update_watchlist_by_id_flow",
-              "fieldPath": "requestBody"
-            },
-            "target": {
-              "actionId": "alpacatrading_update_watchlist_by_id_action",
-              "fieldPath": "requestBody"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "watchlist_id",
-              "description": "Unique identifier for the watchlist.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "Watchlist update details."
-                },
-                "example": {
-                  "name": "Updated Watchlist",
-                  "assets": [
-                    "AAPL",
-                    "TSLA"
-                  ]
-                }
-              }
-            },
-            "required": true
-          },
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Updated watchlist details.",
-              "example": {
-                "watchlist_id": "wl1",
-                "name": "Updated Watchlist",
-                "assets": [
-                  "AAPL",
-                  "TSLA"
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_add_asset_to_watchlist_flow",
-        "title": "Add Asset to Watchlist",
-        "description": "Adds an asset to an existing watchlist by ID.",
-        "actions": [
-          {
-            "id": "alpacatrading_add_asset_to_watchlist_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_add_asset_to_watchlist"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_add_asset_to_watchlist_flow",
-              "fieldPath": "parameters.watchlist_id"
-            },
-            "target": {
-              "actionId": "alpacatrading_add_asset_to_watchlist_action",
-              "fieldPath": "parameters.watchlist_id"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_add_asset_to_watchlist_flow",
-              "fieldPath": "requestBody"
-            },
-            "target": {
-              "actionId": "alpacatrading_add_asset_to_watchlist_action",
-              "fieldPath": "requestBody"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "watchlist_id",
-              "description": "Watchlist ID to add asset to.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "Asset to add."
-                },
-                "example": {
-                  "asset": "GOOGL"
-                }
-              }
-            },
-            "required": true
-          },
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Updated watchlist with the new asset.",
-              "example": {
-                "watchlist_id": "wl1",
-                "assets": [
-                  "AAPL",
-                  "TSLA",
-                  "GOOGL"
-                ]
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_delete_watchlist_by_id_flow",
-        "title": "Delete Watchlist by ID",
-        "description": "Deletes a watchlist by its unique ID.",
-        "actions": [
-          {
-            "id": "alpacatrading_delete_watchlist_by_id_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_delete_watchlist_by_id"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_delete_watchlist_by_id_flow",
-              "fieldPath": "parameters.watchlist_id"
-            },
-            "target": {
-              "actionId": "alpacatrading_delete_watchlist_by_id_action",
-              "fieldPath": "parameters.watchlist_id"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "watchlist_id",
-              "description": "Unique identifier of the watchlist to delete.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Confirmation of watchlist deletion.",
-              "example": {
-                "watchlist_id": "wl1",
-                "deleted": true
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_get_watchlist_by_name_flow",
-        "title": "Get Watchlist by Name",
-        "description": "Retrieves a watchlist by its name.",
-        "actions": [
-          {
-            "id": "alpacatrading_get_watchlist_by_name_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_get_watchlist_by_name"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_get_watchlist_by_name_flow",
-              "fieldPath": "parameters.name"
-            },
-            "target": {
-              "actionId": "alpacatrading_get_watchlist_by_name_action",
-              "fieldPath": "parameters.name"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "name",
-              "description": "Name of the watchlist.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Watchlist details by name.",
-              "example": {
-                "watchlist": {
-                  "watchlist_id": "wl1",
-                  "name": "My Watchlist",
-                  "assets": [
-                    "AAPL"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "alpacatrading_update_watchlist_by_name_flow",
-        "title": "Update Watchlist by Name",
-        "description": "Updates a watchlist identified by its name.",
-        "actions": [
-          {
-            "id": "alpacatrading_update_watchlist_by_name_action",
-            "sourceId": "alpacatrading",
-            "operationId": "alpacatrading_update_watchlist_by_name"
-          }
-        ],
-        "links": [
-          {
-            "origin": {
-              "actionId": "alpacatrading_update_watchlist_by_name_flow",
-              "fieldPath": "parameters.name"
-            },
-            "target": {
-              "actionId": "alpacatrading_update_watchlist_by_name_action",
-              "fieldPath": "parameters.name"
-            }
-          },
-          {
-            "origin": {
-              "actionId": "alpacatrading_update_watchlist_by_name_flow",
-              "fieldPath": "requestBody"
-            },
-            "target": {
-              "actionId": "alpacatrading_update_watchlist_by_name_action",
-              "fieldPath": "requestBody"
-            }
-          }
-        ],
-        "fields": {
-          "parameters": [
-            {
-              "name": "name",
-              "description": "Name of the watchlist.",
-              "required": true,
-              "type": "string"
-            }
-          ],
-          "requestBody": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "Updated watchlist details."
-                },
-                "example": {
-                  "name": "Updated Watchlist",
-                  "assets": [
-                    "AAPL",
-                    "TSLA"
-                  ]
-                }
-              }
-            },
-            "required": true
-          },
-          "responses": {
-            "success": {
-              "type": "object",
-              "description": "Updated watchlist details.",
-              "example": {
-                "watchlist": {
-                  "watchlist_id": "wl1",
-                  "name": "Updated Watchlist",
-                  "assets": [
-                    "AAPL",
-                    "TSLA"
-                  ]
-                }
               }
             }
           }
@@ -3650,7 +2552,14 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "description": "Asset to add."
+                  "properties": {
+                    "asset": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "asset"
+                  ]
                 },
                 "example": {
                   "asset": "GOOGL"
@@ -3662,7 +2571,7 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Updated watchlist after adding the asset.",
+              "description": "Updated watchlist after asset addition.",
               "example": {
                 "watchlist": {
                   "watchlist_id": "wl1",
@@ -3774,7 +2683,7 @@
           }
         ],
         "fields": {
-        "parameters": [],
+          "parameters": [],
           "requestBody": {
             "content": {
               "application/json": {
@@ -3872,7 +2781,7 @@
       {
         "id": "alpacatrading_get_account_activities_by_activity_type_flow",
         "title": "Get Account Activities by Type",
-        "description": "Retrieves account activities filtered by activity type.",
+        "description": "Retrieves account activities filtered by type.",
         "actions": [
           {
             "id": "alpacatrading_get_account_activities_by_activity_type_action",
@@ -4033,7 +2942,7 @@
           "parameters": [
             {
               "name": "symbol_or_asset_id",
-              "description": "Symbol or asset ID.",
+              "description": "Asset symbol or ID.",
               "required": true,
               "type": "string"
             }
@@ -4185,9 +3094,59 @@
             "operationId": "alpacatrading_get-v2-corporate_actions-announcements"
           }
         ],
-        "links": [],
+        "links": [
+          {
+            "origin": {
+              "actionId": "alpacatrading_get-v2-corporate_actions-announcements_flow",
+              "fieldPath": "parameters.ca_types"
+            },
+            "target": {
+              "actionId": "alpacatrading_get-v2-corporate_actions-announcements_action",
+              "fieldPath": "parameters.ca_types"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_get-v2-corporate_actions-announcements_flow",
+              "fieldPath": "parameters.since"
+            },
+            "target": {
+              "actionId": "alpacatrading_get-v2-corporate_actions-announcements_action",
+              "fieldPath": "parameters.since"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_get-v2-corporate_actions-announcements_flow",
+              "fieldPath": "parameters.until"
+            },
+            "target": {
+              "actionId": "alpacatrading_get-v2-corporate_actions-announcements_action",
+              "fieldPath": "parameters.until"
+            }
+          }
+        ],
         "fields": {
-          "parameters": [],
+          "parameters": [
+            {
+              "name": "ca_types",
+              "description": "Corporate action types.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "since",
+              "description": "Start date/time for announcements.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "until",
+              "description": "End date/time for announcements.",
+              "required": true,
+              "type": "string"
+            }
+          ],
           "responses": {
             "success": {
               "type": "object",
@@ -4279,11 +3238,31 @@
           {
             "origin": {
               "actionId": "alpacatrading_create_crypto_transfer_for_account_flow",
-              "fieldPath": "requestBody"
+              "fieldPath": "requestBody.address"
             },
             "target": {
               "actionId": "alpacatrading_create_crypto_transfer_for_account_action",
-              "fieldPath": "requestBody"
+              "fieldPath": "requestBody.address"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_create_crypto_transfer_for_account_flow",
+              "fieldPath": "requestBody.amount"
+            },
+            "target": {
+              "actionId": "alpacatrading_create_crypto_transfer_for_account_action",
+              "fieldPath": "requestBody.amount"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "alpacatrading_create_crypto_transfer_for_account_flow",
+              "fieldPath": "requestBody.asset"
+            },
+            "target": {
+              "actionId": "alpacatrading_create_crypto_transfer_for_account_action",
+              "fieldPath": "requestBody.asset"
             }
           }
         ],
@@ -4294,11 +3273,27 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "description": "Transfer details."
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    },
+                    "asset": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "address",
+                    "amount",
+                    "asset"
+                  ]
                 },
                 "example": {
+                  "address": "1A2b3C4d5E",
                   "amount": "0.1",
-                  "currency": "BTC"
+                  "asset": "BTC"
                 }
               }
             },
@@ -4307,7 +3302,7 @@
           "responses": {
             "success": {
               "type": "object",
-              "description": "Crypto transfer creation result.",
+              "description": "Result of crypto transfer creation.",
               "example": {
                 "transfer_id": "tx1",
                 "status": "pending"
@@ -4416,13 +3411,20 @@
           }
         ],
         "fields": {
-            "parameters": [],
+          "parameters": [],
           "requestBody": {
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "description": "Whitelisted address details."
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "address"
+                  ]
                 },
                 "example": {
                   "address": "0x123"
