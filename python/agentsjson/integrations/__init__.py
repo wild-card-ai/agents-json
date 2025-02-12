@@ -8,4 +8,4 @@ from . import stripe
 from . import googlesheets
 from . import resend
 
-__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend"]
+__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend", "hubspotcontacts"]
