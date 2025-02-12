@@ -3,7 +3,7 @@
   <img alt="Shows a white agents.json Logo with a black background." src="./static/logo/agentsjson-white-blackbackground.png" width="full">
 </p>
 
-<h1 align="center"> Translate OpenAPI into LLM Tools</h1>
+<h1 align="center"> Make APIs work for AI Agents </h1>
 
 [![GitHub stars](https://img.shields.io/github/stars/wild-card-ai/agents-json?style=social)](https://github.com/wild-card-ai/agents-json/stargazers)
 [![Discord](https://img.shields.io/discord/1334616501436682405?style=flat&logo=discord&logoColor=white&label=discord&color=7289DA&link=https%3A%2F%2Fdiscord.gg%2F7AP6wSkVtQ)](https://discord.gg/7VU6HKq7cZ)
