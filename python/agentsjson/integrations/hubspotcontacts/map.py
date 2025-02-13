@@ -1,5 +1,8 @@
 from typing import Dict, Callable, Any
 from .tools import Executor
+from ..types import ExecutorType
+
+map_type = ExecutorType.SDK
 
 map: Dict[str, Callable[..., Any]] = {
     "hubspotcontacts_list_contacts": Executor.hubspotcontacts_list_contacts,
