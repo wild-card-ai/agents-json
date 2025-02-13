@@ -30,6 +30,11 @@ def apply_link(link: Link, execution_trace: Dict[str, Any]) -> Dict[str, Dict[st
     field_type = field_path_parts[0] if field_path_parts else None
             
     source_value = source_trace.get(field_path, None)
+    # If the source value is empty or None, throw an error since links require non-empty values
+    if source_value is None or source_value == "" or \
+       (isinstance(source_value, dict) and not source_value) or \
+       (isinstance(source_value, list) and not source_value):
+        raise ValueError(f"Source value at path '{field_path}' is empty but is required by link")
     
     # If the source value does not exist, do nothing
     if source_value is None:
@@ -193,6 +198,7 @@ def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List
         else:
             parameters = args_dict.get("parameters", {})
             requestBody = args_dict.get("requestBody", {})
+        
         results[flow.id] = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody)
                 
     return results

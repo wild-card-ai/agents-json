@@ -49,21 +49,21 @@
         {
           "origin": {
             "actionId": "retrieve_top_incident_details",
-            "fieldPath": "search_query"
+            "fieldPath": "parameters.search_query"
           },
           "target": {
             "actionId": "rootly_list_incidents",
-            "fieldPath": "filter[search]"
+            "fieldPath": "parameters.filter[search]"
           }
         },
         {
           "origin": {
             "actionId": "rootly_list_incidents",
-            "fieldPath": "incidents.data.0.id"
+            "fieldPath": "responses.success.data.0.id"
           },
           "target": {
             "actionId": "rootly_get_incident",
-            "fieldPath": "incident_id"
+            "fieldPath": "parameters.id"
           }
         }
       ]
