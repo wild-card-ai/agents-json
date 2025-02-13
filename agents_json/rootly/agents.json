@@ -8,7 +8,7 @@
   "sources": [
     {
       "id": "rootly",
-      "path": "https://rootly.com/swagger/v1/swagger.json",
+      "path": "https://gist.githubusercontent.com/yagnyaPatel/cddd39b4997e34ff9701a0e5bc3ca214/raw/30bacfd794af90f73a2164972bd0f0d920c91a0c/openapi.yaml",
       "description": "The Rootly OpenAPI specification covering incidents, alert events, and alert groups."
     }
   ],
