@@ -1,0 +1,72 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Rootly API Integration Agents",
+    "version": "0.1.0",
+    "description": "This agents.json specification integrates with the Rootly API platform. It exposes operations for retrieving incidents, listing alert events, and managing alert groups. Each flow maps its input fields—using the proper prefixes (parameters. or requestBody.)—to the expected operation fields, ensuring the links adhere to the OpenAPI spec and validator expectations."
+  },
+  "sources": [
+    {
+      "id": "rootly",
+      "path": "https://rootly.com/swagger/v1/swagger.json",
+      "description": "The Rootly OpenAPI specification covering incidents, alert events, and alert groups."
+    }
+  ],
+  "flows": [
+    {
+      "id": "retrieve_top_incident_details",
+      "title": "Retrieve Top Incident Details",
+      "description": "List incidents using a search filter (and no additional filters), pick the top result, and then retrieve the detailed information of that incident.",
+      "fields": {
+        "parameters": [
+          {
+            "name": "search_query",
+            "description": "Search term for filtering incidents",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The detailed information of the incident"
+          }
+        }
+      },
+      "actions": [
+        {
+          "id": "rootly_list_incidents",
+          "sourceId": "rootly",
+          "operationId": "rootly_list_incidents"
+        },
+        {
+          "id": "rootly_get_incident",
+          "sourceId": "rootly",
+          "operationId": "rootly_get_incident"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "retrieve_top_incident_details",
+            "fieldPath": "search_query"
+          },
+          "target": {
+            "actionId": "rootly_list_incidents",
+            "fieldPath": "filter[search]"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "rootly_list_incidents",
+            "fieldPath": "incidents.data.0.id"
+          },
+          "target": {
+            "actionId": "rootly_get_incident",
+            "fieldPath": "incident_id"
+          }
+        }
+      ]
+    }
+  ]
+}
