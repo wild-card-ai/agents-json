@@ -1,4 +1,4 @@
-import { AgentsJson } from '../../models/schema';
+import { AgentsJson } from './schema.js';
 
 export interface Bundle {
   agentsJson: AgentsJson;

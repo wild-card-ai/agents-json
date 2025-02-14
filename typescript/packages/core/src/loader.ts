@@ -1,6 +1,6 @@
-import { AgentsJsonSchema, Override, Source } from '../models/schema';
-import { Bundle } from './models/bundle';
-import { convertDotDigitsToBrackets } from './utils';
+import { AgentsJsonSchema, Override, Source } from './models/schema.js';
+import { Bundle } from './models/bundle.js';
+import { convertDotDigitsToBrackets } from './utils.js';
 import yaml from 'js-yaml';
 
 interface ApplyOverridesParams {

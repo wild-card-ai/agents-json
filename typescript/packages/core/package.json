@@ -2,6 +2,7 @@
   "name": "@agents-json/core",
   "version": "1.0.0",
   "description": "Core TypeScript implementation of agents.json specification",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -19,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mastra/core": "latest",
     "js-yaml": "^4.1.0",
     "zod": "^3.22.4"
   },

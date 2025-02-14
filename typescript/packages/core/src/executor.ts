@@ -1,7 +1,7 @@
-import { Bundle } from './models/bundle';
-import { Flow, Link } from '../models/schema';
-import { AuthConfig, AuthType, OAuth1AuthConfig, OAuth2AuthConfig, UserPassCredentials } from './models/auth';
-import { convertDotDigitsToBrackets, get, set, deepMerge } from './utils';
+import { Bundle } from './models/bundle.js';
+import { Flow, Link } from './models/schema.js';
+import { AuthConfig, AuthType, OAuth1AuthConfig, OAuth2AuthConfig, UserPassCredentials } from './models/auth.js';
+import { convertDotDigitsToBrackets, get, set, deepMerge } from './utils.js';
 
 type ExecutionTrace = Record<string, {
   parameters: Record<string, any>;
