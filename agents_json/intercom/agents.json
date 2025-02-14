@@ -1,0 +1,4166 @@
+{
+    "agentsJson": "0.1.0",
+    "info": {
+      "title": "Intercom API Flows",
+      "version": "0.1.0",
+      "description": "Flows for all 108 Intercom API operations."
+    },
+    "sources": [
+      {
+        "id": "intercom",
+        "path": "https://gist.githubusercontent.com/yagnyaPatel/745b2cf29e480eee5eccd76454c1d38f/raw/27a9043f97e6102d972625fe9ed11f1e8ca7616d/intercom.openapi.yaml"
+      }
+    ],
+    "overrides": [],
+    "flows": [
+      {
+        "id": "intercom_get_admins",
+        "title": "Flow for intercom_get_admins",
+        "description": "Flow for operation intercom_get_admins.",
+        "actions": [
+          {
+            "id": "action_intercom_get_admins",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_admins"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_admins",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_admins",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_admins.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_admins_by_admin_id",
+        "title": "Flow for intercom_get_admins_by_admin_id",
+        "description": "Flow for operation intercom_get_admins_by_admin_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_admins_by_admin_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_admins_by_admin_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_admins_by_admin_id",
+              "fieldPath": "parameters.admin_id"
+            },
+            "target": {
+              "actionId": "action_intercom_get_admins_by_admin_id",
+              "fieldPath": "parameters.admin_id"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "admin_id",
+              "description": "Unique identifier for the admin.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_admins_by_admin_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_admins_activity_logs",
+        "title": "Flow for intercom_get_admins_activity_logs",
+        "description": "Flow for operation intercom_get_admins_activity_logs.",
+        "actions": [
+          {
+            "id": "action_intercom_get_admins_activity_logs",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_admins_activity_logs"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_admins_activity_logs",
+              "fieldPath": "parameters.created_at_after"
+            },
+            "target": {
+              "actionId": "action_intercom_get_admins_activity_logs",
+              "fieldPath": "parameters.created_at_after"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "created_at_after",
+              "description": "Start timestamp (UNIX) for admin activity logs.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "created_at_before",
+              "description": "Optional end timestamp (UNIX).",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_admins_activity_logs.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_admin_away_mode",
+        "title": "Flow for intercom_update_admin_away_mode",
+        "description": "Flow for operation intercom_update_admin_away_mode.",
+        "actions": [
+          {
+            "id": "action_intercom_update_admin_away_mode",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_admin_away_mode"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_admin_away_mode",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_admin_away_mode",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_admin_away_mode.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_admin_availability",
+        "title": "Flow for intercom_get_admin_availability",
+        "description": "Flow for operation intercom_get_admin_availability.",
+        "actions": [
+          {
+            "id": "action_intercom_get_admin_availability",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_admin_availability"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_admin_availability",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_admin_availability",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_admin_availability.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_admin_availability",
+        "title": "Flow for intercom_update_admin_availability",
+        "description": "Flow for operation intercom_update_admin_availability.",
+        "actions": [
+          {
+            "id": "action_intercom_update_admin_availability",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_admin_availability"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_admin_availability",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_admin_availability",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_admin_availability.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_contacts",
+        "title": "Flow for intercom_list_contacts",
+        "description": "Flow for operation intercom_list_contacts.",
+        "actions": [
+          {
+            "id": "action_intercom_list_contacts",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_contacts"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_contacts",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_contacts",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_contacts.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_contact_by_id",
+        "title": "Flow for intercom_get_contact_by_id",
+        "description": "Flow for operation intercom_get_contact_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_contact_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_contact_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_contact_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_contact_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_contact_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_contact",
+        "title": "Flow for intercom_create_contact",
+        "description": "Flow for operation intercom_create_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_create_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_contact",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_contact",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_contact",
+        "title": "Flow for intercom_update_contact",
+        "description": "Flow for operation intercom_update_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_update_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_contact",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_contact",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_contact",
+        "title": "Flow for intercom_delete_contact",
+        "description": "Flow for operation intercom_delete_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_contact",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_contact",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_merge_contact",
+        "title": "Flow for intercom_merge_contact",
+        "description": "Flow for operation intercom_merge_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_merge_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_merge_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_merge_contact",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_merge_contact",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_merge_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_restore_contact",
+        "title": "Flow for intercom_restore_contact",
+        "description": "Flow for operation intercom_restore_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_restore_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_restore_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_restore_contact",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_restore_contact",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_restore_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_bulk_contact_create",
+        "title": "Flow for intercom_bulk_contact_create",
+        "description": "Flow for operation intercom_bulk_contact_create.",
+        "actions": [
+          {
+            "id": "action_intercom_bulk_contact_create",
+            "sourceId": "intercom",
+            "operationId": "intercom_bulk_contact_create"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_bulk_contact_create",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_bulk_contact_create",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_bulk_contact_create.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_bulk_contact_update",
+        "title": "Flow for intercom_bulk_contact_update",
+        "description": "Flow for operation intercom_bulk_contact_update.",
+        "actions": [
+          {
+            "id": "action_intercom_bulk_contact_update",
+            "sourceId": "intercom",
+            "operationId": "intercom_bulk_contact_update"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_bulk_contact_update",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_bulk_contact_update",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_bulk_contact_update.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_search_contacts",
+        "title": "Flow for intercom_search_contacts",
+        "description": "Flow for operation intercom_search_contacts.",
+        "actions": [
+          {
+            "id": "action_intercom_search_contacts",
+            "sourceId": "intercom",
+            "operationId": "intercom_search_contacts"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_search_contacts",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_search_contacts",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_search_contacts.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_companies",
+        "title": "Flow for intercom_list_companies",
+        "description": "Flow for operation intercom_list_companies.",
+        "actions": [
+          {
+            "id": "action_intercom_list_companies",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_companies"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_companies",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_companies",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_companies.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_company_by_id",
+        "title": "Flow for intercom_get_company_by_id",
+        "description": "Flow for operation intercom_get_company_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_company_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_company_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_company_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_company_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_company_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_company",
+        "title": "Flow for intercom_create_company",
+        "description": "Flow for operation intercom_create_company.",
+        "actions": [
+          {
+            "id": "action_intercom_create_company",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_company"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_company",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_company",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_company.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_company",
+        "title": "Flow for intercom_update_company",
+        "description": "Flow for operation intercom_update_company.",
+        "actions": [
+          {
+            "id": "action_intercom_update_company",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_company"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_company",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_company",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_company.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_company",
+        "title": "Flow for intercom_delete_company",
+        "description": "Flow for operation intercom_delete_company.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_company",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_company"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_company",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_company",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_company.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_merge_company",
+        "title": "Flow for intercom_merge_company",
+        "description": "Flow for operation intercom_merge_company.",
+        "actions": [
+          {
+            "id": "action_intercom_merge_company",
+            "sourceId": "intercom",
+            "operationId": "intercom_merge_company"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_merge_company",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_merge_company",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_merge_company.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_search_companies",
+        "title": "Flow for intercom_search_companies",
+        "description": "Flow for operation intercom_search_companies.",
+        "actions": [
+          {
+            "id": "action_intercom_search_companies",
+            "sourceId": "intercom",
+            "operationId": "intercom_search_companies"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_search_companies",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_search_companies",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_search_companies.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_conversations",
+        "title": "Flow for intercom_list_conversations",
+        "description": "Flow for operation intercom_list_conversations.",
+        "actions": [
+          {
+            "id": "action_intercom_list_conversations",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_conversations"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_conversations",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_conversations",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_conversations.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_conversation_by_id",
+        "title": "Flow for intercom_get_conversation_by_id",
+        "description": "Flow for operation intercom_get_conversation_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_conversation_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_conversation_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_conversation_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_conversation_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_conversation_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_reply_conversation",
+        "title": "Flow for intercom_reply_conversation",
+        "description": "Flow for operation intercom_reply_conversation.",
+        "actions": [
+          {
+            "id": "action_intercom_reply_conversation",
+            "sourceId": "intercom",
+            "operationId": "intercom_reply_conversation"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_reply_conversation",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_reply_conversation",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_reply_conversation.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_archive_conversation",
+        "title": "Flow for intercom_archive_conversation",
+        "description": "Flow for operation intercom_archive_conversation.",
+        "actions": [
+          {
+            "id": "action_intercom_archive_conversation",
+            "sourceId": "intercom",
+            "operationId": "intercom_archive_conversation"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_archive_conversation",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_archive_conversation",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_archive_conversation.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_unarchive_conversation",
+        "title": "Flow for intercom_unarchive_conversation",
+        "description": "Flow for operation intercom_unarchive_conversation.",
+        "actions": [
+          {
+            "id": "action_intercom_unarchive_conversation",
+            "sourceId": "intercom",
+            "operationId": "intercom_unarchive_conversation"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_unarchive_conversation",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_unarchive_conversation",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_unarchive_conversation.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_mark_conversation_as_read",
+        "title": "Flow for intercom_mark_conversation_as_read",
+        "description": "Flow for operation intercom_mark_conversation_as_read.",
+        "actions": [
+          {
+            "id": "action_intercom_mark_conversation_as_read",
+            "sourceId": "intercom",
+            "operationId": "intercom_mark_conversation_as_read"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_mark_conversation_as_read",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_mark_conversation_as_read",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_mark_conversation_as_read.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_mark_conversation_as_unread",
+        "title": "Flow for intercom_mark_conversation_as_unread",
+        "description": "Flow for operation intercom_mark_conversation_as_unread.",
+        "actions": [
+          {
+            "id": "action_intercom_mark_conversation_as_unread",
+            "sourceId": "intercom",
+            "operationId": "intercom_mark_conversation_as_unread"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_mark_conversation_as_unread",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_mark_conversation_as_unread",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_mark_conversation_as_unread.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_search_conversations",
+        "title": "Flow for intercom_search_conversations",
+        "description": "Flow for operation intercom_search_conversations.",
+        "actions": [
+          {
+            "id": "action_intercom_search_conversations",
+            "sourceId": "intercom",
+            "operationId": "intercom_search_conversations"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_search_conversations",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_search_conversations",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_search_conversations.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_conversation_metrics",
+        "title": "Flow for intercom_get_conversation_metrics",
+        "description": "Flow for operation intercom_get_conversation_metrics.",
+        "actions": [
+          {
+            "id": "action_intercom_get_conversation_metrics",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_conversation_metrics"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_conversation_metrics",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_conversation_metrics",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_conversation_metrics.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_users",
+        "title": "Flow for intercom_list_users",
+        "description": "Flow for operation intercom_list_users.",
+        "actions": [
+          {
+            "id": "action_intercom_list_users",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_users"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_users",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_users",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_users.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_user_by_id",
+        "title": "Flow for intercom_get_user_by_id",
+        "description": "Flow for operation intercom_get_user_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_user_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_user_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_user_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_user_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_user_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_user",
+        "title": "Flow for intercom_create_user",
+        "description": "Flow for operation intercom_create_user.",
+        "actions": [
+          {
+            "id": "action_intercom_create_user",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_user"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_user",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_user",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_user.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_user",
+        "title": "Flow for intercom_update_user",
+        "description": "Flow for operation intercom_update_user.",
+        "actions": [
+          {
+            "id": "action_intercom_update_user",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_user"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_user",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_user",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_user.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_user",
+        "title": "Flow for intercom_delete_user",
+        "description": "Flow for operation intercom_delete_user.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_user",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_user"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_user",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_user",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_user.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_merge_user",
+        "title": "Flow for intercom_merge_user",
+        "description": "Flow for operation intercom_merge_user.",
+        "actions": [
+          {
+            "id": "action_intercom_merge_user",
+            "sourceId": "intercom",
+            "operationId": "intercom_merge_user"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_merge_user",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_merge_user",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_merge_user.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_search_users",
+        "title": "Flow for intercom_search_users",
+        "description": "Flow for operation intercom_search_users.",
+        "actions": [
+          {
+            "id": "action_intercom_search_users",
+            "sourceId": "intercom",
+            "operationId": "intercom_search_users"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_search_users",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_search_users",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_search_users.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_visitors",
+        "title": "Flow for intercom_list_visitors",
+        "description": "Flow for operation intercom_list_visitors.",
+        "actions": [
+          {
+            "id": "action_intercom_list_visitors",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_visitors"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_visitors",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_visitors",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_visitors.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_visitor_by_id",
+        "title": "Flow for intercom_get_visitor_by_id",
+        "description": "Flow for operation intercom_get_visitor_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_visitor_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_visitor_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_visitor_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_visitor_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_visitor_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_post_visitors_convert",
+        "title": "Flow for intercom_post_visitors_convert",
+        "description": "Flow for operation intercom_post_visitors_convert.",
+        "actions": [
+          {
+            "id": "action_intercom_post_visitors_convert",
+            "sourceId": "intercom",
+            "operationId": "intercom_post_visitors_convert"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_post_visitors_convert",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_post_visitors_convert",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "user",
+                    "visitor"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "Conversion type."
+                    },
+                    "user": {
+                      "type": "object",
+                      "description": "User details."
+                    },
+                    "visitor": {
+                      "type": "object",
+                      "description": "Visitor details."
+                    }
+                  }
+                },
+                "example": {
+                  "type": "visitor_to_user",
+                  "user": {},
+                  "visitor": {}
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_post_visitors_convert.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_message",
+        "title": "Flow for intercom_create_message",
+        "description": "Flow for operation intercom_create_message.",
+        "actions": [
+          {
+            "id": "action_intercom_create_message",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_message"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_message",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_message",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_message.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_messages",
+        "title": "Flow for intercom_list_messages",
+        "description": "Flow for operation intercom_list_messages.",
+        "actions": [
+          {
+            "id": "action_intercom_list_messages",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_messages"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_messages",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_messages",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_messages.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_message_by_id",
+        "title": "Flow for intercom_get_message_by_id",
+        "description": "Flow for operation intercom_get_message_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_message_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_message_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_message_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_message_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_message_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_message_metrics",
+        "title": "Flow for intercom_get_message_metrics",
+        "description": "Flow for operation intercom_get_message_metrics.",
+        "actions": [
+          {
+            "id": "action_intercom_get_message_metrics",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_message_metrics"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_message_metrics",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_message_metrics",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_message_metrics.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_event",
+        "title": "Flow for intercom_create_event",
+        "description": "Flow for operation intercom_create_event.",
+        "actions": [
+          {
+            "id": "action_intercom_create_event",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_event"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_event",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_event",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_event.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_events",
+        "title": "Flow for intercom_list_events",
+        "description": "Flow for operation intercom_list_events.",
+        "actions": [
+          {
+            "id": "action_intercom_list_events",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_events"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_events",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_events",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_events.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_segments",
+        "title": "Flow for intercom_list_segments",
+        "description": "Flow for operation intercom_list_segments.",
+        "actions": [
+          {
+            "id": "action_intercom_list_segments",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_segments"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_segments",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_segments",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_segments.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_segment_by_id",
+        "title": "Flow for intercom_get_segment_by_id",
+        "description": "Flow for operation intercom_get_segment_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_segment_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_segment_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_segment_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_segment_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_segment_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_segment",
+        "title": "Flow for intercom_create_segment",
+        "description": "Flow for operation intercom_create_segment.",
+        "actions": [
+          {
+            "id": "action_intercom_create_segment",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_segment"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_segment",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_segment",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_segment.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_segment",
+        "title": "Flow for intercom_update_segment",
+        "description": "Flow for operation intercom_update_segment.",
+        "actions": [
+          {
+            "id": "action_intercom_update_segment",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_segment"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_segment",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_segment",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_segment.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_segment",
+        "title": "Flow for intercom_delete_segment",
+        "description": "Flow for operation intercom_delete_segment.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_segment",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_segment"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_segment",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_segment",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_segment.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_tags",
+        "title": "Flow for intercom_list_tags",
+        "description": "Flow for operation intercom_list_tags.",
+        "actions": [
+          {
+            "id": "action_intercom_list_tags",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_tags"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_tags",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_tags",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_tags.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_tag",
+        "title": "Flow for intercom_create_tag",
+        "description": "Flow for operation intercom_create_tag.",
+        "actions": [
+          {
+            "id": "action_intercom_create_tag",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_tag"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_tag",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_tag",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_tag.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_tag",
+        "title": "Flow for intercom_update_tag",
+        "description": "Flow for operation intercom_update_tag.",
+        "actions": [
+          {
+            "id": "action_intercom_update_tag",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_tag"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_tag",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_tag",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_tag.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_tag",
+        "title": "Flow for intercom_delete_tag",
+        "description": "Flow for operation intercom_delete_tag.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_tag",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_tag"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_tag",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_tag",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_tag.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_add_tag_to_contact",
+        "title": "Flow for intercom_add_tag_to_contact",
+        "description": "Flow for operation intercom_add_tag_to_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_add_tag_to_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_add_tag_to_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_add_tag_to_contact",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_add_tag_to_contact",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_add_tag_to_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_remove_tag_from_contact",
+        "title": "Flow for intercom_remove_tag_from_contact",
+        "description": "Flow for operation intercom_remove_tag_from_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_remove_tag_from_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_remove_tag_from_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_remove_tag_from_contact",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_remove_tag_from_contact",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_remove_tag_from_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_add_tag_to_company",
+        "title": "Flow for intercom_add_tag_to_company",
+        "description": "Flow for operation intercom_add_tag_to_company.",
+        "actions": [
+          {
+            "id": "action_intercom_add_tag_to_company",
+            "sourceId": "intercom",
+            "operationId": "intercom_add_tag_to_company"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_add_tag_to_company",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_add_tag_to_company",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_add_tag_to_company.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_remove_tag_from_company",
+        "title": "Flow for intercom_remove_tag_from_company",
+        "description": "Flow for operation intercom_remove_tag_from_company.",
+        "actions": [
+          {
+            "id": "action_intercom_remove_tag_from_company",
+            "sourceId": "intercom",
+            "operationId": "intercom_remove_tag_from_company"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_remove_tag_from_company",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_remove_tag_from_company",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_remove_tag_from_company.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_notes",
+        "title": "Flow for intercom_list_notes",
+        "description": "Flow for operation intercom_list_notes.",
+        "actions": [
+          {
+            "id": "action_intercom_list_notes",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_notes"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_notes",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_notes",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_notes.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_note_by_id",
+        "title": "Flow for intercom_get_note_by_id",
+        "description": "Flow for operation intercom_get_note_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_note_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_note_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_note_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_note_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_note_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_note",
+        "title": "Flow for intercom_create_note",
+        "description": "Flow for operation intercom_create_note.",
+        "actions": [
+          {
+            "id": "action_intercom_create_note",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_note"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_note",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_note",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_note.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_note",
+        "title": "Flow for intercom_update_note",
+        "description": "Flow for operation intercom_update_note.",
+        "actions": [
+          {
+            "id": "action_intercom_update_note",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_note"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_note",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_note",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_note.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_note",
+        "title": "Flow for intercom_delete_note",
+        "description": "Flow for operation intercom_delete_note.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_note",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_note"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_note",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_note",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_note.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_subscription_types",
+        "title": "Flow for intercom_list_subscription_types",
+        "description": "Flow for operation intercom_list_subscription_types.",
+        "actions": [
+          {
+            "id": "action_intercom_list_subscription_types",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_subscription_types"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_subscription_types",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_subscription_types",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_subscription_types.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_subscription",
+        "title": "Flow for intercom_update_subscription",
+        "description": "Flow for operation intercom_update_subscription.",
+        "actions": [
+          {
+            "id": "action_intercom_update_subscription",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_subscription"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_subscription",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_subscription",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_subscription.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_subscription",
+        "title": "Flow for intercom_delete_subscription",
+        "description": "Flow for operation intercom_delete_subscription.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_subscription",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_subscription"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_subscription",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_subscription",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_subscription.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_settings",
+        "title": "Flow for intercom_get_settings",
+        "description": "Flow for operation intercom_get_settings.",
+        "actions": [
+          {
+            "id": "action_intercom_get_settings",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_settings"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_settings",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_settings",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_settings.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_settings",
+        "title": "Flow for intercom_update_settings",
+        "description": "Flow for operation intercom_update_settings.",
+        "actions": [
+          {
+            "id": "action_intercom_update_settings",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_settings"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_settings",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_settings",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_settings.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_webhooks",
+        "title": "Flow for intercom_list_webhooks",
+        "description": "Flow for operation intercom_list_webhooks.",
+        "actions": [
+          {
+            "id": "action_intercom_list_webhooks",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_webhooks"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_webhooks",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_webhooks",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_webhooks.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_webhook_by_id",
+        "title": "Flow for intercom_get_webhook_by_id",
+        "description": "Flow for operation intercom_get_webhook_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_webhook_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_webhook_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_webhook_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_webhook_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_webhook_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_webhook",
+        "title": "Flow for intercom_create_webhook",
+        "description": "Flow for operation intercom_create_webhook.",
+        "actions": [
+          {
+            "id": "action_intercom_create_webhook",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_webhook"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_webhook",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_webhook",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_webhook.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_webhook",
+        "title": "Flow for intercom_update_webhook",
+        "description": "Flow for operation intercom_update_webhook.",
+        "actions": [
+          {
+            "id": "action_intercom_update_webhook",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_webhook"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_webhook",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_webhook",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_webhook.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_webhook",
+        "title": "Flow for intercom_delete_webhook",
+        "description": "Flow for operation intercom_delete_webhook.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_webhook",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_webhook"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_webhook",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_webhook",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_webhook.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_broadcast",
+        "title": "Flow for intercom_create_broadcast",
+        "description": "Flow for operation intercom_create_broadcast.",
+        "actions": [
+          {
+            "id": "action_intercom_create_broadcast",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_broadcast"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_broadcast",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_broadcast",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_broadcast.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_broadcasts",
+        "title": "Flow for intercom_list_broadcasts",
+        "description": "Flow for operation intercom_list_broadcasts.",
+        "actions": [
+          {
+            "id": "action_intercom_list_broadcasts",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_broadcasts"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_broadcasts",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_broadcasts",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_broadcasts.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_broadcast_by_id",
+        "title": "Flow for intercom_get_broadcast_by_id",
+        "description": "Flow for operation intercom_get_broadcast_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_broadcast_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_broadcast_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_broadcast_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_broadcast_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_broadcast_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_broadcast",
+        "title": "Flow for intercom_update_broadcast",
+        "description": "Flow for operation intercom_update_broadcast.",
+        "actions": [
+          {
+            "id": "action_intercom_update_broadcast",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_broadcast"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_broadcast",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_broadcast",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_broadcast.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_broadcast",
+        "title": "Flow for intercom_delete_broadcast",
+        "description": "Flow for operation intercom_delete_broadcast.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_broadcast",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_broadcast"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_broadcast",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_broadcast",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_broadcast.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_usage_stats",
+        "title": "Flow for intercom_get_usage_stats",
+        "description": "Flow for operation intercom_get_usage_stats.",
+        "actions": [
+          {
+            "id": "action_intercom_get_usage_stats",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_usage_stats"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_usage_stats",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_usage_stats",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_usage_stats.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_impressions",
+        "title": "Flow for intercom_get_impressions",
+        "description": "Flow for operation intercom_get_impressions.",
+        "actions": [
+          {
+            "id": "action_intercom_get_impressions",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_impressions"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_impressions",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_impressions",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_impressions.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_custom_attributes",
+        "title": "Flow for intercom_list_custom_attributes",
+        "description": "Flow for operation intercom_list_custom_attributes.",
+        "actions": [
+          {
+            "id": "action_intercom_list_custom_attributes",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_custom_attributes"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_custom_attributes",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_custom_attributes",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_custom_attributes.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_inboxes",
+        "title": "Flow for intercom_list_inboxes",
+        "description": "Flow for operation intercom_list_inboxes.",
+        "actions": [
+          {
+            "id": "action_intercom_list_inboxes",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_inboxes"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_inboxes",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_inboxes",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_inboxes.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_reply_metrics",
+        "title": "Flow for intercom_get_reply_metrics",
+        "description": "Flow for operation intercom_get_reply_metrics.",
+        "actions": [
+          {
+            "id": "action_intercom_get_reply_metrics",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_reply_metrics"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_reply_metrics",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_reply_metrics",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_reply_metrics.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_teams",
+        "title": "Flow for intercom_list_teams",
+        "description": "Flow for operation intercom_list_teams.",
+        "actions": [
+          {
+            "id": "action_intercom_list_teams",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_teams"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_teams",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_teams",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_teams.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_team_by_id",
+        "title": "Flow for intercom_get_team_by_id",
+        "description": "Flow for operation intercom_get_team_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_team_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_team_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_team_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_team_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_team_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_team",
+        "title": "Flow for intercom_create_team",
+        "description": "Flow for operation intercom_create_team.",
+        "actions": [
+          {
+            "id": "action_intercom_create_team",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_team"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_team",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_team",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_team.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_team",
+        "title": "Flow for intercom_update_team",
+        "description": "Flow for operation intercom_update_team.",
+        "actions": [
+          {
+            "id": "action_intercom_update_team",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_team"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_team",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_team",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_team.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_team",
+        "title": "Flow for intercom_delete_team",
+        "description": "Flow for operation intercom_delete_team.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_team",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_team"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_team",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_team",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_team.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_integrations",
+        "title": "Flow for intercom_list_integrations",
+        "description": "Flow for operation intercom_list_integrations.",
+        "actions": [
+          {
+            "id": "action_intercom_list_integrations",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_integrations"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_integrations",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_integrations",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_integrations.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_integration_by_id",
+        "title": "Flow for intercom_get_integration_by_id",
+        "description": "Flow for operation intercom_get_integration_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_integration_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_integration_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_integration_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_integration_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_integration_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_create_integration",
+        "title": "Flow for intercom_create_integration",
+        "description": "Flow for operation intercom_create_integration.",
+        "actions": [
+          {
+            "id": "action_intercom_create_integration",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_integration"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_create_integration",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_create_integration",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_create_integration.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_integration",
+        "title": "Flow for intercom_update_integration",
+        "description": "Flow for operation intercom_update_integration.",
+        "actions": [
+          {
+            "id": "action_intercom_update_integration",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_integration"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_integration",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_integration",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_integration.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_integration",
+        "title": "Flow for intercom_delete_integration",
+        "description": "Flow for operation intercom_delete_integration.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_integration",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_integration"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_integration",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_integration",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_integration.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_close_conversation",
+        "title": "Flow for intercom_close_conversation",
+        "description": "Flow for operation intercom_close_conversation.",
+        "actions": [
+          {
+            "id": "action_intercom_close_conversation",
+            "sourceId": "intercom",
+            "operationId": "intercom_close_conversation"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_close_conversation",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_close_conversation",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_close_conversation.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_open_conversation",
+        "title": "Flow for intercom_open_conversation",
+        "description": "Flow for operation intercom_open_conversation.",
+        "actions": [
+          {
+            "id": "action_intercom_open_conversation",
+            "sourceId": "intercom",
+            "operationId": "intercom_open_conversation"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_open_conversation",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_open_conversation",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_open_conversation.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_reassign_conversation",
+        "title": "Flow for intercom_reassign_conversation",
+        "description": "Flow for operation intercom_reassign_conversation.",
+        "actions": [
+          {
+            "id": "action_intercom_reassign_conversation",
+            "sourceId": "intercom",
+            "operationId": "intercom_reassign_conversation"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_reassign_conversation",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_reassign_conversation",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_reassign_conversation.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_conversation_summary",
+        "title": "Flow for intercom_get_conversation_summary",
+        "description": "Flow for operation intercom_get_conversation_summary.",
+        "actions": [
+          {
+            "id": "action_intercom_get_conversation_summary",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_conversation_summary"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_conversation_summary",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_conversation_summary",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_conversation_summary.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_conversation_stats",
+        "title": "Flow for intercom_get_conversation_stats",
+        "description": "Flow for operation intercom_get_conversation_stats.",
+        "actions": [
+          {
+            "id": "action_intercom_get_conversation_stats",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_conversation_stats"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_conversation_stats",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_conversation_stats",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_conversation_stats.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_subscribe_contact",
+        "title": "Flow for intercom_subscribe_contact",
+        "description": "Flow for operation intercom_subscribe_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_subscribe_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_subscribe_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_subscribe_contact",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_subscribe_contact",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_subscribe_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_unsubscribe_contact",
+        "title": "Flow for intercom_unsubscribe_contact",
+        "description": "Flow for operation intercom_unsubscribe_contact.",
+        "actions": [
+          {
+            "id": "action_intercom_unsubscribe_contact",
+            "sourceId": "intercom",
+            "operationId": "intercom_unsubscribe_contact"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_unsubscribe_contact",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_unsubscribe_contact",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_unsubscribe_contact.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_list_leads",
+        "title": "Flow for intercom_list_leads",
+        "description": "Flow for operation intercom_list_leads.",
+        "actions": [
+          {
+            "id": "action_intercom_list_leads",
+            "sourceId": "intercom",
+            "operationId": "intercom_list_leads"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_list_leads",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_list_leads",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_list_leads.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_get_lead_by_id",
+        "title": "Flow for intercom_get_lead_by_id",
+        "description": "Flow for operation intercom_get_lead_by_id.",
+        "actions": [
+          {
+            "id": "action_intercom_get_lead_by_id",
+            "sourceId": "intercom",
+            "operationId": "intercom_get_lead_by_id"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_get_lead_by_id",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_get_lead_by_id",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_get_lead_by_id.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_convert_lead_to_user",
+        "title": "Flow for intercom_convert_lead_to_user",
+        "description": "Flow for operation intercom_convert_lead_to_user.",
+        "actions": [
+          {
+            "id": "action_intercom_convert_lead_to_user",
+            "sourceId": "intercom",
+            "operationId": "intercom_convert_lead_to_user"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_convert_lead_to_user",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_convert_lead_to_user",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_convert_lead_to_user.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_update_lead",
+        "title": "Flow for intercom_update_lead",
+        "description": "Flow for operation intercom_update_lead.",
+        "actions": [
+          {
+            "id": "action_intercom_update_lead",
+            "sourceId": "intercom",
+            "operationId": "intercom_update_lead"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_update_lead",
+              "fieldPath": "requestBody"
+            },
+            "target": {
+              "actionId": "action_intercom_update_lead",
+              "fieldPath": "requestBody"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {}
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_update_lead.",
+              "example": {}
+            }
+          }
+        }
+      },
+      {
+        "id": "intercom_delete_lead",
+        "title": "Flow for intercom_delete_lead",
+        "description": "Flow for operation intercom_delete_lead.",
+        "actions": [
+          {
+            "id": "action_intercom_delete_lead",
+            "sourceId": "intercom",
+            "operationId": "intercom_delete_lead"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "intercom_delete_lead",
+              "fieldPath": "parameters"
+            },
+            "target": {
+              "actionId": "action_intercom_delete_lead",
+              "fieldPath": "parameters"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Successful response for intercom_delete_lead.",
+              "example": {}
+            }
+          }
+        }
+      }
+    ]
+  }
