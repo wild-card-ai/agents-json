@@ -4161,6 +4161,128 @@
             }
           }
         }
+      },
+      {
+        "id": "compound_create_user_and_send_welcome_message",
+        "title": "Compound Flow: Create User and Send Welcome Message",
+        "description": "This compound flow first creates a new user in Intercom and then sends a welcome message to that user. It orchestrates the 'intercom_create_user' and 'intercom_create_message' operations.",
+        "actions": [
+          {
+            "id": "action_intercom_create_user",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_user"
+          },
+          {
+            "id": "action_intercom_create_message",
+            "sourceId": "intercom",
+            "operationId": "intercom_create_message"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "compound_create_user_and_send_welcome_message",
+              "fieldPath": "requestBody.user"
+            },
+            "target": {
+              "actionId": "action_intercom_create_user",
+              "fieldPath": "requestBody"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "compound_create_user_and_send_welcome_message",
+              "fieldPath": "requestBody.message"
+            },
+            "target": {
+              "actionId": "action_intercom_create_message",
+              "fieldPath": "requestBody"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "action_intercom_create_user",
+              "fieldPath": "responses.success.id"
+            },
+            "target": {
+              "actionId": "action_intercom_create_message",
+              "fieldPath": "requestBody.user_id"
+            }
+          }
+        ],
+        "fields": {
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "description": "User details for creation.",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "User email address."
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "User full name."
+                        }
+                      },
+                      "required": ["email", "name"]
+                    },
+                    "message": {
+                      "type": "object",
+                      "description": "Welcome message details.",
+                      "properties": {
+                        "template": {
+                          "type": "string",
+                          "description": "The message template, e.g. 'welcome'."
+                        },
+                        "body": {
+                          "type": "string",
+                          "description": "The content of the welcome message."
+                        }
+                      },
+                      "required": ["template", "body"]
+                    }
+                  },
+                  "required": ["user", "message"]
+                },
+                "example": {
+                  "user": {
+                    "email": "newuser@example.com",
+                    "name": "New User"
+                  },
+                  "message": {
+                    "template": "welcome",
+                    "body": "Welcome to Intercom!"
+                  }
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Compound response containing the outcome from both actions.",
+              "example": {
+                "createdUser": {
+                  "id": "12345",
+                  "email": "newuser@example.com",
+                  "name": "New User"
+                },
+                "sentMessage": {
+                  "id": "msg_67890",
+                  "status": "sent",
+                  "user_id": "12345"
+                }
+              }
+            }
+          }
+        }
       }
     ]
   }
