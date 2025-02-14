@@ -4,8 +4,7 @@ export * from './core/models/auth';
 export * from './core/models/bundle';
 
 // Export core functionality
-export * from './core/executor';
-export * from './core/loader';
-
-// Export utilities
+export * from './types';
+export * from './factory';
+export * from './loader';
 export * from './utils';
