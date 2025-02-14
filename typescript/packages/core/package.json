@@ -1,0 +1,32 @@
+{
+  "name": "@agents-json/core",
+  "version": "1.0.0",
+  "description": "Core TypeScript implementation of agents.json specification",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "keywords": [
+    "agents",
+    "json",
+    "api",
+    "workflow"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.11.0",
+    "dotenv": "^16.4.7",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  }
+}
