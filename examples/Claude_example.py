@@ -6,7 +6,7 @@ from agentsjson.core.models.auth import AuthType, BearerAuthConfig
 
 # API Keys (Replace with actual values)
 STRIPE_API_KEY = "enter your key"
-CLAUDE_API_KEY = "enter your claude key"
+ANTHROPIC_API_KEY = "enter your claude key"
 
 # Load Stripe's agents.json (API flows definition)
 agents_json_url = "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/stripe/agents.json"
@@ -90,4 +90,4 @@ def execute_simulated_flows(response, format, bundle, flows, auth):
 
 # Iterate through simulated responses and execute them
 for response in simulated_responses:
-    execute_simulated_flows(response, format=ToolFormat.CLAUDE, bundle=data, flows=flows, auth=auth)
+    execute_simulated_flows(response, format=ToolFormat.ANTHROPIC, bundle=data, flows=flows, auth=auth)
