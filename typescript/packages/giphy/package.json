@@ -20,11 +20,11 @@
   "license": "ISC",
   "dependencies": {
     "@agents-json/core": "workspace:*",
-    "@mastra/core": "latest",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@ai-sdk/openai": "^1.1.11",
+    "@mastra/core": "latest",
+    "@ai-sdk/openai": "latest",
     "@types/node": "^20.11.0",
     "dotenv": "^16.4.7",
     "typescript": "^5.3.3",

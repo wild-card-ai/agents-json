@@ -1,0 +1,21 @@
+{
+  "name": "@agents-json/resend",
+  "version": "0.0.1",
+  "description": "Resend integration for agents-json",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@agents-json/core": "workspace:*",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@mastra/core": "latest",
+    "@ai-sdk/openai": "latest",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.2"
+  }
+}
