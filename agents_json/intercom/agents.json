@@ -4211,6 +4211,7 @@
           }
         ],
         "fields": {
+          "parameters": [],
           "requestBody": {
             "content": {
               "application/json": {
@@ -4230,7 +4231,7 @@
                           "description": "User full name."
                         }
                       },
-                      "required": ["email", "name"]
+                      "required": [ "email", "name" ]
                     },
                     "message": {
                       "type": "object",
@@ -4245,10 +4246,10 @@
                           "description": "The content of the welcome message."
                         }
                       },
-                      "required": ["template", "body"]
+                      "required": [ "template", "body" ]
                     }
                   },
-                  "required": ["user", "message"]
+                  "required": [ "user", "message" ]
                 },
                 "example": {
                   "user": {
