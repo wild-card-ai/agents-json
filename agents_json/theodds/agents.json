@@ -725,6 +725,114 @@
           }
         }
       }
+    },
+    {
+      "id": "parlay_validation_compound",
+      "title": "Validate parlay Picks",
+      "description": "Validate a set of parlay picks against current odds and event data. Provides confidence scoring and risk assessment.",
+      "actions": [
+        {
+          "id": "odds_lookup",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports_odds_by_sport"
+        },
+        {
+          "id": "scores_check",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports_scores_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "parlay_validation_compound",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "odds_lookup",
+            "fieldPath": "parameters"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "parlay_validation_compound",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "scores_check",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "picks",
+            "description": "Array of pick objects containing team, odds, and sport information",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "team": { "type": "string" },
+                "odds": { "type": "string" },
+                "sport": { "type": "string" },
+                "event": { "type": "string" }
+              }
+            }
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regions",
+            "description": "Regions for odds comparison (e.g., 'us')",
+            "required": true,
+            "type": "string",
+            "default": "us"
+          },
+          {
+            "name": "markets",
+            "description": "Markets to check (e.g., 'h2h,spreads')",
+            "required": false,
+            "type": "string",
+            "default": "h2h"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Validation results for the parlay picks",
+            "properties": {
+              "picks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "team": { "type": "string" },
+                    "odds": { "type": "string" },
+                    "status": { "type": "string" },
+                    "confidence": { "type": "string" },
+                    "current_odds": { "type": "object" },
+                    "event_status": { "type": "string" }
+                  }
+                }
+              },
+              "risk_assessment": {
+                "type": "object",
+                "properties": {
+                  "overall_confidence": { "type": "string" },
+                  "risk_level": { "type": "string" },
+                  "key_factors": { "type": "array" }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }
