@@ -1,0 +1,1658 @@
+openapi: 3.0.1
+info:
+  title: The Odds API
+  description: To access the API, get a free API key from https://the-odds-api.com
+  version: '4'
+tags:
+  - name: sports
+    description: Get a list of in-season sports.
+    externalDocs:
+      description: Find out more
+      url: https://the-odds-api.com/liveapi/guides/v4/#get-sports
+  - name: current events
+    description: Current in-play and pre-match events. Covers recent odds from a range of bookmakers for a given sport, as well as scores.
+    externalDocs:
+      description: Find out more
+      url: https://the-odds-api.com/liveapi/guides/v4/#get-odds
+  - name: historical events
+    description: Historical events and bookmaker odds as they appeared at a specified point in time. Historical snapshots for featured markets are available from June 2020, at 10 minute intervals until Sep 2022, and at 5 minute intervals thereafter. Snapshots of historical odds for non-featured markets (player props, period markets, alternates, etc.) are available from May 2023 at 5 minute intervals.
+    externalDocs:
+      description: Find out more
+      url: https://the-odds-api.com/historical-odds-data/
+servers:
+  - url: https://api.the-odds-api.com
+paths:
+  /v4/sports:
+    get:
+      tags:
+        - sports
+      description: A successful response includes a list of available sports and tournaments
+      parameters:
+        - name: apiKey
+          required: true
+          description: Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abcdefg1234567890
+        - name: all
+          required: false
+          description: When excluded, only recently updated (in-season) sports appear. Include this paramter to see all available sports
+          in: query
+          schema:
+            type: boolean
+          example: true
+          allowEmptyValue: true
+      responses:
+        '200':
+          description: Returns a list of available sports. Use the sport "key" in the /odds request
+          content:
+            application/json:
+              schema:
+                type: array
+                description: A list of sports
+                items:
+                  type: object
+                  properties:
+                    key:
+                      example: americanfootball_nfl
+                      type: string
+                      description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                    active:
+                      example: true
+                      type: boolean
+                      description: Indicates if the sport is in season
+                    group:
+                      example: American Football
+                      type: string
+                      description: A broader grouping
+                    description:
+                      example: US Football
+                      type: string
+                      description: A brief description of the sport. Subject to change (for example, if sponsors change)
+                    title:
+                      example: NFL
+                      type: string
+                      description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                    has_outrights:
+                      example: false
+                      type: boolean
+                      description: Indicates if the sport has outrights markets.
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: The request was throttled because requests are being sent too frequently
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_sports
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/sports/{sport}/odds:
+    get:
+      tags:
+        - current events
+      description: Returns list of live and upcoming events for a given sport, showing bookmaker odds for the specified region and markets
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds. This is obtained from the /sports endpoint
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abc123ABC456abc123ABC456abc123ABC456abc1
+        - name: regions
+          required: true
+          description: Determines which bookmakers appear in the response. Multiple regions can be specified if comma delimited. Each region will count as 1 request against the usage quota for each market. Most use cases will only need to specify one region. For a list of bookmakers by region, see https://the-odds-api.com/sports-odds-data/bookmaker-apis.html
+          in: query
+          schema:
+            type: string
+            enum:
+              - uk
+              - us
+              - us2
+              - us_dfs
+              - eu
+              - au
+          example: us
+        - name: markets
+          required: false
+          description: The odds market to return. Multiple markets can be specified if comma delimited. Defaults to h2h (head to head / moneyline). Outrights are only avaialable for select sports, such as golf.
+          in: query
+          schema:
+            type: string
+            enum:
+              - h2h
+              - spreads
+              - totals
+              - outrights
+            default: h2h
+          example: h2h,spreads
+        - name: dateFormat
+          required: false
+          description: Format of returned timestamps. Can be iso (ISO8601) or unix timestamp (seconds since epoch)
+          in: query
+          schema:
+            type: string
+            enum:
+              - iso
+              - unix
+            default: iso
+          example: iso
+        - name: oddsFormat
+          required: false
+          description: Format of returned odds
+          in: query
+          schema:
+            type: string
+            enum:
+              - decimal
+              - american
+            default: decimal
+          example: decimal
+        - name: eventIds
+          required: false
+          description: Comma-separated event ids. Filters the response to only return events for the specified ids, provided those events have not expired
+          in: query
+          schema:
+            type: string
+        - name: bookmakers
+          required: false
+          description: Comma-separated list of bookmakers to be returned. If both `bookmakers` and `regions` are specified, `bookmakers` takes precendence. Bookmakers can be from any region. Every group of 10 bookmakers counts as 1 request. For example for a single market, specifying up to 10 bookmakers is the equivalent of 1 region. Specifying between 11 and 20 bookmakers is the equivalent of 2 regions
+          in: query
+          schema:
+            type: string
+        - name: commenceTimeFrom
+          required: false
+          description: Filters the response to show events that commence on and after this parameter. Values are in ISO8601 format
+          in: query
+          schema:
+            type: string
+          example: '2023-09-09T00:00:00Z'
+        - name: commenceTimeTo
+          required: false
+          description: Filters the response to show events that commence on and before this parameter. Values are in ISO8601 format
+          in: query
+          schema:
+            type: string
+          example: '2023-09-09T00:00:00Z'
+        - name: includeLinks
+          required: false
+          description: The response will include bookmaker links to events, markets, and betslips if available.
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+        - name: includeSids
+          required: false
+          description: The response will include source ids (bookmaker ids) for events, markets, and outcomes if available.
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+        - name: includeBetLimits
+          required: false
+          description: The response will include the bet limit of each betting option, mainly available for betting exchanges.
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+      responses:
+        '200':
+          description: A list of live and upcoming events for the specified sport, including odds from bookmakers in the specific region for the specified market
+          content:
+            application/json:
+              schema:
+                type: array
+                description: A list of live and upcoming events
+                items:
+                  type: object
+                  properties:
+                    id:
+                      example: e912304de2b2ce35b473ce2ecd3d1502
+                      type: string
+                      description: A unique 32 character identifier for the event.
+                    sport_key:
+                      example: americanfootball_nfl
+                      type: string
+                      description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                    sport_title:
+                      example: NFL
+                      type: string
+                      description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                    commence_time:
+                      example: '2023-10-11T23:10:00Z'
+                      type: string
+                      description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+                      format: date-time
+                    home_team:
+                      example: Houston Texans
+                      type: string
+                      description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                      nullable: true
+                    away_team:
+                      example: Kansas City Chiefs
+                      type: string
+                      description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                      nullable: true
+                    bookmakers:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            description: A unique slug (key) of the bookmaker
+                            example: draftkings
+                            type: string
+                          title:
+                            description: A formatted title of the bookmaker
+                            example: DraftKings
+                            type: string
+                          last_update:
+                            description: A timestamp of when the bookmaker's odds were last read. Will be an integer if dateFormat=unix, otherwise it will be a string
+                            example: '2023-10-10T12:10:29Z'
+                            type: string
+                            format: date-time
+                          markets:
+                            type: array
+                            description: The included market depends on the specified 'markets' GET param. NOTE Allow for the addition of new market types in future.
+                            items:
+                              type: object
+                              properties:
+                                key:
+                                  type: string
+                                  enum:
+                                    - h2h
+                                    - spreads
+                                    - totals
+                                    - outrights
+                                  description: The name of the odds market
+                                  example: h2h
+                                last_update:
+                                  description: A timestamp of when the markets's odds were last read. Will be an integer if dateFormat=unix, otherwise it will be a string. To check recency of odds, we recommend using this field instead of the "last_update" field at the bookmaker level.
+                                  example: '2023-10-10T12:10:29Z'
+                                  type: string
+                                  format: date-time
+                                outcomes:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      name:
+                                        type: string
+                                        example: Houston Texans
+                                        description: The outcome label. The value will depend on the market. For totals markets, this will be 'Over' or 'Under'. For team markets, it will be the name of the team or participant, or 'Draw'
+                                      price:
+                                        type: number
+                                        example: 2.23
+                                        description: The odds of the outcome. The format is determined by the oddsFormat query param. The format is decimal by default.
+                                      point:
+                                        type: number
+                                        example: 20.5
+                                        nullable: true
+                                        description: The handicap or points of the outcome, only applicable to spreads and totals markets (this property will be missing for h2h and outrights markets)
+                                      description:
+                                        type: string
+                                        nullable: true
+                                        description: This field is only relevant for certain markets. It contains more information about the outcome (for example, for player prop markets, it includes the player's name)
+                                      link:
+                                        type: string
+                                        nullable: true
+                                        description: If available, link to the bookmaker's website and populate the betslip. This field is included when providing the query parameter includeLinks=true
+                                      sid:
+                                        type: string
+                                        nullable: true
+                                        description: The bookmaker's id for the bet selection, if available. This field is included when providing the query parameter includeSids=true
+                                      bet_limit:
+                                        type: number
+                                        nullable: true
+                                        description: The bookmaker's or exchange's monetary limit on the betting selection. The currency will depend on the bookmaker/exchange. This field is included when providing the query parameter includeBetLimits=true, and is mainly populated for betting exchanges.
+                                  example:
+                                    - name: Houston Texans
+                                      price: 2.23
+                                    - name: Kansas City Chiefs
+                                      price: 1.45
+                                link:
+                                  description: Link to the market on the bookmaker's website if applicable. This field is included when providing the query parameter includeLinks=true
+                                  nullable: true
+                                  type: string
+                                sid:
+                                  description: The bookmaker's id of the market if available. This field is included when providing the query parameter includeSids=true
+                                  nullable: true
+                                  type: string
+                          link:
+                            description: Link to the event on the bookmaker's website if available. This field is included when providing the query parameter includeLinks=true
+                            nullable: true
+                            example: https://sportsbook.draftkings.com/event/chi-bears-%40-ind-colts/30568753
+                            type: string
+                          sid:
+                            description: The bookmaker's id of the event if available. This field is included when providing the query parameter includeSids=true
+                            nullable: true
+                            example: '30568753'
+                            type: string
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_sports_odds_by_sport
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/sports/{sport}/scores:
+    get:
+      tags:
+        - current events
+      description: Returns list of live and upcoming events for a given sport, and optionally recently completed events. Live and completed events will contain scores
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+        - name: daysFrom
+          required: false
+          description: The number of days in the past from which to return completed events. Valid values are integers from `1` to `3`. If this field is missing, only live and upcoming events are returned.
+          in: query
+          schema:
+            type: integer
+          example: 3
+        - name: dateFormat
+          required: false
+          description: Format of returned timestamps. Can be iso (ISO8601) or unix timestamp (seconds since epoch)
+          in: query
+          schema:
+            type: string
+            enum:
+              - iso
+              - unix
+            default: iso
+          example: iso
+        - name: eventIds
+          required: false
+          description: Comma-separated event ids. Filters the response to only return events for the specified ids, provided those events have not expired
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of live and upcoming events for the specified sport, and optionally recently completed events. Scores will be included for live and recently completed events.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: A list of live, upcoming and optionally recently completed events
+                items:
+                  type: object
+                  properties:
+                    id:
+                      example: e912304de2b2ce35b473ce2ecd3d1502
+                      type: string
+                      description: A unique 32 character identifier for the event.
+                    sport_key:
+                      example: americanfootball_nfl
+                      type: string
+                      description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                    sport_title:
+                      example: NFL
+                      type: string
+                      description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                    commence_time:
+                      example: '2023-10-11T23:10:00Z'
+                      type: string
+                      description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+                      format: date-time
+                    completed:
+                      type: boolean
+                      description: true if the event has finished, otherwise false
+                    home_team:
+                      example: Houston Texans
+                      type: string
+                      description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                      nullable: true
+                    away_team:
+                      example: Kansas City Chiefs
+                      type: string
+                      description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                      nullable: true
+                    scores:
+                      type: array
+                      description: A list of teams and their scores. List will be empty if event has not started.
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            example: Houston Texans
+                            type: string
+                            description: The participant name
+                          score:
+                            example: '20'
+                            type: string
+                            description: The most recent score for the participant
+                      example:
+                        - name: Houston Texans
+                          score: '20'
+                        - name: Kansas City Chiefs
+                          score: '34'
+                    last_update:
+                      type: string
+                      description: ISO8601 datetime of when the scores were last updated. Will be null if event has not started
+                      example: '2023-10-11T23:30:12Z'
+                      nullable: true
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_sports_scores_by_sport
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/sports/{sport}/events:
+    get:
+      tags:
+        - current events
+      description: Returns a list of in-play and pre-match events for a specified sport or league. Odds are not included in the response. This endpoint does not count against the usage quota.
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds. This is obtained from the /sports endpoint
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abc123ABC456abc123ABC456abc123ABC456abc1
+        - name: dateFormat
+          required: false
+          description: Format of returned timestamps. Can be iso (ISO8601) or unix timestamp (seconds since epoch)
+          in: query
+          schema:
+            type: string
+            enum:
+              - iso
+              - unix
+            default: iso
+          example: iso
+        - name: eventIds
+          required: false
+          description: Comma-separated event ids. Filters the response to only return events for the specified ids, provided those events have not expired
+          in: query
+          schema:
+            type: string
+        - name: commenceTimeFrom
+          required: false
+          description: Filters the response to show events that commence on and after this parameter. Values are in ISO8601 format
+          in: query
+          schema:
+            type: string
+          example: '2023-09-09T00:00:00Z'
+        - name: commenceTimeTo
+          required: false
+          description: Filters the response to show events that commence on and before this parameter. Values are in ISO8601 format
+          in: query
+          schema:
+            type: string
+          example: '2023-09-09T00:00:00Z'
+      responses:
+        '200':
+          description: A list of live and upcoming events for the specified sport, excluding odds
+          content:
+            application/json:
+              schema:
+                type: array
+                description: A list of live and upcoming events
+                items:
+                  type: object
+                  properties:
+                    id:
+                      example: e912304de2b2ce35b473ce2ecd3d1502
+                      type: string
+                      description: A unique 32 character identifier for the event.
+                    sport_key:
+                      example: americanfootball_nfl
+                      type: string
+                      description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                    sport_title:
+                      example: NFL
+                      type: string
+                      description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                    commence_time:
+                      example: '2023-10-11T23:10:00Z'
+                      type: string
+                      description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+                      format: date-time
+                    home_team:
+                      example: Houston Texans
+                      type: string
+                      description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                      nullable: true
+                    away_team:
+                      example: Kansas City Chiefs
+                      type: string
+                      description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                      nullable: true
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_sports_events_by_sport
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/sports/{sport}/events/{eventId}/odds:
+    get:
+      tags:
+        - current events
+      description: Returns bookmaker odds for a single event as long as the event is still valid (live or upcoming). Accepts any available market keys using the `markets` parameter. Use this endpoint to access any available markets for an event. For the most popular featured markets, use the `/v4/sports/{sport}/odds` endpoint (see above). The API is gradually expanding coverage to more betting markets. [See the full list here](https://the-odds-api.com/sports-odds-data/betting-markets.html)
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds. This is obtained from the /sports endpoint
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: eventId
+          required: true
+          description: Event ids can be found in the `id` field in the response of the `/events` endpoint (see `/v4/sports/{sports}/events`). If the event has expired (not receiving updates due to completion or cancellation), a HTTP 404 status code will be returned.
+          in: path
+          schema:
+            type: string
+          example: 50f069186530f68051f2a978745931b5
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abc123ABC456abc123ABC456abc123ABC456abc1
+        - name: regions
+          required: true
+          description: Determines which bookmakers appear in the response. Multiple regions can be specified if comma delimited. Each region will count as 1 request against the usage quota for each market. Most use cases will only need to specify one region. See [the full list of bookmakers by region](https://the-odds-api.com/sports-odds-data/bookmaker-apis.html)
+          in: query
+          schema:
+            type: string
+            enum:
+              - uk
+              - us
+              - us2
+              - us_dfs
+              - eu
+              - au
+          example: us
+        - name: markets
+          required: false
+          description: The odds markets to return. Multiple markets can be specified if comma delimited. Defaults to h2h (head to head / moneyline). Outrights only avaialable for select sports. See [the full list of supported market keys](https://the-odds-api.com/sports-odds-data/betting-markets.html)
+          in: query
+          schema:
+            type: string
+            default: h2h
+          example: player_pass_tds,alternate_spreads
+        - name: dateFormat
+          required: false
+          description: Format of returned timestamps. Can be iso (ISO8601) or unix timestamp (seconds since epoch)
+          in: query
+          schema:
+            type: string
+            enum:
+              - iso
+              - unix
+            default: iso
+          example: iso
+        - name: oddsFormat
+          required: false
+          description: Format of returned odds
+          in: query
+          schema:
+            type: string
+            enum:
+              - decimal
+              - american
+            default: decimal
+          example: decimal
+        - name: bookmakers
+          required: false
+          description: Comma-separated list of bookmakers to be returned. If both `bookmakers` and `regions` are specified, `bookmakers` takes precendence. Bookmakers can be from any region. Every group of 10 bookmakers counts as 1 request. For example for a single market, specifying up to 10 bookmakers counts as 1 request. Specifying between 11 and 20 bookmakers counts as 2 requests
+          in: query
+          schema:
+            type: string
+        - name: includeLinks
+          required: false
+          description: The response will include bookmaker links to events, markets, and betslips if available.
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+        - name: includeSids
+          required: false
+          description: The response will include source ids (bookmaker ids) for events, markets, and outcomes if available.
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+        - name: includeBetLimits
+          required: false
+          description: The response will include the bet limit of each betting option, mainly available for betting exchanges.
+          in: query
+          schema:
+            type: boolean
+            default: false
+          example: true
+      responses:
+        '200':
+          description: The event with the eventId specified in the path parameter. Includes odds from bookmakers in the specified region for the specified markets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    example: e912304de2b2ce35b473ce2ecd3d1502
+                    type: string
+                    description: A unique 32 character identifier for the event.
+                  sport_key:
+                    example: americanfootball_nfl
+                    type: string
+                    description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                  sport_title:
+                    example: NFL
+                    type: string
+                    description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                  commence_time:
+                    example: '2023-10-11T23:10:00Z'
+                    type: string
+                    description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+                    format: date-time
+                  home_team:
+                    example: Houston Texans
+                    type: string
+                    description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                    nullable: true
+                  away_team:
+                    example: Kansas City Chiefs
+                    type: string
+                    description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                    nullable: true
+                  bookmakers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          description: A unique slug (key) of the bookmaker
+                          example: draftkings
+                          type: string
+                        title:
+                          description: A formatted title of the bookmaker
+                          example: DraftKings
+                          type: string
+                        markets:
+                          type: array
+                          description: The included market depends on the specified 'markets' GET param.
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                                description: The unique key for the odds market
+                                example: alternate_spreads
+                              last_update:
+                                description: A timestamp of when the markets's odds were last read. Will be an integer if dateFormat=unix, otherwise it will be a string.
+                                example: '2023-10-10T12:10:29Z'
+                                type: string
+                                format: date-time
+                              outcomes:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    name:
+                                      type: string
+                                      example: Houston Texans
+                                      description: The outcome label. The value will depend on the market. For totals markets, this will be 'Over' or 'Under'. For team markets, it will be the name of the team or participant, or 'Draw'
+                                    price:
+                                      type: number
+                                      example: 2.23
+                                      description: The odds of the outcome. The format is determined by the oddsFormat query param. The format is decimal by default.
+                                    point:
+                                      type: number
+                                      example: 20.5
+                                      nullable: true
+                                      description: The handicap or points of the outcome, only applicable to spreads and totals markets (this property will be missing for h2h and outrights markets)
+                                    description:
+                                      type: string
+                                      nullable: true
+                                      description: This field is only relevant for certain markets. It contains more information about the outcome (for example, for player prop markets, it includes the player's name)
+                                    link:
+                                      type: string
+                                      nullable: true
+                                      description: If available, link to the bookmaker's website and populate the betslip. This field is included when providing the query parameter includeLinks=true
+                                    sid:
+                                      type: string
+                                      nullable: true
+                                      description: The bookmaker's id for the bet selection, if available. This field is included when providing the query parameter includeSids=true
+                                    bet_limit:
+                                      type: number
+                                      nullable: true
+                                      description: The bookmaker's or exchange's monetary limit on the betting selection. The currency will depend on the bookmaker/exchange. This field is included when providing the query parameter includeBetLimits=true, and is mainly populated for betting exchanges.
+                                example:
+                                  - name: Houston Texans
+                                    price: 5.08
+                                    point: -23
+                                  - name: Houston Texans
+                                    price: 4.82
+                                    point: -22.5
+                                  - name: Houston Texans
+                                    price: 4.66
+                                    point: -22
+                                  - name: Kansas City Chiefs
+                                    price: 1.15
+                                    point: 23
+                                  - name: Kansas City Chiefs
+                                    price: 1.17
+                                    point: 22.5
+                                  - name: Kansas City Chiefs
+                                    price: 1.17
+                                    point: 22
+                              link:
+                                description: Link to the market on the bookmaker's website if applicable. This field is included when providing the query parameter includeLinks=true
+                                nullable: true
+                                type: string
+                              sid:
+                                description: The bookmaker's id of the market if available. This field is included when providing the query parameter includeSids=true
+                                nullable: true
+                                type: string
+                        link:
+                          description: Link to the event on the bookmaker's website if available. This field is included when providing the query parameter includeLinks=true
+                          nullable: true
+                          example: https://sportsbook.draftkings.com/event/chi-bears-%40-ind-colts/30568753
+                          type: string
+                        sid:
+                          description: The bookmaker's id of the event if available. This field is included when providing the query parameter includeSids=true
+                          nullable: true
+                          example: '30568753'
+                          type: string
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '404':
+          description: The event id is invalid or the event has expired
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_sports_events_odds_by_sport_and_event_id
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/sports/{sport}/participants:
+    get:
+      description: |-
+        Returns a list of participants for a given sport. Depending on the sport, a participant can be either a team or an individual. For example for NBA, this endpoint returns a list of teams. For tennis, it will return a list of players.
+        Participants are used to define events, for example Boston Celtics vs Chicago Bulls, or Novak Djokovic vs Roger Federer. This endpoint does not return players on a team.
+        The returning list should be considered a whitelist and may include participants that are no longer active. Future updates will remove inactive particpants.
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds. This is obtained from the /sports endpoint
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abc123ABC456abc123ABC456abc123ABC456abc1
+      responses:
+        '200':
+          description: A list of participants for the given sport. The returning list should be considered a whitelist and may include participants that are no longer active. Future updates will remove inactive particpants.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: A list of participants
+                items:
+                  type: object
+                  properties:
+                    id:
+                      description: A unique id of the participant
+                      example: par_01hqmkq6fdf1pvq7jgdd7hdmpf
+                      type: string
+                    full_name:
+                      description: The participant name. Either a team name, or player name depending on the sport. This endpoint does not return players on a team.
+                      example: Boston Celtics
+                      type: string
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_sports_participants_by_sport
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/historical/sports/{sport}/odds:
+    get:
+      tags:
+        - historical events
+      description: Returns list of live and upcoming events at a point in time for a given sport, including bookmaker odds for the specified region and markets. This endpoint will only return featured markets (moneyline, match winner, 1x2, head-to-head, spreads, totals, over/under, outrights etc.), using the market keys `h2h`, `spreads`, `totals`. This endpoint was previously `/v4/sports/{sport}/odds-history`, which has been deprecated.
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds. This is obtained from the /sports endpoint
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abc123ABC456abc123ABC456abc123ABC456abc1
+        - name: regions
+          required: true
+          description: Determines which bookmakers appear in the response. Multiple regions can be specified if comma delimited. Most use cases will only need to specify one region. For a list of bookmakers by region, see https://the-odds-api.com/sports-odds-data/bookmaker-apis.html
+          in: query
+          schema:
+            type: string
+            enum:
+              - uk
+              - us
+              - us2
+              - us_dfs
+              - eu
+              - au
+          example: us
+        - name: markets
+          required: false
+          description: The odds market to return. Multiple markets can be specified if comma delimited. Defaults to h2h (head to head / moneyline). Outrights are only avaialable for select sports, such as golf.
+          in: query
+          schema:
+            type: string
+            enum:
+              - h2h
+              - spreads
+              - totals
+              - outrights
+            default: h2h
+          example: h2h,spreads
+        - name: dateFormat
+          required: false
+          description: Format of returned timestamps. Can be iso (ISO8601) or unix timestamp (seconds since epoch)
+          in: query
+          schema:
+            type: string
+            enum:
+              - iso
+              - unix
+            default: iso
+          example: iso
+        - name: oddsFormat
+          required: false
+          description: Format of returned odds
+          in: query
+          schema:
+            type: string
+            enum:
+              - decimal
+              - american
+            default: decimal
+          example: decimal
+        - name: eventIds
+          required: false
+          description: Comma-separated event ids. Filters the response to only return events for the specified ids, provided those events have not expired
+          in: query
+          schema:
+            type: string
+        - name: bookmakers
+          required: false
+          description: Comma-separated list of bookmakers to be returned. If both `bookmakers` and `regions` are specified, `bookmakers` takes precendence. Bookmakers can be from any region. Every group of 10 bookmakers counts as 1 request. For example for a single market, specifying up to 10 bookmakers counts as 1 request. Specifying between 11 and 20 bookmakers counts as 2 requests
+          in: query
+          schema:
+            type: string
+        - name: date
+          required: true
+          example: '2023-10-10T12:15:00Z'
+          description: The timestamp of the data snapshot to be returned, specified in ISO8601 format. The historical odds API will return the closest snapshot equal to or earlier than the provided date parameter
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of live and upcoming events and bookmaker odds for the specified sport, from the historical snapshot closest to the specified date
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    description: The timestamp of the snapshot. This will be the closest available timestamp equal to or earlier than the provided date parameter.
+                    example: '2023-10-10T12:10:39Z'
+                  previous_timestamp:
+                    type: string
+                    description: The preceding available timestamp. This can be used as the date parameter in a new request to move back in time.
+                    example: '2023-10-10T12:05:39Z'
+                  next_timestamp:
+                    type: string
+                    description: The next available timestamp. This can be used as the date parameter in a new request to move forward in time.
+                    example: '2023-10-10T12:15:39Z'
+                  data:
+                    type: array
+                    description: A list of live and upcoming events at the time of the snapshot
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          example: e912304de2b2ce35b473ce2ecd3d1502
+                          type: string
+                          description: A unique 32 character identifier for the event.
+                        sport_key:
+                          example: americanfootball_nfl
+                          type: string
+                          description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                        sport_title:
+                          example: NFL
+                          type: string
+                          description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                        commence_time:
+                          example: '2023-10-11T23:10:00Z'
+                          type: string
+                          description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+                          format: date-time
+                        home_team:
+                          example: Houston Texans
+                          type: string
+                          description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                          nullable: true
+                        away_team:
+                          example: Kansas City Chiefs
+                          type: string
+                          description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                          nullable: true
+                        bookmakers:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                description: A unique slug (key) of the bookmaker
+                                example: draftkings
+                                type: string
+                              title:
+                                description: A formatted title of the bookmaker
+                                example: DraftKings
+                                type: string
+                              last_update:
+                                description: A timestamp of when the bookmaker's odds were last read. Will be an integer if dateFormat=unix, otherwise it will be a string
+                                example: '2023-10-10T12:10:29Z'
+                                type: string
+                                format: date-time
+                              markets:
+                                type: array
+                                description: The included market depends on the specified 'markets' GET param. NOTE Allow for the addition of new market types in future.
+                                items:
+                                  type: object
+                                  properties:
+                                    key:
+                                      type: string
+                                      enum:
+                                        - h2h
+                                        - spreads
+                                        - totals
+                                        - outrights
+                                      description: The name of the odds market
+                                      example: h2h
+                                    last_update:
+                                      description: A timestamp of when the markets's odds were last read. Will be an integer if dateFormat=unix, otherwise it will be a string. To check recency of odds, we recommend using this field instead of the "last_update" field at the bookmaker level.
+                                      example: '2023-10-10T12:10:29Z'
+                                      type: string
+                                      format: date-time
+                                    outcomes:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          name:
+                                            type: string
+                                            example: Houston Texans
+                                            description: The outcome label. The value will depend on the market. For totals markets, this will be 'Over' or 'Under'. For team markets, it will be the name of the team or participant, or 'Draw'
+                                          price:
+                                            type: number
+                                            example: 2.23
+                                            description: The odds of the outcome. The format is determined by the oddsFormat query param. The format is decimal by default.
+                                          point:
+                                            type: number
+                                            example: 20.5
+                                            nullable: true
+                                            description: The handicap or points of the outcome, only applicable to spreads and totals markets (this property will be missing for h2h and outrights markets)
+                                          description:
+                                            type: string
+                                            nullable: true
+                                            description: This field is only relevant for certain markets. It contains more information about the outcome (for example, for player prop markets, it includes the player's name)
+                                          link:
+                                            type: string
+                                            nullable: true
+                                            description: If available, link to the bookmaker's website and populate the betslip. This field is included when providing the query parameter includeLinks=true
+                                          sid:
+                                            type: string
+                                            nullable: true
+                                            description: The bookmaker's id for the bet selection, if available. This field is included when providing the query parameter includeSids=true
+                                          bet_limit:
+                                            type: number
+                                            nullable: true
+                                            description: The bookmaker's or exchange's monetary limit on the betting selection. The currency will depend on the bookmaker/exchange. This field is included when providing the query parameter includeBetLimits=true, and is mainly populated for betting exchanges.
+                                      example:
+                                        - name: Houston Texans
+                                          price: 2.23
+                                        - name: Kansas City Chiefs
+                                          price: 1.45
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_historical_sports_odds_by_sport
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/historical/sports/{sport}/events:
+    get:
+      tags:
+        - historical events
+      description: Returns a list of events for the specified sport as they appeared at the specified timestamp (date parameter). Odds are not included in the response
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds. This is obtained from the /sports endpoint
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abc123ABC456abc123ABC456abc123ABC456abc1
+        - name: dateFormat
+          required: false
+          description: Format of returned timestamps. Can be iso (ISO8601) or unix timestamp (seconds since epoch)
+          in: query
+          schema:
+            type: string
+            enum:
+              - iso
+              - unix
+            default: iso
+          example: iso
+        - name: eventIds
+          required: false
+          description: Comma-separated event ids. Filters the response to only return events for the specified ids, provided those events have not expired
+          in: query
+          schema:
+            type: string
+        - name: commenceTimeFrom
+          required: false
+          description: Filters the response to show events that commence on and after this parameter. Values are in ISO8601 format
+          in: query
+          schema:
+            type: string
+          example: '2023-09-09T00:00:00Z'
+        - name: commenceTimeTo
+          required: false
+          description: Filters the response to show events that commence on and before this parameter. Values are in ISO8601 format
+          in: query
+          schema:
+            type: string
+          example: '2023-09-09T00:00:00Z'
+        - name: date
+          required: true
+          example: '2023-10-10T12:15:00Z'
+          description: The timestamp of the data snapshot to be returned, specified in ISO8601 format. The API will return the closest snapshot equal to or earlier than the provided date parameter
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of live and upcoming events for the specified sport, as they appeared at the specified timestamp (date parameter), excluding odds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    description: The timestamp of the snapshot. This will be the closest available timestamp equal to or earlier than the provided date parameter.
+                    example: '2023-10-10T12:10:39Z'
+                  previous_timestamp:
+                    type: string
+                    description: The preceding available timestamp. This can be used as the date parameter in a new request to move back in time.
+                    example: '2023-10-10T12:05:39Z'
+                  next_timestamp:
+                    type: string
+                    description: The next available timestamp. This can be used as the date parameter in a new request to move forward in time.
+                    example: '2023-10-10T12:15:39Z'
+                  data:
+                    type: array
+                    description: A list of live and upcoming events
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          example: e912304de2b2ce35b473ce2ecd3d1502
+                          type: string
+                          description: A unique 32 character identifier for the event.
+                        sport_key:
+                          example: americanfootball_nfl
+                          type: string
+                          description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                        sport_title:
+                          example: NFL
+                          type: string
+                          description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                        commence_time:
+                          example: '2023-10-11T23:10:00Z'
+                          type: string
+                          description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+                          format: date-time
+                        home_team:
+                          example: Houston Texans
+                          type: string
+                          description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                          nullable: true
+                        away_team:
+                          example: Kansas City Chiefs
+                          type: string
+                          description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                          nullable: true
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_historical_sports_events_by_sport
+    servers:
+      - url: https://api.the-odds-api.com
+  /v4/historical/sports/{sport}/events/{eventId}/odds:
+    get:
+      tags:
+        - historical events
+      description: Returns bookmaker odds for a single event as they appeared at the specified timestamp (date parameter). Accepts any available market keys using the `markets` parameter. Use this endpoint to access historical odds from any available markets for an event. For historical odds of the most popular featured markets, use the `/v4/historical/sports/{sport}/odds` endpoint. See the [full list of market keys here](https://the-odds-api.com/sports-odds-data/betting-markets.html)
+      parameters:
+        - name: sport
+          required: true
+          description: sport key for which to return events and odds. This is obtained from the /sports endpoint
+          in: path
+          schema:
+            type: string
+          example: americanfootball_nfl
+        - name: eventId
+          required: true
+          description: Event ids can be found in the `id` field in the response of the historical events endpoint (see `/v4/historical/sports/{sports}/events`). If the event had expired at the specified timestamp (not receiving updates due to completion or cancellation), a HTTP 404 status code will be returned.
+          in: path
+          schema:
+            type: string
+          example: 50f069186530f68051f2a978745931b5
+        - name: apiKey
+          required: true
+          description: Access key (40 characters). Get an API key at https://the-odds-api.com/#get-access
+          in: query
+          schema:
+            type: string
+          example: abc123ABC456abc123ABC456abc123ABC456abc1
+        - name: regions
+          required: true
+          description: Determines which bookmakers appear in the response. Multiple regions can be specified if comma delimited. Most use cases will only need to specify one region. See [the full list of bookmakers by region](https://the-odds-api.com/sports-odds-data/bookmaker-apis.html)
+          in: query
+          schema:
+            type: string
+            enum:
+              - uk
+              - us
+              - us2
+              - us_dfs
+              - eu
+              - au
+          example: us
+        - name: markets
+          required: false
+          description: The odds markets to return. Multiple markets can be specified if comma delimited. Defaults to h2h (head to head / moneyline). Outrights only avaialable for select sports. See [the full list of supported market keys](https://the-odds-api.com/sports-odds-data/betting-markets.html)
+          in: query
+          schema:
+            type: string
+            default: h2h
+          example: player_pass_tds,alternate_spreads
+        - name: dateFormat
+          required: false
+          description: Format of returned timestamps. Can be iso (ISO8601) or unix timestamp (seconds since epoch)
+          in: query
+          schema:
+            type: string
+            enum:
+              - iso
+              - unix
+            default: iso
+          example: iso
+        - name: oddsFormat
+          required: false
+          description: Format of returned odds
+          in: query
+          schema:
+            type: string
+            enum:
+              - decimal
+              - american
+            default: decimal
+          example: decimal
+        - name: bookmakers
+          required: false
+          description: Comma-separated list of bookmakers to be returned. If both `bookmakers` and `regions` are specified, `bookmakers` takes precendence. Bookmakers can be from any region. Every group of 10 bookmakers counts as 1 request. For example for a single market, specifying up to 10 bookmakers counts as 1 request. Specifying between 11 and 20 bookmakers counts as 2 requests
+          in: query
+          schema:
+            type: string
+        - name: date
+          required: true
+          example: '2023-10-10T12:15:00Z'
+          description: The timestamp of the data snapshot to be returned, specified in ISO8601 format. The API will return the closest snapshot equal to or earlier than the provided date parameter
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The event with the eventId specified in the path parameter. Includes odds from bookmakers in the specified region for the specified markets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    description: The timestamp of the snapshot. This will be the closest available timestamp equal to or earlier than the provided date parameter.
+                    example: '2023-10-10T12:10:39Z'
+                  previous_timestamp:
+                    type: string
+                    description: The preceding available timestamp. This can be used as the date parameter in a new request to move back in time.
+                    example: '2023-10-10T12:05:39Z'
+                  next_timestamp:
+                    type: string
+                    description: The next available timestamp. This can be used as the date parameter in a new request to move forward in time.
+                    example: '2023-10-10T12:15:39Z'
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        example: e912304de2b2ce35b473ce2ecd3d1502
+                        type: string
+                        description: A unique 32 character identifier for the event.
+                      sport_key:
+                        example: americanfootball_nfl
+                        type: string
+                        description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+                      sport_title:
+                        example: NFL
+                        type: string
+                        description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+                      commence_time:
+                        example: '2023-10-11T23:10:00Z'
+                        type: string
+                        description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+                        format: date-time
+                      home_team:
+                        example: Houston Texans
+                        type: string
+                        description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                        nullable: true
+                      away_team:
+                        example: Kansas City Chiefs
+                        type: string
+                        description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+                        nullable: true
+                      bookmakers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              description: A unique slug (key) of the bookmaker
+                              example: draftkings
+                              type: string
+                            title:
+                              description: A formatted title of the bookmaker
+                              example: DraftKings
+                              type: string
+                            markets:
+                              type: array
+                              description: The included market depends on the specified 'markets' GET param.
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                    description: The unique key for the odds market
+                                    example: alternate_spreads
+                                  last_update:
+                                    description: A timestamp of when the markets's odds were last read. Will be an integer if dateFormat=unix, otherwise it will be a string.
+                                    example: '2023-10-10T12:10:29Z'
+                                    type: string
+                                    format: date-time
+                                  outcomes:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        name:
+                                          type: string
+                                          example: Houston Texans
+                                          description: The outcome label. The value will depend on the market. For totals markets, this will be 'Over' or 'Under'. For team markets, it will be the name of the team or participant, or 'Draw'
+                                        price:
+                                          type: number
+                                          example: 2.23
+                                          description: The odds of the outcome. The format is determined by the oddsFormat query param. The format is decimal by default.
+                                        point:
+                                          type: number
+                                          example: 20.5
+                                          nullable: true
+                                          description: The handicap or points of the outcome, only applicable to spreads and totals markets (this property will be missing for h2h and outrights markets)
+                                        description:
+                                          type: string
+                                          nullable: true
+                                          description: This field is only relevant for certain markets. It contains more information about the outcome (for example, for player prop markets, it includes the player's name)
+                                        link:
+                                          type: string
+                                          nullable: true
+                                          description: If available, link to the bookmaker's website and populate the betslip. This field is included when providing the query parameter includeLinks=true
+                                        sid:
+                                          type: string
+                                          nullable: true
+                                          description: The bookmaker's id for the bet selection, if available. This field is included when providing the query parameter includeSids=true
+                                        bet_limit:
+                                          type: number
+                                          nullable: true
+                                          description: The bookmaker's or exchange's monetary limit on the betting selection. The currency will depend on the bookmaker/exchange. This field is included when providing the query parameter includeBetLimits=true, and is mainly populated for betting exchanges.
+                                    example:
+                                      - name: Houston Texans
+                                        price: 5.08
+                                        point: -23
+                                      - name: Houston Texans
+                                        price: 4.82
+                                        point: -22.5
+                                      - name: Houston Texans
+                                        price: 4.66
+                                        point: -22
+                                      - name: Kansas City Chiefs
+                                        price: 1.15
+                                        point: 23
+                                      - name: Kansas City Chiefs
+                                        price: 1.17
+                                        point: 22.5
+                                      - name: Kansas City Chiefs
+                                        price: 1.17
+                                        point: 22
+          headers:
+            x-requests-remaining:
+              schema:
+                type: integer
+              description: Usage credits remaining until the quota resets
+            x-requests-used:
+              schema:
+                type: integer
+              description: Usage credits used since the last quota reset
+            x-requests-last:
+              schema:
+                type: integer
+              description: The usage cost of the last API call
+        '401':
+          description: Unauthenticated or unauthorized. The API key might be missing or invalid (unauthenticated), or it might at its usage limit (unauthorized). The repsonse body will contain more info
+        '404':
+          description: The event id is invalid or the event has expired
+        '422':
+          description: One or more of the query params are invalid. The repsonse body will contain more info
+        '429':
+          description: Requests are being sent too frequently - the request was throttled
+        '500':
+          description: Internal error
+      servers:
+        - url: https://api.the-odds-api.com
+      operationId: theodds_get_v4_historical_sports_events_odds_by_sport_and_event_id
+    servers:
+      - url: https://api.the-odds-api.com
+components:
+  schemas:
+    Outcome:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Houston Texans
+          description: The outcome label. The value will depend on the market. For totals markets, this will be 'Over' or 'Under'. For team markets, it will be the name of the team or participant, or 'Draw'
+        price:
+          type: number
+          example: 2.23
+          description: The odds of the outcome. The format is determined by the oddsFormat query param. The format is decimal by default.
+        point:
+          type: number
+          example: 20.5
+          nullable: true
+          description: The handicap or points of the outcome, only applicable to spreads and totals markets (this property will be missing for h2h and outrights markets)
+        description:
+          type: string
+          nullable: true
+          description: This field is only relevant for certain markets. It contains more information about the outcome (for example, for player prop markets, it includes the player's name)
+        link:
+          type: string
+          nullable: true
+          description: If available, link to the bookmaker's website and populate the betslip. This field is included when providing the query parameter includeLinks=true
+        sid:
+          type: string
+          nullable: true
+          description: The bookmaker's id for the bet selection, if available. This field is included when providing the query parameter includeSids=true
+        bet_limit:
+          type: number
+          nullable: true
+          description: The bookmaker's or exchange's monetary limit on the betting selection. The currency will depend on the bookmaker/exchange. This field is included when providing the query parameter includeBetLimits=true, and is mainly populated for betting exchanges.
+    MatchId:
+      example: e912304de2b2ce35b473ce2ecd3d1502
+      type: string
+      description: A unique 32 character identifier for the event.
+    SportKey:
+      example: americanfootball_nfl
+      type: string
+      description: A unique slug for the sport. Use this as the "sport" param in /odds requests
+    SportTitle:
+      example: NFL
+      type: string
+      description: A presentable title of the sport. Occassionally this value can change, for example if a league undergoes a name change or change in sponsorship.
+    CommenceTime:
+      example: '2023-10-11T23:10:00Z'
+      type: string
+      description: The match start time (ISO 8601 formatted). This will be unix timestamp integer if the dateFormat query param is set to dateFormat=unix.
+      format: date-time
+    HomeTeam:
+      example: Houston Texans
+      type: string
+      description: The home team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+      nullable: true
+    AwayTeam:
+      example: Kansas City Chiefs
+      type: string
+      description: The away team. If home/away is not applicable for the sport (such as MMA and Tennis), it will be one of the participants. Null for outrights (futures) events.
+      nullable: true
+    ScoreModel:
+      type: object
+      properties:
+        name:
+          example: Houston Texans
+          type: string
+          description: The participant name
+        score:
+          example: '20'
+          type: string
+          description: The most recent score for the participant

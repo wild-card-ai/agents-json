@@ -1,0 +1,730 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "The Odds API Methods",
+    "version": "0.1.0",
+    "description": "This specification provides flows for interacting with The Odds API. It includes flows for each API endpoint as well as compound flows that orchestrate multiple endpoints. Each flow is highly searchable and embeddable, enabling AI agents and language models to make tool calls that actually work."
+  },
+  "sources": [
+    {
+      "id": "theodds",
+      "path": "https://gist.githubusercontent.com/yagnyaPatel/c672645b330544466dffff843345d8e4/raw/6a0e644b886e1425d392691771df212ce17d874a/theodds.openapi.yaml"
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "theodds_get_v4_sports_flow",
+      "title": "Get Sports List",
+      "description": "Retrieve a list of available sports and tournaments from The Odds API. Include your API key and optionally specify the 'all' flag to include all sports.",
+      "actions": [
+        {
+          "id": "sports_list_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "theodds_get_v4_sports_flow",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "sports_list_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "all",
+            "description": "Optional flag to include all sports even those not currently in-season.",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing the list of sports.",
+            "example": {
+              "sports": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "theodds_get_v4_sports_odds_flow",
+      "title": "Get Sports Odds by Sport",
+      "description": "Retrieve sportsbook odds for a specified sport. Provide the sport key, API key, regions, and optional parameters for markets and formatting.",
+      "actions": [
+        {
+          "id": "sports_odds_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports_odds_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "theodds_get_v4_sports_odds_flow",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "sports_odds_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regions",
+            "description": "Comma-separated list of regions (e.g., 'us,uk').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "markets",
+            "description": "Odds market to return (e.g., 'h2h', 'spreads'). Defaults to 'h2h'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateFormat",
+            "description": "Format for timestamps ('iso' or 'unix'). Defaults to 'iso'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oddsFormat",
+            "description": "Format of odds ('decimal' or 'american'). Defaults to 'decimal'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventIds",
+            "description": "Optional comma-separated event IDs to filter results.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "bookmakers",
+            "description": "Optional comma-separated list of bookmakers to include.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing sports odds.",
+            "example": {
+              "odds": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "theodds_get_v4_sports_scores_flow",
+      "title": "Get Sports Scores",
+      "description": "Retrieve live, upcoming, and recently completed sports event scores. Provide the sport key, API key, and optionally specify days from the past and event IDs.",
+      "actions": [
+        {
+          "id": "sports_scores_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports_scores_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "theodds_get_v4_sports_scores_flow",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "sports_scores_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "daysFrom",
+            "description": "The number of days in the past to include completed events (1 to 3).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "dateFormat",
+            "description": "Format for timestamps ('iso' or 'unix'). Defaults to 'iso'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventIds",
+            "description": "Optional comma-separated event IDs to filter scores.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing sports scores.",
+            "example": {
+              "scores": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "theodds_get_v4_sports_participants_flow",
+      "title": "Get Sports Participants",
+      "description": "Retrieve a list of participants (teams or individuals) for a given sport.",
+      "actions": [
+        {
+          "id": "sports_participants_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports_participants_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "theodds_get_v4_sports_participants_flow",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "sports_participants_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing sports participants.",
+            "example": {
+              "participants": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "theodds_get_v4_historical_sports_odds_flow",
+      "title": "Get Historical Sports Odds",
+      "description": "Retrieve historical sportsbook odds for a specified sport based on a snapshot timestamp. Include parameters such as regions, markets, and formats.",
+      "actions": [
+        {
+          "id": "historical_sports_odds_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_historical_sports_odds_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "theodds_get_v4_historical_sports_odds_flow",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "historical_sports_odds_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regions",
+            "description": "Comma-separated list of regions (e.g., 'us,uk').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "markets",
+            "description": "Odds market to return (default is 'h2h').",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateFormat",
+            "description": "Timestamp format ('iso' or 'unix'). Defaults to 'iso'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oddsFormat",
+            "description": "Odds format ('decimal' or 'american'). Defaults to 'decimal'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventIds",
+            "description": "Optional comma-separated event IDs to filter results.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "bookmakers",
+            "description": "Optional comma-separated list of bookmakers.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "description": "Snapshot timestamp in ISO8601 format for historical data.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing historical sports odds.",
+            "example": {
+              "historical_odds": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "theodds_get_v4_historical_sports_events_flow",
+      "title": "Get Historical Sports Events",
+      "description": "Retrieve a list of sports events as they appeared at a specific historical snapshot. Optionally filter by commence time and event IDs.",
+      "actions": [
+        {
+          "id": "historical_sports_events_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_historical_sports_events_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "theodds_get_v4_historical_sports_events_flow",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "historical_sports_events_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "dateFormat",
+            "description": "Timestamp format ('iso' or 'unix'), defaults to 'iso'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventIds",
+            "description": "Optional comma-separated event IDs.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "commenceTimeFrom",
+            "description": "Filter events commencing on or after this ISO8601 timestamp.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "commenceTimeTo",
+            "description": "Filter events commencing on or before this ISO8601 timestamp.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "description": "Snapshot timestamp in ISO8601 format for historical events.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing historical sports events.",
+            "example": {
+              "historical_events": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "theodds_get_v4_historical_sports_events_odds_flow",
+      "title": "Get Historical Event Odds",
+      "description": "Retrieve historical odds for a specific event using sport and event identifiers.",
+      "actions": [
+        {
+          "id": "historical_event_odds_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_historical_sports_events_odds_by_sport_and_event_id"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "theodds_get_v4_historical_sports_events_odds_flow",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "historical_event_odds_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "eventId",
+            "description": "Unique identifier for the event.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regions",
+            "description": "Comma-separated list of regions (e.g., 'us,uk').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "markets",
+            "description": "Odds market to return (default is 'h2h').",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateFormat",
+            "description": "Format for timestamps ('iso' or 'unix'). Defaults to 'iso'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oddsFormat",
+            "description": "Odds format ('decimal' or 'american'). Defaults to 'decimal'.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing historical event odds.",
+            "example": {
+              "historical_event_odds": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "live_odds_scores_compound",
+      "title": "Get Live Odds and Scores",
+      "description": "Retrieve live sportsbook odds and current scores for a specified sport. This compound flow orchestrates calls to both the odds and scores endpoints.",
+      "actions": [
+        {
+          "id": "live_odds_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports_odds_by_sport"
+        },
+        {
+          "id": "live_scores_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_sports_scores_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "live_odds_scores_compound",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "live_odds_action",
+            "fieldPath": "parameters"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "live_odds_scores_compound",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "live_scores_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regions",
+            "description": "Regions for odds data (e.g., 'us,uk').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "markets",
+            "description": "Odds market to return (default is 'h2h').",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateFormat",
+            "description": "Timestamp format ('iso' or 'unix'). Defaults to 'iso'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oddsFormat",
+            "description": "Odds format ('decimal' or 'american'). Defaults to 'decimal'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "daysFrom",
+            "description": "Number of days in the past for scores (1 to 3).",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "eventIds",
+            "description": "Optional event IDs to filter scores.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The combined successful response containing both live odds and scores.",
+            "example": {
+              "live_odds": [],
+              "live_scores": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "historical_odds_events_compound",
+      "title": "Get Historical Odds and Events",
+      "description": "Retrieve both historical sportsbook odds and event details for a given sport at a specific snapshot in time. This compound flow combines odds and event data.",
+      "actions": [
+        {
+          "id": "historical_odds_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_historical_sports_odds_by_sport"
+        },
+        {
+          "id": "historical_events_action",
+          "sourceId": "theodds",
+          "operationId": "theodds_get_v4_historical_sports_events_by_sport"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "historical_odds_events_compound",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "historical_odds_action",
+            "fieldPath": "parameters"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "historical_odds_events_compound",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "historical_events_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "sport",
+            "description": "Sport key (e.g., 'americanfootball_nfl').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "apiKey",
+            "description": "Your API key for The Odds API.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "regions",
+            "description": "Comma-separated list of regions (e.g., 'us,uk').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "markets",
+            "description": "Odds market to return (default is 'h2h').",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "dateFormat",
+            "description": "Timestamp format ('iso' or 'unix'). Defaults to 'iso'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "oddsFormat",
+            "description": "Odds format ('decimal' or 'american'). Defaults to 'decimal'.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "description": "Snapshot timestamp in ISO8601 format for historical data.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "commenceTimeFrom",
+            "description": "Filter events commencing on or after this ISO8601 timestamp.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "commenceTimeTo",
+            "description": "Filter events commencing on or before this ISO8601 timestamp.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "eventIds",
+            "description": "Optional comma-separated event IDs to filter event details.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The successful response containing both historical odds and events.",
+            "example": {
+              "historical_odds": [],
+              "historical_events": []
+            }
+          }
+        }
+      }
+    }
+  ]
+}
