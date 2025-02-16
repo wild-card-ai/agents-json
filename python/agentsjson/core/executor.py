@@ -30,11 +30,31 @@ def apply_link(link: Link, execution_trace: Dict[str, Any]) -> Dict[str, Dict[st
     field_type = field_path_parts[0] if field_path_parts else None
             
     source_value = source_trace.get(field_path, None)
+    # If the source value is empty or None, throw an error since links require non-empty values
+    if source_value is None or source_value == "" or \
+       (isinstance(source_value, dict) and not source_value) or \
+       (isinstance(source_value, list) and not source_value):
+        raise ValueError(f"Source value at path '{field_path}' is empty but is required by link")
     
-    # If the source value does not exist, do nothing
-    if source_value is None:
-        return dict(apply)
-
+    # Check from the end of the path until we find a value or reach the start
+    field_path_parts = field_path.split('.')
+    for i in range(len(field_path_parts) - 1, 0, -1):
+        partial_path = '.'.join(field_path_parts[:i])
+        # Skip if immediate parent is parameters or requestBody
+        if field_path_parts[i-1] in ['parameters', 'requestBody']:
+            continue
+            
+        intermediate_value = source_trace.get(partial_path, None)
+        if intermediate_value is None or intermediate_value == "" or \
+           (isinstance(intermediate_value, dict) and not intermediate_value) or \
+           (isinstance(intermediate_value, list) and not intermediate_value):
+            raise ValueError(f"Cannot access '{field_path}' because intermediate path '{partial_path}' is empty")
+        # If we found a non-empty value, we can stop checking
+        break
+    
+    
+    
+    # If we get here, the source value is None but the path is valid
     # Apply the value to the target field
     target_path = convert_dot_digits_to_brackets(link.target.fieldPath)
     apply[target_path] = source_value
@@ -193,6 +213,7 @@ def execute_flows(response: Any, format: ToolFormat, bundle: Bundle, flows: List
         else:
             parameters = args_dict.get("parameters", {})
             requestBody = args_dict.get("requestBody", {})
+        
         results[flow.id] = execute(bundle=bundle, flow=flow, auth=auth, parameters=parameters, requestBody=requestBody)
                 
     return results
