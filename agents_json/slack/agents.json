@@ -1,0 +1,1634 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Slack API Methods",
+    "version": "0.1.0",
+    "description": "This specification exposes a curated set of 24 Slack API operations. Each flow includes detailed descriptions and explicit token mappings so that embedding‐based search can accurately match tool capabilities to user requests."
+  },
+  "sources": [
+    {
+      "id": "slack",
+      "path": "https://gist.githubusercontent.com/kmahorker/b3c3c026f75619a81d170018f22c3525/raw/d0d7fafce02d57bba7cb4c0932cd9fe8112a8b99/slackopenapi.yaml"
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "chat_postMessage",
+      "title": "Post Message",
+      "description": "Sends a message to a Slack channel or direct message. Use this endpoint to broadcast notifications, start conversations, or deliver dynamic content.",
+      "actions": [
+        {
+          "id": "chat_postMessage_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_chat_post_message"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "chat_postMessage",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "chat_postMessage_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "chat_postMessage",
+            "fieldPath": "requestBody.text"
+          },
+          "target": {
+            "actionId": "chat_postMessage_action",
+            "fieldPath": "requestBody.text"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for posting a message. Includes the authentication token, channel ID, and message text.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "ID of the Slack channel or DM"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Content of the message"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "text"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "text": "Hello, world!"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation that the message was successfully posted.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "chat_update",
+      "title": "Update Message",
+      "description": "Edits an existing message in a Slack channel. Ideal for correcting errors or updating information dynamically.",
+      "actions": [
+        {
+          "id": "chat_update_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_chat_update"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "chat_update",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "chat_update_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "chat_update",
+            "fieldPath": "requestBody.ts"
+          },
+          "target": {
+            "actionId": "chat_update_action",
+            "fieldPath": "requestBody.ts"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "chat_update",
+            "fieldPath": "requestBody.text"
+          },
+          "target": {
+            "actionId": "chat_update_action",
+            "fieldPath": "requestBody.text"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for updating a message. Must include token, channel ID, timestamp, and the new message text.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "Channel ID where the message exists"
+                  },
+                  "ts": {
+                    "type": "string",
+                    "description": "Timestamp of the message to update"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Updated message text"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "ts",
+                  "text"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "ts": "1234567890.123456",
+                "text": "Updated message"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the message was successfully updated.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "chat_postEphemeral",
+      "title": "Post Ephemeral Message",
+      "description": "Sends a temporary, user-specific message that appears only to the targeted user. Use this endpoint for context-sensitive notifications.",
+      "actions": [
+        {
+          "id": "chat_postEphemeral_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_chat_post_ephemeral"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "chat_postEphemeral",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "chat_postEphemeral_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "chat_postEphemeral",
+            "fieldPath": "requestBody.user"
+          },
+          "target": {
+            "actionId": "chat_postEphemeral_action",
+            "fieldPath": "requestBody.user"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "chat_postEphemeral",
+            "fieldPath": "requestBody.text"
+          },
+          "target": {
+            "actionId": "chat_postEphemeral_action",
+            "fieldPath": "requestBody.text"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for posting an ephemeral message. Includes token, channel, target user, and message text.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "Channel ID"
+                  },
+                  "user": {
+                    "type": "string",
+                    "description": "User ID to receive the message"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "Ephemeral message text"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "user",
+                  "text"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "user": "U123456",
+                "text": "This is an ephemeral message."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response indicating that the ephemeral message was successfully sent.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "chat_delete",
+      "title": "Delete Message",
+      "description": "Removes a previously posted message from a designated Slack channel. Use this endpoint to retract outdated or erroneous content.",
+      "actions": [
+        {
+          "id": "chat_delete_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_chat_delete"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "chat_delete",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "chat_delete_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "chat_delete",
+            "fieldPath": "requestBody.ts"
+          },
+          "target": {
+            "actionId": "chat_delete_action",
+            "fieldPath": "requestBody.ts"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for deleting a message. Includes the authentication token, channel ID, and message timestamp.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "ID of the Slack channel"
+                  },
+                  "ts": {
+                    "type": "string",
+                    "description": "Timestamp of the message to be deleted"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "ts"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "ts": "1234567890.123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the message was successfully deleted.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "conversations_history",
+      "title": "Get Conversation History",
+      "description": "Fetches the complete message history for a specified Slack channel. This endpoint is ideal for analyzing context, retrieving past interactions, and informing AI decisions.",
+      "actions": [
+        {
+          "id": "conversations_history_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_conversations_history"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "conversations_history",
+            "fieldPath": "parameters.channel"
+          },
+          "target": {
+            "actionId": "conversations_history_action",
+            "fieldPath": "parameters.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "conversations_history",
+            "fieldPath": "parameters.cursor"
+          },
+          "target": {
+            "actionId": "conversations_history_action",
+            "fieldPath": "parameters.cursor"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "conversations_history",
+            "fieldPath": "parameters.limit"
+          },
+          "target": {
+            "actionId": "conversations_history_action",
+            "fieldPath": "parameters.limit"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "channel",
+            "description": "ID of the Slack channel to retrieve history from",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cursor",
+            "description": "Optional pagination cursor for navigating through history",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "Optional limit on the number of messages to return",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The channel's message history along with pagination details.",
+            "example": {
+              "ok": true,
+              "messages": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "conversations_info",
+      "title": "Get Conversation Info",
+      "description": "Provides comprehensive details about a specific Slack conversation, including metadata, member list, and configuration. This is useful for contextualizing interactions.",
+      "actions": [
+        {
+          "id": "conversations_info_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_conversations_info"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "conversations_info",
+            "fieldPath": "parameters.channel"
+          },
+          "target": {
+            "actionId": "conversations_info_action",
+            "fieldPath": "parameters.channel"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "channel",
+            "description": "ID of the Slack conversation",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Detailed metadata and status of the conversation.",
+            "example": {
+              "ok": true,
+              "channel": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "conversations_list",
+      "title": "List Conversations",
+      "description": "Retrieves a list of all available conversations (channels, groups, and IMs) in the Slack workspace. This list helps the agent identify channels for navigation or further operations.",
+      "actions": [
+        {
+          "id": "conversations_list_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_conversations_list"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "conversations_list",
+            "fieldPath": "parameters.cursor"
+          },
+          "target": {
+            "actionId": "conversations_list_action",
+            "fieldPath": "parameters.cursor"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "conversations_list",
+            "fieldPath": "parameters.limit"
+          },
+          "target": {
+            "actionId": "conversations_list_action",
+            "fieldPath": "parameters.limit"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "cursor",
+            "description": "Optional pagination cursor",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "Optional maximum number of conversations to return",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of conversations and pagination metadata.",
+            "example": {
+              "ok": true,
+              "channels": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "conversations_open",
+      "title": "Open Conversation",
+      "description": "Initiates a new direct or group conversation on Slack, enabling real-time communication between specified users.",
+      "actions": [
+        {
+          "id": "conversations_open_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_conversations_open"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "conversations_open",
+            "fieldPath": "requestBody.users"
+          },
+          "target": {
+            "actionId": "conversations_open_action",
+            "fieldPath": "requestBody.users"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for opening a conversation. Specifies the authentication token and a comma-separated list of user IDs to include.",
+                "properties": {
+                  "users": {
+                    "type": "string",
+                    "description": "Comma-separated user IDs"
+                  }
+                },
+                "required": [
+                  "users"
+                ]
+              },
+              "example": {
+                "users": "U123456,U234567"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Details of the newly opened conversation.",
+            "example": {
+              "ok": true,
+              "channel": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "files_upload",
+      "title": "Upload File",
+      "description": "Uploads a file (such as an image or document) to Slack and shares it in specified channels. This enables the agent to deliver rich media content as part of its interactions.",
+      "actions": [
+        {
+          "id": "files_upload_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_files_upload"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "files_upload",
+            "fieldPath": "requestBody.file"
+          },
+          "target": {
+            "actionId": "files_upload_action",
+            "fieldPath": "requestBody.file"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "files_upload",
+            "fieldPath": "requestBody.filename"
+          },
+          "target": {
+            "actionId": "files_upload_action",
+            "fieldPath": "requestBody.filename"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "files_upload",
+            "fieldPath": "requestBody.channels"
+          },
+          "target": {
+            "actionId": "files_upload_action",
+            "fieldPath": "requestBody.channels"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for file upload. Includes the authentication token, file data (or URL), desired filename, and optional channel IDs.",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "description": "File content (typically base64-encoded) or URL"
+                  },
+                  "filename": {
+                    "type": "string",
+                    "description": "Name to assign to the uploaded file"
+                  },
+                  "channels": {
+                    "type": "string",
+                    "description": "Comma-separated list of channel IDs to share the file in",
+                    "default": ""
+                  }
+                },
+                "required": [
+                  "file",
+                  "filename"
+                ]
+              },
+              "example": {
+                "file": "base64encodeddata",
+                "filename": "document.pdf",
+                "channels": "C123456,C234567"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response containing details of the uploaded file.",
+            "example": {
+              "ok": true,
+              "file": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "files_info",
+      "title": "Get File Info",
+      "description": "Retrieves detailed metadata for a specific file stored in Slack. This includes file type, size, and associated channel information.",
+      "actions": [
+        {
+          "id": "files_info_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_files_info"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "files_info",
+            "fieldPath": "parameters.file"
+          },
+          "target": {
+            "actionId": "files_info_action",
+            "fieldPath": "parameters.file"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "file",
+            "description": "ID of the file to retrieve information for",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Detailed file metadata.",
+            "example": {
+              "ok": true,
+              "file": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "conversations_join",
+      "title": "Join Conversation",
+      "description": "Allows the AI agent to join an existing Slack conversation, enabling real-time participation and monitoring of live discussions.",
+      "actions": [
+        {
+          "id": "conversations_join_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_conversations_join"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "conversations_join",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "conversations_join_action",
+            "fieldPath": "requestBody.channel"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for joining a conversation. Includes token and the channel to join.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "ID of the Slack channel to join"
+                  }
+                },
+                "required": [
+                  "channel"
+                ]
+              },
+              "example": {
+                "channel": "C123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the conversation was successfully joined.",
+            "example": {
+              "ok": true,
+              "channel": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "conversations_invite",
+      "title": "Invite to Conversation",
+      "description": "Invites one or more users to join a Slack conversation, expanding the discussion group for collaborative sessions.",
+      "actions": [
+        {
+          "id": "conversations_invite_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_conversations_invite"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "conversations_invite",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "conversations_invite_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "conversations_invite",
+            "fieldPath": "requestBody.users"
+          },
+          "target": {
+            "actionId": "conversations_invite_action",
+            "fieldPath": "requestBody.users"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for inviting users to a conversation. Must include token, channel ID, and a comma-separated list of user IDs.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "ID of the Slack channel"
+                  },
+                  "users": {
+                    "type": "string",
+                    "description": "Comma-separated list of user IDs to invite"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "users"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "users": "U123456,U234567"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the invitation was sent successfully.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "users_info",
+      "title": "Get User Info",
+      "description": "Retrieves comprehensive details about a Slack user. Useful for personalization and understanding user context.",
+      "actions": [
+        {
+          "id": "users_info_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_users_info"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "users_info",
+            "fieldPath": "parameters.user"
+          },
+          "target": {
+            "actionId": "users_info_action",
+            "fieldPath": "parameters.user"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "user",
+            "description": "ID of the user to retrieve information for",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "User information including profile details and status.",
+            "example": {
+              "ok": true,
+              "user": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "search_messages",
+      "title": "Search Messages",
+      "description": "Performs a search query across Slack messages to retrieve historical context or specific interactions. Useful for context-aware responses.",
+      "actions": [
+        {
+          "id": "search_messages_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_search_messages"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "search_messages",
+            "fieldPath": "parameters.query"
+          },
+          "target": {
+            "actionId": "search_messages_action",
+            "fieldPath": "parameters.query"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "search_messages",
+            "fieldPath": "parameters.cursor"
+          },
+          "target": {
+            "actionId": "search_messages_action",
+            "fieldPath": "parameters.cursor"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "search_messages",
+            "fieldPath": "parameters.count"
+          },
+          "target": {
+            "actionId": "search_messages_action",
+            "fieldPath": "parameters.count"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "query",
+            "description": "Search query string",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cursor",
+            "description": "Optional pagination cursor",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "count",
+            "description": "Optional number of results to return",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Search results containing matching messages.",
+            "example": {
+              "ok": true,
+              "messages": {}
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "views_open",
+      "title": "Open View",
+      "description": "Opens an interactive modal in Slack. Ideal for launching rich, interactive experiences to collect user input or display detailed information.",
+      "actions": [
+        {
+          "id": "views_open_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_views_open"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "views_open",
+            "fieldPath": "parameters.trigger_id"
+          },
+          "target": {
+            "actionId": "views_open_action",
+            "fieldPath": "parameters.trigger_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "views_open",
+            "fieldPath": "parameters.view"
+          },
+          "target": {
+            "actionId": "views_open_action",
+            "fieldPath": "parameters.view"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "trigger_id",
+            "description": "Trigger ID from an interaction payload",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "view",
+            "description": "Modal view object",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the view was successfully opened.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "views_push",
+      "title": "Push View",
+      "description": "Pushes a new interactive view onto the existing view stack. Use this to dynamically extend or modify the current modal experience.",
+      "actions": [
+        {
+          "id": "views_push_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_views_push"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "views_push",
+            "fieldPath": "parameters.trigger_id"
+          },
+          "target": {
+            "actionId": "views_push_action",
+            "fieldPath": "parameters.trigger_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "views_push",
+            "fieldPath": "parameters.view"
+          },
+          "target": {
+            "actionId": "views_push_action",
+            "fieldPath": "parameters.view"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "trigger_id",
+            "description": "Trigger ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "view",
+            "description": "View object to push",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the new view was pushed successfully.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "views_update",
+      "title": "Update View",
+      "description": "Updates an existing interactive view in Slack. Use this endpoint to modify modal content or adjust interactive components in real time.",
+      "actions": [
+        {
+          "id": "views_update_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_views_update"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "views_update",
+            "fieldPath": "parameters.view_id"
+          },
+          "target": {
+            "actionId": "views_update_action",
+            "fieldPath": "parameters.view_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "views_update",
+            "fieldPath": "parameters.view"
+          },
+          "target": {
+            "actionId": "views_update_action",
+            "fieldPath": "parameters.view"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "view_id",
+            "description": "ID of the view to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "view",
+            "description": "Updated view object",
+            "required": true,
+            "type": "object"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the view was updated successfully.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "auth_test",
+      "title": "Test Auth",
+      "description": "Validates the provided Slack authentication token to ensure proper access and configuration.",
+      "actions": [
+        {
+          "id": "auth_test_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_auth_test"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response indicating that the token is valid.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "reactions_add",
+      "title": "Add Reaction",
+      "description": "Adds an emoji reaction to a specific Slack message or item. This can be used for lightweight feedback or acknowledgment.",
+      "actions": [
+        {
+          "id": "reactions_add_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_reactions_add"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "reactions_add",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "reactions_add_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "reactions_add",
+            "fieldPath": "requestBody.name"
+          },
+          "target": {
+            "actionId": "reactions_add_action",
+            "fieldPath": "requestBody.name"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "reactions_add",
+            "fieldPath": "requestBody.timestamp"
+          },
+          "target": {
+            "actionId": "reactions_add_action",
+            "fieldPath": "requestBody.timestamp"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for adding a reaction. Must include token, channel ID, reaction name, and the message timestamp.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "Channel ID"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Emoji name to add as a reaction"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "Timestamp of the message to react to"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "name",
+                  "timestamp"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "name": "thumbsup",
+                "timestamp": "1234567890.123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the reaction was added.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "reactions_remove",
+      "title": "Remove Reaction",
+      "description": "Removes an emoji reaction from a Slack message. This endpoint is used to retract previous feedback or correct mistakes.",
+      "actions": [
+        {
+          "id": "reactions_remove_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_reactions_remove"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "reactions_remove",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "reactions_remove_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "reactions_remove",
+            "fieldPath": "requestBody.name"
+          },
+          "target": {
+            "actionId": "reactions_remove_action",
+            "fieldPath": "requestBody.name"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "reactions_remove",
+            "fieldPath": "requestBody.timestamp"
+          },
+          "target": {
+            "actionId": "reactions_remove_action",
+            "fieldPath": "requestBody.timestamp"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for removing a reaction. Requires token, channel ID, reaction name, and message timestamp.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "Channel ID"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Emoji reaction name"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "Timestamp of the message"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "name",
+                  "timestamp"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "name": "thumbsup",
+                "timestamp": "1234567890.123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming the reaction was removed.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "pins_add",
+      "title": "Add Pin",
+      "description": "Pins a specific message or item to the top of a Slack channel, helping to highlight important content for future reference.",
+      "actions": [
+        {
+          "id": "pins_add_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_pins_add"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "pins_add",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "pins_add_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "pins_add",
+            "fieldPath": "requestBody.timestamp"
+          },
+          "target": {
+            "actionId": "pins_add_action",
+            "fieldPath": "requestBody.timestamp"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for adding a pin. Includes token, channel ID, and the timestamp of the item to pin.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "Channel ID"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "Timestamp of the message or item"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "timestamp"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "timestamp": "1234567890.123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the item was pinned.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "pins_list",
+      "title": "List Pins",
+      "description": "Retrieves all pinned items from a Slack channel, allowing the agent to quickly identify key messages and information.",
+      "actions": [
+        {
+          "id": "pins_list_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_pins_list"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "pins_list",
+            "fieldPath": "parameters.channel"
+          },
+          "target": {
+            "actionId": "pins_list_action",
+            "fieldPath": "parameters.channel"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "channel",
+            "description": "Channel ID to list pins from",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of pinned items along with their metadata.",
+            "example": {
+              "ok": true,
+              "items": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "pins_remove",
+      "title": "Remove Pin",
+      "description": "Removes a pin from a Slack channel, helping to clear outdated or irrelevant highlighted content.",
+      "actions": [
+        {
+          "id": "pins_remove_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_pins_remove"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "pins_remove",
+            "fieldPath": "requestBody.channel"
+          },
+          "target": {
+            "actionId": "pins_remove_action",
+            "fieldPath": "requestBody.channel"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "pins_remove",
+            "fieldPath": "requestBody.timestamp"
+          },
+          "target": {
+            "actionId": "pins_remove_action",
+            "fieldPath": "requestBody.timestamp"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for removing a pin. Includes token, channel ID, and the timestamp of the pinned item.",
+                "properties": {
+                  "channel": {
+                    "type": "string",
+                    "description": "Channel ID"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "description": "Timestamp of the item to unpin"
+                  }
+                },
+                "required": [
+                  "channel",
+                  "timestamp"
+                ]
+              },
+              "example": {
+                "channel": "C123456",
+                "timestamp": "1234567890.123456"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the pin was removed.",
+            "example": {
+              "ok": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "reminders_add",
+      "title": "Add Reminder",
+      "description": "Creates a new reminder in Slack. Use this endpoint to schedule follow-ups or task reminders directly within conversations.",
+      "actions": [
+        {
+          "id": "reminders_add_action",
+          "sourceId": "slack",
+          "operationId": "slack_web_api_reminders_add"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "reminders_add",
+            "fieldPath": "requestBody.text"
+          },
+          "target": {
+            "actionId": "reminders_add_action",
+            "fieldPath": "requestBody.text"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "reminders_add",
+            "fieldPath": "requestBody.time"
+          },
+          "target": {
+            "actionId": "reminders_add_action",
+            "fieldPath": "requestBody.time"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "description": "Payload for creating a reminder. Includes token, reminder text, and time specification.",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "Text for the reminder"
+                  },
+                  "time": {
+                    "type": "string",
+                    "description": "Time specification for the reminder (e.g., 'in 10 minutes')"
+                  }
+                },
+                "required": [
+                  "text",
+                  "time"
+                ]
+              },
+              "example": {
+                "text": "Meeting reminder",
+                "time": "in 10 minutes"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response confirming that the reminder was successfully set.",
+            "example": {
+              "ok": true,
+              "reminder": {}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

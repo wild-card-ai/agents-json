@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "agentsjson"
-version = "0.1.4"
+version = "0.1.6"
 description = "Agents.json Python Implementation with Core and Integrations"
 authors = ["Wildcard AI <info@wildcard.ai>"]
 readme = "README.md"
@@ -21,6 +21,7 @@ six = ">=1.16.0"
 google-api-python-client = ">=2.0.0"
 hubspot-api-client = ">=8.1.0"
 setuptools = ">=65.0.0"
+slack_sdk = ">=3.34.0"
 
 [build-system]
 requires = ["poetry-core"]
