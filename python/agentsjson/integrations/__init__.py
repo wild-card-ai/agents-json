@@ -8,5 +8,6 @@ from . import stripe
 from . import googlesheets
 from . import resend
 from . import hubspotcontacts
+from . import rootly
 
-__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend", "hubspotcontacts"]
+__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend", "hubspotcontacts", "rootly"]
