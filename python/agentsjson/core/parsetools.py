@@ -20,7 +20,12 @@ def flow_to_openai_tool(flow: Flow) -> Dict[str, Any]:
     """Convert a Flow to an OpenAI function-calling tool format"""
     def convert_schema_to_openai(schema: Dict[str, Any]) -> Dict[str, Any]:
         """Helper function to convert JSON schema to OpenAI format recursively"""
-        if "anyOf" in schema:
+        if "oneOf" in schema:
+            # Simply convert oneOf to anyOf while preserving the base schema structure
+            converted = schema.copy()
+            converted["anyOf"] = converted.pop("oneOf")
+            return convert_schema_to_openai(converted)  # Convert any nested schemas
+        elif "anyOf" in schema:
             return {
                 "anyOf": [convert_schema_to_openai(option) for option in schema["anyOf"]]
             }
@@ -59,7 +64,7 @@ def flow_to_openai_tool(flow: Flow) -> Dict[str, Any]:
             "type": "object",
             "properties": {
                 param.name: {
-                    "type": "string",  # TODO: add type based on param.type if available
+                    **({"type": param.type, "items": {"type": "string"}} if param.type == "array" else {"type": param.type if hasattr(param, 'type') else "string"}),  # Handle array type with items
                     "description": param.description
                 }
                 for param in flow.fields.parameters

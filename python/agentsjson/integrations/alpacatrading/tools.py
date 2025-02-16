@@ -120,6 +120,7 @@ class RestApiHandler:
         print(f"Resource path: {resource_path}")
         print(f"Path params: {path_params}")
         print(f"Query params: {query_params}")
+        print(f"Request body: {request_body}")
         print(f"Headers: {list(headers.keys())}")
         
         client = ApiClient(configuration)
