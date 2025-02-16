@@ -756,6 +756,21 @@ files = [
 ]
 
 [[package]]
+name = "slack-sdk"
+version = "3.34.0"
+description = "The Slack API Platform SDK for Python"
+optional = false
+python-versions = ">=3.6"
+groups = ["main"]
+files = [
+    {file = "slack_sdk-3.34.0-py2.py3-none-any.whl", hash = "sha256:c61f57f310d85be83466db5a98ab6ae3bb2e5587437b54fa0daa8fae6a0feffa"},
+    {file = "slack_sdk-3.34.0.tar.gz", hash = "sha256:ff61db7012160eed742285ea91f11c72b7a38a6500a7f6c5335662b4bc6b853d"},
+]
+
+[package.extras]
+optional = ["SQLAlchemy (>=1.4,<3)", "aiodns (>1.0)", "aiohttp (>=3.7.3,<4)", "boto3 (<=2)", "websocket-client (>=1,<2)", "websockets (>=9.1,<15)"]
+
+[[package]]
 name = "stripe"
 version = "7.11.0"
 description = "Python bindings for the Stripe API"
@@ -852,4 +867,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.8"
-content-hash = "673c7e799c72dc3d0242a56b4130b19614aa041ac87266973901158527fcd3d7"
+content-hash = "e5a41a09aa62b88a06d7a4ad55908d843b85c906dafe651bebc5fe1c4f4e8068"
