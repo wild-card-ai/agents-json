@@ -8,11 +8,11 @@
     "sources": [
       {
         "id": "alpacatrading",
-        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/trading_openapi.json"
+        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/trading_openapi.yaml"
       },
       {
         "id": "alpacamarketdata",
-        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/marketdata_openapi.json"
+        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/marketdata_openapi.yaml"
       }
     ],
     "overrides": [],
