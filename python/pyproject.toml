@@ -20,6 +20,10 @@ stripe = "7.11.0"
 six = "^1.16.0"
 google-api-python-client = "^2.0.0"
 
+[tool.poetry.scripts]
+agentsjson = "agentsjson.cli:app"
+
+
 [build-system]
 requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api" 
+build-backend = "poetry.core.masonry.api"

@@ -4,4 +4,4 @@ class ToolFormat(str, Enum):
     """Enum representing different types of tools"""
     JSON = "json"
     OPENAI = "openai"
-    CLAUDE = "claude"  # Added Claude format
+    ANTHROPIC = "ANTHROPIC"  # Added Claude format
