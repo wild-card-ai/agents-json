@@ -2,7 +2,20 @@ from enum import Enum
 from typing import List, Dict, Any
 from .models.tools import ToolFormat
 from .models.schema import Flow
+from .models.schema import AgentsJson
 
+def get_tool_prompt(agentsjson: AgentsJson) -> str:
+    """Get a prompt for the tools in the agentsjson"""
+    return flows_prompt(agentsjson.flows)
+
+def get_tools(agentsjson: AgentsJson, format: ToolFormat) -> List[Dict[str, Any]]:
+    """Get tools for all flows in an agentsjson using a given format"""
+    if format == ToolFormat.OPENAI:
+        return [flow_to_openai_tool(flow) for flow in agentsjson.flows]
+    elif format == ToolFormat.JSON:
+        return [flow_to_json_tool(flow) for flow in agentsjson.flows]
+    else:
+        raise ValueError(f"Unsupported tool format: {format}")
     
 def flows_tools(flows: List[Flow], format: ToolFormat) -> List[Dict[str, Any]]:
     if format == ToolFormat.OPENAI:
