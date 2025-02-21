@@ -9,6 +9,11 @@ from .models.schema import AgentsJson, Flow, Link, Action
 from .models.tools import ToolFormat
 from .loader import load_agents_json
 from .parsetools import flows_prompt, flows_tools
+from .models.tools import ToolFormat  #for claude toolformat
+from .utils import conversion
+from .parsetools import flow_to_claude_tool
+
+
 
 __all__ = [
     'execute',
@@ -24,4 +29,5 @@ __all__ = [
     'ToolFormat',
     'flows_prompt',
     'flows_tools'
+    'flow_to_claude_tool'  # Expose flow_to_claude_tool for external use
 ]
