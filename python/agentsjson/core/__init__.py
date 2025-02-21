@@ -8,7 +8,7 @@ from .models.bundle import Bundle
 from .models.schema import AgentsJson, Flow, Link, Action
 from .models.tools import ToolFormat
 from .loader import load_agents_json
-from .parsetools import flows_prompt, flows_tools
+from .parsetools import flows_prompt, flows_tools, get_tool_prompt, get_tools
 
 __all__ = [
     'execute',
@@ -23,5 +23,7 @@ __all__ = [
     'load_agents_json',
     'ToolFormat',
     'flows_prompt',
-    'flows_tools'
+    'flows_tools',
+    'get_tool_prompt',
+    'get_tools'
 ]

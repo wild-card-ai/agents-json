@@ -1,0 +1,1167 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Alpaca Trading and Market Data API Methods",
+    "version": "0.1.0",
+    "description": "This specification enables interaction with the Alpaca Trading and Market Data APIs by exposing both individual operations and compound orchestration flows. Each flow is highly searchable and embeddable so that AI agents and developers can invoke tool calls that actually work."
+  },
+  "sources": [
+    {
+      "id": "alpacatrading",
+      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/trading_openapi.yaml"
+    },
+    {
+      "id": "alpacamarketdata",
+      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/alpaca/agents_json/alpaca/marketdata_openapi.yaml"
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "account_get",
+      "title": "Get Account Information",
+      "description": "Retrieves account details including balance, equity, and margin information.",
+      "actions": [
+        {
+          "id": "account_get_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_get_account"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "account_get",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "account_get_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Account information including id, account_number, status, currency, cash, and portfolio value.",
+            "properties": {
+              "id": { "type": "string" },
+              "account_number": { "type": "string" },
+              "status": { "type": "string" },
+              "currency": { "type": "string" },
+              "cash": { "type": "string" },
+              "portfolio_value": { "type": "string" }
+            },
+            "required": [ "id", "status", "currency" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "orders_cancel_all",
+      "title": "Cancel All Open Orders",
+      "description": "Attempts to cancel every open order in the account and returns a summary of the cancellation results.",
+      "actions": [
+        {
+          "id": "orders_cancel_all_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_delete_all_orders"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "orders_cancel_all",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "orders_cancel_all_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Results from cancelling open orders.",
+            "properties": {
+              "cancelled": { "type": "boolean" },
+              "details": { "type": "object" }
+            },
+            "required": [ "cancelled" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "order_get",
+      "title": "Get Order By Order ID",
+      "description": "Retrieves the details of a specific order using its unique order identifier.",
+      "actions": [
+        {
+          "id": "order_get_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_get_order_by_order_i_d"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "order_get",
+            "fieldPath": "parameters.order_id"
+          },
+          "target": {
+            "actionId": "order_get_action",
+            "fieldPath": "parameters.order_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "order_id",
+            "description": "Unique order identifier.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Order details including id, status, and symbol.",
+            "properties": {
+              "id": { "type": "string" },
+              "status": { "type": "string" },
+              "symbol": { "type": "string" }
+            },
+            "required": [ "id", "status", "symbol" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "positions_get",
+      "title": "Get Open Positions",
+      "description": "Retrieves the list of currently open positions in the account.",
+      "actions": [
+        {
+          "id": "positions_get_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_get_all_open_positions"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "positions_get",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "positions_get_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of open positions.",
+            "properties": {
+              "positions": { "type": "array" }
+            },
+            "required": [ "positions" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "watchlists_get",
+      "title": "Get Watchlists",
+      "description": "Retrieves all watchlists associated with the account.",
+      "actions": [
+        {
+          "id": "watchlists_get_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_get_watchlists"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "watchlists_get",
+            "fieldPath": "parameters"
+          },
+          "target": {
+            "actionId": "watchlists_get_action",
+            "fieldPath": "parameters"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "A list of watchlists.",
+            "properties": {
+              "watchlists": { "type": "array" }
+            },
+            "required": [ "watchlists" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "watchlists_create",
+      "title": "Create Watchlist",
+      "description": "Creates a new watchlist with the specified name and optional symbols.",
+      "actions": [
+        {
+          "id": "watchlists_create_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_post_watchlist"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "watchlists_create",
+            "fieldPath": "parameters.name"
+          },
+          "target": {
+            "actionId": "watchlists_create_action",
+            "fieldPath": "requestBody.name"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "watchlists_create",
+            "fieldPath": "parameters.symbols"
+          },
+          "target": {
+            "actionId": "watchlists_create_action",
+            "fieldPath": "requestBody.symbols"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "name",
+            "description": "Name of the watchlist.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "symbols",
+            "description": "Optional list of symbols to include.",
+            "required": false,
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "The created watchlist resource.",
+            "properties": {
+              "watchlist_id": { "type": "string" },
+              "name": { "type": "string" }
+            },
+            "required": [ "watchlist_id", "name" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "order_place",
+      "title": "Place Order",
+      "description": "Places a new order. Required details include symbol, side, type, time_in_force, qty or notional, and limit_price (when applicable).",
+      "actions": [
+        {
+          "id": "order_place_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_post_order"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "order_place",
+            "fieldPath": "requestBody.symbol"
+          },
+          "target": {
+            "actionId": "order_place_action",
+            "fieldPath": "requestBody.symbol"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_place",
+            "fieldPath": "requestBody.side"
+          },
+          "target": {
+            "actionId": "order_place_action",
+            "fieldPath": "requestBody.side"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_place",
+            "fieldPath": "requestBody.type"
+          },
+          "target": {
+            "actionId": "order_place_action",
+            "fieldPath": "requestBody.type"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_place",
+            "fieldPath": "requestBody.time_in_force"
+          },
+          "target": {
+            "actionId": "order_place_action",
+            "fieldPath": "requestBody.time_in_force"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_place",
+            "fieldPath": "requestBody.qty"
+          },
+          "target": {
+            "actionId": "order_place_action",
+            "fieldPath": "requestBody.qty"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_place",
+            "fieldPath": "requestBody.notional"
+          },
+          "target": {
+            "actionId": "order_place_action",
+            "fieldPath": "requestBody.notional"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_place",
+            "fieldPath": "requestBody.limit_price"
+          },
+          "target": {
+            "actionId": "order_place_action",
+            "fieldPath": "requestBody.limit_price"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["symbol", "side", "type", "time_in_force"],
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "required": ["qty"],
+                    "properties": {
+                      "symbol": {
+                        "type": "string",
+                        "description": "The asset symbol for the order."
+                      },
+                      "side": {
+                        "type": "string",
+                        "enum": ["buy", "sell"],
+                        "description": "The order side: 'buy' or 'sell'."
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["market", "limit", "stop", "stop_limit", "trailing_stop"],
+                        "description": "The type of order."
+                      },
+                      "time_in_force": {
+                        "type": "string",
+                        "description": "Time in force (e.g., 'day', 'gtc')."
+                      },
+                      "qty": {
+                        "type": "number",
+                        "description": "The quantity for the order."
+                      },
+                      "limit_price": {
+                        "type": "number",
+                        "description": "Limit price (if applicable)."
+                      }
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": ["notional"],
+                    "properties": {
+                      "symbol": {
+                        "type": "string",
+                        "description": "The asset symbol for the order."
+                      },
+                      "side": {
+                        "type": "string",
+                        "enum": ["buy", "sell"],
+                        "description": "The order side: 'buy' or 'sell'."
+                      },
+                      "type": {
+                        "type": "string",
+                        "enum": ["market", "limit", "stop", "stop_limit", "trailing_stop"],
+                        "description": "The type of order."
+                      },
+                      "time_in_force": {
+                        "type": "string",
+                        "description": "Time in force (e.g., 'day', 'gtc')."
+                      },
+                      "notional": {
+                        "type": "number",
+                        "description": "The notional amount for the order."
+                      },
+                      "limit_price": {
+                        "type": "number",
+                        "description": "Limit price (if applicable)."
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Response after order placement.",
+            "properties": {
+              "id": { "type": "string" },
+              "status": { "type": "string" },
+              "symbol": { "type": "string" }
+            },
+            "required": ["id", "status", "symbol"]
+          }
+        }
+      }
+    },
+    {
+      "id": "order_roundtrip",
+      "title": "Place Order and Get Order Status",
+      "description": "Places a new order and then retrieves that order's details using the returned order ID.",
+      "actions": [
+        {
+          "id": "order_roundtrip_place_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_post_order"
+        },
+        {
+          "id": "order_roundtrip_get_action",
+          "sourceId": "alpacatrading",
+          "operationId": "alpacatrading_get_order_by_order_i_d"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.symbol"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.symbol"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.side"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.side"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.order_type"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.order_type"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.time_in_force"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.time_in_force"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.qty"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.qty"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.notional"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.notional"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.limit_price"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.limit_price"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip",
+            "fieldPath": "parameters.type"
+          },
+          "target": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "requestBody.type"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "order_roundtrip_place_action",
+            "fieldPath": "responses.success.id"
+          },
+          "target": {
+            "actionId": "order_roundtrip_get_action",
+            "fieldPath": "parameters.order_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "The asset symbol for the order.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "side",
+            "description": "The order side: 'buy' or 'sell'.",
+            "required": true,
+            "type": "string",
+            "enum": ["buy", "sell"]
+          },
+          {
+            "name": "order_type",
+            "description": "The type of order (e.g., 'market', 'limit', 'stop', 'stop_limit', 'trailing_stop').",
+            "required": true,
+            "type": "string",
+            "enum": ["market", "limit", "stop", "stop_limit", "trailing_stop"]
+          },
+          {
+            "name": "time_in_force",
+            "description": "Time in force (e.g., 'day', 'gtc').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "qty",
+            "description": "The quantity for the order.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "notional",
+            "description": "The notional amount for the order.",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit_price",
+            "description": "Limit price (if applicable).",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "type",
+            "description": "Secondary order type specification.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "order_id",
+            "description": "Order ID returned from order placement.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Combined response with order placement and retrieval details.",
+            "properties": {
+              "placed_order": { "type": "object", "description": "Response from placing the order." },
+              "retrieved_order": { "type": "object", "description": "Order details retrieved after placement." }
+            },
+            "required": ["placed_order", "retrieved_order"]
+          }
+        }
+      }
+    },
+    {
+      "id": "stock_bars_get_multiple",
+      "title": "Get Stock Bars for Multiple Symbols",
+      "description": "Retrieves aggregated bar data for multiple stock symbols over a given time window.",
+      "actions": [
+        {
+          "id": "stock_bars_get_multiple_action",
+          "sourceId": "alpacamarketdata",
+          "operationId": "alpacamarketdata_get_bars_for_multiple_stock_symbols"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.symbols"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "parameters.symbols"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.timeframe"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "parameters.timeframe"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.start"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "query.start"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.end"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "query.end"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.limit"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "query.limit"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.page_token"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "query.page_token"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.feed"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "query.feed"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_multiple",
+            "fieldPath": "parameters.adjustment"
+          },
+          "target": {
+            "actionId": "stock_bars_get_multiple_action",
+            "fieldPath": "query.adjustment"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "symbols",
+            "description": "Comma-separated stock ticker symbols.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "timeframe",
+            "description": "Bar aggregation timeframe (e.g., '1Min', '15Min').",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "description": "Start datetime in RFC3339 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end",
+            "description": "End datetime in RFC3339 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "Number of bars to return.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_token",
+            "description": "Pagination token.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "feed",
+            "description": "Market data feed (iex, sip, otc).",
+            "required": false,
+            "type": "string",
+            "enum": ["iex", "sip", "otc"]
+          },
+          {
+            "name": "adjustment",
+            "description": "Corporate action adjustment (raw, split, dividend, all).",
+            "required": false,
+            "type": "string",
+            "enum": ["raw", "split", "dividend", "all"]
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Bar data for multiple symbols.",
+            "properties": {
+              "bars": { "type": "object" },
+              "next_page_token": { "type": "string" }
+            },
+            "required": [ "bars" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "stock_bars_get_by_symbol",
+      "title": "Get Stock Bars for a Single Symbol",
+      "description": "Retrieves bar data for one stock symbol with specified time bounds.",
+      "actions": [
+        {
+          "id": "stock_bars_get_by_symbol_action",
+          "sourceId": "alpacamarketdata",
+          "operationId": "alpacamarketdata_get_bars_for_stock_symbol"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.symbol"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "query.symbol"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.timeframe"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "parameters.timeframe"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.start"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "query.start"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.end"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "query.end"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.limit"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "query.limit"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.page_token"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "query.page_token"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.feed"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "query.feed"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_bars_get_by_symbol",
+            "fieldPath": "parameters.adjustment"
+          },
+          "target": {
+            "actionId": "stock_bars_get_by_symbol_action",
+            "fieldPath": "query.adjustment"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Stock ticker symbol.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "timeframe",
+            "description": "Timeframe for aggregation.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "description": "Start datetime in RFC3339 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end",
+            "description": "End datetime in RFC3339 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "Number of bars to return.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_token",
+            "description": "Pagination token.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "feed",
+            "description": "Market data feed (iex, sip, otc).",
+            "required": false,
+            "type": "string",
+            "enum": ["iex", "sip", "otc"]
+          },
+          {
+            "name": "adjustment",
+            "description": "Adjustment type (raw, split, dividend, all).",
+            "required": false,
+            "type": "string",
+            "enum": ["raw", "split", "dividend", "all"]
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Bar data for the specified symbol.",
+            "properties": {
+              "bars": { "type": "array" },
+              "next_page_token": { "type": "string" }
+            },
+            "required": [ "bars" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "stock_trades_get_multiple",
+      "title": "Get Trades for Multiple Stock Symbols",
+      "description": "Retrieves trade data for a list of stock symbols with pagination and feed options.",
+      "actions": [
+        {
+          "id": "stock_trades_get_multiple_action",
+          "sourceId": "alpacamarketdata",
+          "operationId": "alpacamarketdata_get_trades_for_multiple_stock_symbols"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "stock_trades_get_multiple",
+            "fieldPath": "parameters.symbols"
+          },
+          "target": {
+            "actionId": "stock_trades_get_multiple_action",
+            "fieldPath": "parameters.symbols"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_trades_get_multiple",
+            "fieldPath": "parameters.start"
+          },
+          "target": {
+            "actionId": "stock_trades_get_multiple_action",
+            "fieldPath": "query.start"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_trades_get_multiple",
+            "fieldPath": "parameters.end"
+          },
+          "target": {
+            "actionId": "stock_trades_get_multiple_action",
+            "fieldPath": "query.end"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_trades_get_multiple",
+            "fieldPath": "parameters.limit"
+          },
+          "target": {
+            "actionId": "stock_trades_get_multiple_action",
+            "fieldPath": "query.limit"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_trades_get_multiple",
+            "fieldPath": "parameters.page_token"
+          },
+          "target": {
+            "actionId": "stock_trades_get_multiple_action",
+            "fieldPath": "query.page_token"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "stock_trades_get_multiple",
+            "fieldPath": "parameters.feed"
+          },
+          "target": {
+            "actionId": "stock_trades_get_multiple_action",
+            "fieldPath": "query.feed"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "symbols",
+            "description": "Comma-separated stock ticker symbols.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "start",
+            "description": "Start datetime in RFC3339 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "end",
+            "description": "End datetime in RFC3339 format.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "description": "Number of trade data points to return.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_token",
+            "description": "Pagination token.",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "feed",
+            "description": "Market data feed.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Trades data for multiple symbols.",
+            "properties": {
+              "trades": { "type": "object" },
+              "next_page_token": { "type": "string" }
+            },
+            "required": [ "trades" ]
+          }
+        }
+      }
+    },
+    {
+      "id": "latest_stock_data",
+      "title": "Get Latest Stock Data",
+      "description": "Retrieves the latest bar and trade data for a given stock symbol.",
+      "actions": [
+        {
+          "id": "latest_bar_action",
+          "sourceId": "alpacamarketdata",
+          "operationId": "alpacamarketdata_get_latest_bars_for_multiple_stock_symbols"
+        },
+        {
+          "id": "latest_trade_action",
+          "sourceId": "alpacamarketdata",
+          "operationId": "alpacamarketdata_get_latest_trades_for_multiple_stock_symbols"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "latest_stock_data",
+            "fieldPath": "parameters.symbols"
+          },
+          "target": {
+            "actionId": "latest_bar_action",
+            "fieldPath": "parameters.symbols"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "latest_stock_data",
+            "fieldPath": "parameters.feed"
+          },
+          "target": {
+            "actionId": "latest_bar_action",
+            "fieldPath": "query.feed"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "latest_stock_data",
+            "fieldPath": "parameters.symbols"
+          },
+          "target": {
+            "actionId": "latest_trade_action",
+            "fieldPath": "parameters.symbols"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "latest_stock_data",
+            "fieldPath": "parameters.feed"
+          },
+          "target": {
+            "actionId": "latest_trade_action",
+            "fieldPath": "query.feed"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "symbols",
+            "description": "Comma-separated stock ticker symbols.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "feed",
+            "description": "Market data feed (iex, sip, otc).",
+            "required": false,
+            "type": "string",
+            "enum": ["iex", "sip", "otc"]
+          }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Aggregated latest bar and trade data.",
+            "properties": {
+              "latest_bar": { "type": "object" },
+              "latest_trade": { "type": "object" }
+            },
+            "required": [ "latest_bar", "latest_trade" ]
+          }
+        }
+      }
+    }
+  ]
+}

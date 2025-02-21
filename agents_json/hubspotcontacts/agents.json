@@ -1,0 +1,1001 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "HubSpot Contacts API Methods",
+    "version": "0.1.0",
+    "description": "This specification exposes the exact operations from the HubSpot Contacts OpenAPI definition. Every required parameter is mapped directly according to the spec. Compound flows (such as get-and-update) and support for pagination (using query cursors) are included."
+  },
+  "sources": [
+    {
+      "id": "hubspotcontacts",
+      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/hubspotcontacts/agents_json/hubspotcontacts/openapi.yaml"
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "contacts_list",
+      "title": "List Contacts",
+      "description": "Retrieve a page of contacts with support for pagination and filtering. Maps all query parameters exactly (limit, after, properties, propertiesWithHistory, associations, and archived).",
+      "actions": [
+        {
+          "id": "list_contacts_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_list_contacts"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "limit",
+            "description": "The maximum number of results to display per page.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "after",
+            "description": "The paging cursor token from the last response (returned as paging.next.after).",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "archived",
+            "description": "Boolean flag indicating whether to return only archived contacts.",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "properties": {
+                    "type": "array",
+                    "description": "A comma-separated list of properties to be returned in the response. Invalid properties are ignored.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "propertiesWithHistory": {
+                    "type": "array",
+                    "description": "A comma-separated list of properties to be returned along with their history.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "associations": {
+                    "type": "array",
+                    "description": "A comma-separated list of object types for associated IDs; ignored if invalid.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": false
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "results": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "properties": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "propertiesWithHistory": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "archived": {
+                      "type": "boolean"
+                    },
+                    "archivedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "properties",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              },
+              "paging": {
+                "type": "object",
+                "properties": {
+                  "next": {
+                    "type": "object",
+                    "required": [
+                      "after"
+                    ],
+                    "properties": {
+                      "after": {
+                        "type": "string"
+                      },
+                      "link": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "results"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_archive",
+      "title": "Archive Contact",
+      "description": "Archive a contact. Requires the contactId parameter to be provided via the query.",
+      "actions": [
+        {
+          "id": "archive_contact_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_archive_contact"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_archive",
+            "fieldPath": "parameters.contactId"
+          },
+          "target": {
+            "actionId": "archive_contact_action",
+            "fieldPath": "parameters.contactId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "contactId",
+            "description": "The unique identifier of the contact to archive.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "archived"
+                ]
+              }
+            },
+            "required": [
+              "status"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_batch_read",
+      "title": "Batch Read Contacts",
+      "description": "Read multiple contacts in one batch request. The request body must include 'inputs', 'properties', and 'propertiesWithHistory'.",
+      "actions": [
+        {
+          "id": "batch_read_contacts_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_batch_read_contacts"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_batch_read",
+            "fieldPath": "requestBody.inputs"
+          },
+          "target": {
+            "actionId": "batch_read_contacts_action",
+            "fieldPath": "requestBody.inputs"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "contacts_batch_read",
+            "fieldPath": "requestBody.properties"
+          },
+          "target": {
+            "actionId": "batch_read_contacts_action",
+            "fieldPath": "requestBody.properties"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "contacts_batch_read",
+            "fieldPath": "requestBody.propertiesWithHistory"
+          },
+          "target": {
+            "actionId": "batch_read_contacts_action",
+            "fieldPath": "requestBody.propertiesWithHistory"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Contact ID for batch read."
+                        }
+                      },
+                      "required": [
+                        "id"
+                      ]
+                    }
+                  },
+                  "properties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "propertiesWithHistory": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "inputs",
+                  "properties",
+                  "propertiesWithHistory"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "completedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "results": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "properties": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "propertiesWithHistory": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "archived": {
+                      "type": "boolean"
+                    },
+                    "archivedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "properties",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              },
+              "startedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "completedAt",
+              "results",
+              "startedAt",
+              "status"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_batch_update",
+      "title": "Batch Update Contacts",
+      "description": "Update multiple contacts in one request. The request body requires an 'inputs' array with each item mapping a contact ID and its updated properties.",
+      "actions": [
+        {
+          "id": "batch_update_contacts_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_batch_update_contacts"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_batch_update",
+            "fieldPath": "requestBody.inputs"
+          },
+          "target": {
+            "actionId": "batch_update_contacts_action",
+            "fieldPath": "requestBody.inputs"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "description": "Contact ID to update."
+                        },
+                        "properties": {
+                          "type": "object",
+                          "description": "Properties to update for the contact."
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "properties"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "inputs"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "results": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "properties": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "properties",
+                    "updatedAt"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "updatedAt",
+              "results"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_create",
+      "title": "Create Contact",
+      "description": "Create a new contact. The request body must include both 'properties' (contact details) and 'associations'.",
+      "actions": [
+        {
+          "id": "create_contact_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_create_contact"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_create",
+            "fieldPath": "requestBody.properties"
+          },
+          "target": {
+            "actionId": "create_contact_action",
+            "fieldPath": "requestBody.properties"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "contacts_create",
+            "fieldPath": "requestBody.associations"
+          },
+          "target": {
+            "actionId": "create_contact_action",
+            "fieldPath": "requestBody.associations"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "properties": {
+                    "type": "object",
+                    "description": "Contact properties including company, email, firstname, lastname, phone, and website."
+                  },
+                  "associations": {
+                    "type": "array",
+                    "description": "Associations for the contact.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "to": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "id"
+                          ]
+                        },
+                        "types": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "associationCategory": {
+                                "type": "string",
+                                "enum": [
+                                  "HUBSPOT_DEFINED",
+                                  "USER_DEFINED",
+                                  "INTEGRATOR_DEFINED"
+                                ]
+                              },
+                              "associationTypeId": {
+                                "type": "integer",
+                                "format": "int32"
+                              }
+                            },
+                            "required": [
+                              "associationCategory",
+                              "associationTypeId"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "to",
+                        "types"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "properties",
+                  "associations"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "properties",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_get",
+      "title": "Get Contact",
+      "description": "Retrieve a contact by its unique identifier. Maps the required query parameter 'contactId'.",
+      "actions": [
+        {
+          "id": "get_contact_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_get_contact"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_get",
+            "fieldPath": "parameters.contactId"
+          },
+          "target": {
+            "actionId": "get_contact_action",
+            "fieldPath": "parameters.contactId"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "contactId",
+            "description": "The unique identifier of the contact to retrieve.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": null,
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "propertiesWithHistory": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "archived": {
+                "type": "boolean"
+              },
+              "archivedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "associations": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                }
+              }
+            },
+            "required": [
+              "id",
+              "properties",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_get_and_update",
+      "title": "Get and Update Contact",
+      "description": "Composite flow: First retrieves a contact (using contactId) then updates its properties. The update requires both the contact ID (mapped from the get response) and updated properties.",
+      "actions": [
+        {
+          "id": "get_contact_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_get_contact"
+        },
+        {
+          "id": "update_contact_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_update_contact"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_get_and_update",
+            "fieldPath": "parameters.contactId"
+          },
+          "target": {
+            "actionId": "get_contact_action",
+            "fieldPath": "parameters.contactId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "get_contact_action",
+            "fieldPath": "responses.success.id"
+          },
+          "target": {
+            "actionId": "update_contact_action",
+            "fieldPath": "parameters.contactId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "contacts_get_and_update",
+            "fieldPath": "requestBody.properties"
+          },
+          "target": {
+            "actionId": "update_contact_action",
+            "fieldPath": "requestBody.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "contactId",
+            "description": "The contact ID to retrieve and update.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "properties": {
+                    "type": "object",
+                    "description": "The updated contact properties."
+                  }
+                },
+                "required": [
+                  "properties"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "properties",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_merge",
+      "title": "Merge Contacts",
+      "description": "Merge two contacts. The request body requires both the primaryObjectId and objectIdToMerge.",
+      "actions": [
+        {
+          "id": "merge_contacts_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_merge_contacts"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_merge",
+            "fieldPath": "requestBody.primaryObjectId"
+          },
+          "target": {
+            "actionId": "merge_contacts_action",
+            "fieldPath": "requestBody.primaryObjectId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "contacts_merge",
+            "fieldPath": "requestBody.objectIdToMerge"
+          },
+          "target": {
+            "actionId": "merge_contacts_action",
+            "fieldPath": "requestBody.objectIdToMerge"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "primaryObjectId": {
+                    "type": "string",
+                    "description": "The primary contact ID (the one that remains after merge)."
+                  },
+                  "objectIdToMerge": {
+                    "type": "string",
+                    "description": "The contact ID to merge."
+                  }
+                },
+                "required": [
+                  "primaryObjectId",
+                  "objectIdToMerge"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "propertiesWithHistory": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "archived": {
+                "type": "boolean"
+              },
+              "archivedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "properties",
+              "createdAt",
+              "updatedAt"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "contacts_update",
+      "title": "Update Contact",
+      "description": "Update an existing contact. The update operation requires both the contactId (as a parameter) and updated contact properties (in the request body).",
+      "actions": [
+        {
+          "id": "update_contact_action",
+          "sourceId": "hubspotcontacts",
+          "operationId": "hubspotcontacts_update_contact"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "contacts_update",
+            "fieldPath": "parameters.contactId"
+          },
+          "target": {
+            "actionId": "update_contact_action",
+            "fieldPath": "parameters.contactId"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "contacts_update",
+            "fieldPath": "requestBody.properties"
+          },
+          "target": {
+            "actionId": "update_contact_action",
+            "fieldPath": "requestBody.properties"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "contactId",
+            "description": "The unique identifier of the contact to update.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "properties": {
+                    "type": "object",
+                    "description": "New property values for the contact."
+                  }
+                },
+                "required": [
+                  "properties"
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "properties": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "id",
+              "properties",
+              "updatedAt"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

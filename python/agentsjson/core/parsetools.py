@@ -2,7 +2,20 @@ from enum import Enum
 from typing import List, Dict, Any
 from .models.tools import ToolFormat
 from .models.schema import Flow
+from .models.schema import AgentsJson
 
+def get_tool_prompt(agentsjson: AgentsJson) -> str:
+    """Get a prompt for the tools in the agentsjson"""
+    return flows_prompt(agentsjson.flows)
+
+def get_tools(agentsjson: AgentsJson, format: ToolFormat) -> List[Dict[str, Any]]:
+    """Get tools for all flows in an agentsjson using a given format"""
+    if format == ToolFormat.OPENAI:
+        return [flow_to_openai_tool(flow) for flow in agentsjson.flows]
+    elif format == ToolFormat.JSON:
+        return [flow_to_json_tool(flow) for flow in agentsjson.flows]
+    else:
+        raise ValueError(f"Unsupported tool format: {format}")
     
 def flows_tools(flows: List[Flow], format: ToolFormat) -> List[Dict[str, Any]]:
     if format == ToolFormat.OPENAI:
@@ -20,7 +33,12 @@ def flow_to_openai_tool(flow: Flow) -> Dict[str, Any]:
     """Convert a Flow to an OpenAI function-calling tool format"""
     def convert_schema_to_openai(schema: Dict[str, Any]) -> Dict[str, Any]:
         """Helper function to convert JSON schema to OpenAI format recursively"""
-        if "anyOf" in schema:
+        if "oneOf" in schema:
+            # Simply convert oneOf to anyOf while preserving the base schema structure
+            converted = schema.copy()
+            converted["anyOf"] = converted.pop("oneOf")
+            return convert_schema_to_openai(converted)  # Convert any nested schemas
+        elif "anyOf" in schema:
             return {
                 "anyOf": [convert_schema_to_openai(option) for option in schema["anyOf"]]
             }
@@ -59,7 +77,7 @@ def flow_to_openai_tool(flow: Flow) -> Dict[str, Any]:
             "type": "object",
             "properties": {
                 param.name: {
-                    "type": "string",  # TODO: add type based on param.type if available
+                    **({"type": param.type, "items": {"type": "string"}} if param.type == "array" else {"type": param.type if hasattr(param, 'type') else "string"}),  # Handle array type with items
                     "description": param.description
                 }
                 for param in flow.fields.parameters

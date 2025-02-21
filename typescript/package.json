@@ -1,0 +1,107 @@
+{
+  "name": "agentsjson",
+  "version": "0.0.8",
+  "description": "Agents.json TypeScript Implementation with Core and Integrations",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./integrations": {
+      "types": "./dist/integrations/index.d.ts",
+      "import": "./dist/integrations/index.js",
+      "require": "./dist/integrations/index.cjs",
+      "default": "./dist/integrations/index.js"
+    },
+    "./integrations/resend": {
+      "types": "./dist/integrations/resend/index.d.ts",
+      "import": "./dist/integrations/resend/index.js",
+      "require": "./dist/integrations/resend/index.cjs",
+      "default": "./dist/integrations/resend/index.js"
+    },
+    "./integrations/stripe": {
+      "types": "./dist/integrations/stripe/index.d.ts",
+      "import": "./dist/integrations/stripe/index.js",
+      "require": "./dist/integrations/stripe/index.cjs",
+      "default": "./dist/integrations/stripe/index.js"
+    },
+    "./integrations/giphy": {
+      "types": "./dist/integrations/giphy/index.d.ts",
+      "import": "./dist/integrations/giphy/index.js",
+      "require": "./dist/integrations/giphy/index.cjs",
+      "default": "./dist/integrations/giphy/index.js"
+    },
+    "./integrations/googlesheets": {
+      "types": "./dist/integrations/googlesheets/index.d.ts",
+      "import": "./dist/integrations/googlesheets/index.js",
+      "require": "./dist/integrations/googlesheets/index.cjs",
+      "default": "./dist/integrations/googlesheets/index.js"
+    },
+    "./integrations/hubspotcontacts": {
+      "types": "./dist/integrations/hubspotcontacts/index.d.ts",
+      "import": "./dist/integrations/hubspotcontacts/index.js",
+      "require": "./dist/integrations/hubspotcontacts/index.cjs",
+      "default": "./dist/integrations/hubspotcontacts/index.js"
+    },
+    "./integrations/twitter": {
+      "types": "./dist/integrations/twitter/index.d.ts",
+      "import": "./dist/integrations/twitter/index.js",
+      "require": "./dist/integrations/twitter/index.cjs",
+      "default": "./dist/integrations/twitter/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "test": "vitest",
+    "prepublishOnly": "npm run build",
+    "sandbox": "node --loader ts-node/esm --experimental-specifier-resolution=node src/sandbox.ts",
+    "update-exports": "ts-node --esm scripts/update-exports.ts"
+  },
+  "keywords": [
+    "agents",
+    "json",
+    "automation",
+    "workflow",
+    "integration"
+  ],
+  "author": "Wildcard AI <info@wildcard.ai>",
+  "dependencies": {
+    "@hey-api/openapi-ts": "latest",
+    "axios": "^1.6.7",
+    "js-yaml": "^4.1.0",
+    "lodash": "^4.17.21",
+    "oauth-1.0a": "^2.2.6",
+    "openai": "^4.83.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
