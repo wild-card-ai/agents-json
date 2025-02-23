@@ -151,7 +151,7 @@ OpenAPI is a thoughtful standard that has evolved with the changes of HTTP APIs.
 
 ## Feature Roadmap
 
-- [ ] OAuth
+- [x] OAuth
 - [ ] Memory & context management in links
 - [ ] Transforming fields at runtime
 - [ ] Rate-limits
@@ -166,8 +166,8 @@ OpenAPI is a thoughtful standard that has evolved with the changes of HTTP APIs.
 
 ## Licenses
 
-The agents.json specification is open source, licensed under the [Apache 2.0 License](./agents_json/LICENSE).
-The Wildcard Bridge is source-available, licensed under the [BUSL-1.1 License](./python/LICENSE).
+The agents.json specification is open-source, licensed under the [Apache 2.0 License](./agents_json/LICENSE).
+The Wildcard Bridge is open-source, licensed under the [GNU Affero General Public License](./LICENSE).
 
 ## Contributions
 
