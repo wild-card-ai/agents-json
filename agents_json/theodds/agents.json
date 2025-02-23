@@ -3,7 +3,7 @@
   "info": {
     "title": "The Odds API Methods",
     "version": "0.1.0",
-    "description": "This specification provides flows for interacting with The Odds API. It includes flows for each API endpoint as well as compound flows that orchestrate multiple endpoints. Each flow is highly searchable and embeddable, enabling AI agents and language models to make tool calls that actually work."
+    "description": "This specification provides flows for interacting with The Odds API, including custom flows for parlay validation."
   },
   "sources": [
     {
@@ -16,7 +16,7 @@
     {
       "id": "theodds_get_v4_sports_flow",
       "title": "Get Sports List",
-      "description": "Retrieve a list of available sports and tournaments from The Odds API. Include your API key and optionally specify the 'all' flag to include all sports.",
+      "description": "Retrieve a list of available sports and tournaments from The Odds API.",
       "actions": [
         {
           "id": "sports_list_action",
@@ -37,35 +37,22 @@
         }
       ],
       "fields": {
-        "parameters": [
-          {
-            "name": "apiKey",
-            "description": "Your API key for The Odds API.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "all",
-            "description": "Optional flag to include all sports even those not currently in-season.",
-            "required": false,
-            "type": "boolean"
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "description": "The successful response containing the list of sports.",
-            "example": {
-              "sports": []
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "apiKey": {
+              "type": "string",
+              "description": "Your API key for The Odds API."
             }
-          }
+          },
+          "required": ["apiKey"]
         }
       }
     },
     {
       "id": "theodds_get_v4_sports_odds_flow",
-      "title": "Get Sports Odds by Sport",
-      "description": "Retrieve sportsbook odds for a specified sport. Provide the sport key, API key, regions, and optional parameters for markets and formatting.",
+      "title": "Get Sports Odds",
+      "description": "Retrieve current odds for a specific sport.",
       "actions": [
         {
           "id": "sports_odds_action",
@@ -86,71 +73,34 @@
         }
       ],
       "fields": {
-        "parameters": [
-          {
-            "name": "sport",
-            "description": "Sport key (e.g., 'americanfootball_nfl').",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "apiKey",
-            "description": "Your API key for The Odds API.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "regions",
-            "description": "Comma-separated list of regions (e.g., 'us,uk').",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "markets",
-            "description": "Odds market to return (e.g., 'h2h', 'spreads'). Defaults to 'h2h'.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "dateFormat",
-            "description": "Format for timestamps ('iso' or 'unix'). Defaults to 'iso'.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "oddsFormat",
-            "description": "Format of odds ('decimal' or 'american'). Defaults to 'decimal'.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "eventIds",
-            "description": "Optional comma-separated event IDs to filter results.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "bookmakers",
-            "description": "Optional comma-separated list of bookmakers to include.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "description": "The successful response containing sports odds.",
-            "example": {
-              "odds": []
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sport": {
+              "type": "string",
+              "description": "Sport key (e.g., 'basketball_nba')."
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "Your API key for The Odds API."
+            },
+            "regions": {
+              "type": "string",
+              "description": "Regions for odds data (e.g., 'us')."
+            },
+            "markets": {
+              "type": "string",
+              "description": "Markets to check (e.g., 'h2h,spreads')."
             }
-          }
+          },
+          "required": ["sport", "apiKey", "regions"]
         }
       }
     },
     {
       "id": "theodds_get_v4_sports_scores_flow",
       "title": "Get Sports Scores",
-      "description": "Retrieve live, upcoming, and recently completed sports event scores. Provide the sport key, API key, and optionally specify days from the past and event IDs.",
+      "description": "Retrieve scores and status for sports events.",
       "actions": [
         {
           "id": "sports_scores_action",
@@ -171,46 +121,23 @@
         }
       ],
       "fields": {
-        "parameters": [
-          {
-            "name": "sport",
-            "description": "Sport key (e.g., 'americanfootball_nfl').",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "apiKey",
-            "description": "Your API key for The Odds API.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "daysFrom",
-            "description": "The number of days in the past to include completed events (1 to 3).",
-            "required": false,
-            "type": "integer"
-          },
-          {
-            "name": "dateFormat",
-            "description": "Format for timestamps ('iso' or 'unix'). Defaults to 'iso'.",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "eventIds",
-            "description": "Optional comma-separated event IDs to filter scores.",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "description": "The successful response containing sports scores.",
-            "example": {
-              "scores": []
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sport": {
+              "type": "string",
+              "description": "Sport key (e.g., 'basketball_nba')."
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "Your API key for The Odds API."
+            },
+            "daysFrom": {
+              "type": "integer",
+              "description": "Number of days in the past to include (1-3)."
             }
-          }
+          },
+          "required": ["sport", "apiKey"]
         }
       }
     },
@@ -729,7 +656,7 @@
     {
       "id": "parlay_validation_compound",
       "title": "Validate parlay Picks",
-      "description": "Validate a set of parlay picks against current odds and event data. Provides confidence scoring and risk assessment.",
+      "description": "Validate a set of parlay picks against current odds and event data.",
       "actions": [
         {
           "id": "odds_lookup",
@@ -765,72 +692,36 @@
         }
       ],
       "fields": {
-        "parameters": [
-          {
-            "name": "picks",
-            "description": "Array of pick objects containing team, odds, and sport information",
-            "required": true,
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "team": { "type": "string" },
-                "odds": { "type": "string" },
-                "sport": { "type": "string" },
-                "event": { "type": "string" }
-              }
-            }
-          },
-          {
-            "name": "apiKey",
-            "description": "Your API key for The Odds API",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "regions",
-            "description": "Regions for odds comparison (e.g., 'us')",
-            "required": true,
-            "type": "string",
-            "default": "us"
-          },
-          {
-            "name": "markets",
-            "description": "Markets to check (e.g., 'h2h,spreads')",
-            "required": false,
-            "type": "string",
-            "default": "h2h"
-          }
-        ],
-        "responses": {
-          "success": {
-            "type": "object",
-            "description": "Validation results for the parlay picks",
-            "properties": {
-              "picks": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "team": { "type": "string" },
-                    "odds": { "type": "string" },
-                    "status": { "type": "string" },
-                    "confidence": { "type": "string" },
-                    "current_odds": { "type": "object" },
-                    "event_status": { "type": "string" }
-                  }
-                }
-              },
-              "risk_assessment": {
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "picks": {
+              "type": "array",
+              "description": "Array of pick objects containing team, odds, and sport information",
+              "items": {
                 "type": "object",
                 "properties": {
-                  "overall_confidence": { "type": "string" },
-                  "risk_level": { "type": "string" },
-                  "key_factors": { "type": "array" }
+                  "team": { "type": "string" },
+                  "odds": { "type": "string" },
+                  "sport": { "type": "string" },
+                  "event": { "type": "string" }
                 }
               }
+            },
+            "apiKey": {
+              "type": "string",
+              "description": "Your API key for The Odds API"
+            },
+            "regions": {
+              "type": "string",
+              "description": "Regions for odds comparison (e.g., 'us')"
+            },
+            "markets": {
+              "type": "string",
+              "description": "Markets to check (e.g., 'h2h,spreads')"
             }
-          }
+          },
+          "required": ["picks", "apiKey", "regions"]
         }
       }
     }
