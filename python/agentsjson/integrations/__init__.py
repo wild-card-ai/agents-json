@@ -8,5 +8,13 @@ from . import stripe
 from . import googlesheets
 from . import resend
 from . import hubspotcontacts
+from . import rootly
+from . import slack
+from . import alpacamarketdata
+from . import alpacatrading
+from . import hubspotcontacts
+from . import rootly
+from . import slack
 
-__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend", "hubspotcontacts"]
+__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend", "alpacamarketdata", "alpacatrading", "hubspotcontacts", "rootly", "slack"]
+

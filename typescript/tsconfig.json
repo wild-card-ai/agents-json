@@ -14,12 +14,12 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "src",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "../examples/typescript/sandbox.ts", "../examples/typescript/sandbox2.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 } 
