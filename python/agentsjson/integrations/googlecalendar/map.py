@@ -1,4 +1,8 @@
 from . import tools
+from agentsjson.core.models.tools import ExecutorType
+
+# Define the type of execution (REST API, Function call, etc.)
+map_type = ExecutorType.RESTAPIHANDLER
 
 # Mapping of operation IDs to corresponding function implementations
 map = {
