@@ -1,0 +1,353 @@
+{
+    "agentsJson": "0.1.0",
+    "info": {
+      "title": "Google Docs API Flows",
+      "version": "0.1.0",
+      "description": "This specification enables interaction with the Google Docs API by exposing individual operations (create, get, batch update) as well as compound flows (e.g. create and retrieve) that orchestrate multiple API calls. Each flow is described in detail so that AI agents and language models can call these methods with high accuracy."
+    },
+    "sources": [
+      {
+        "id": "googledocs",
+        "path": "agents-json/googledocs/openapi.yaml"
+      },
+      {
+        "id": "googledocs_alternate",
+        "path": "https://docs.googleapis.com/$discovery/rest?version=v1"
+      }
+    ],
+    "overrides": [],
+    "flows": [
+      {
+        "id": "document_create",
+        "title": "Create Document",
+        "description": "Creates a blank Google Document with a specified title. Use this flow to initialize a new document.",
+        "actions": [
+          {
+            "id": "create_document_action",
+            "sourceId": "googledocs",
+            "operationId": "googledocs_create_document"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "document_create",
+              "fieldPath": "requestBody.title"
+            },
+            "target": {
+              "actionId": "create_document_action",
+              "fieldPath": "requestBody.title"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Google Docs document definition. Provide the title of the document.",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Title of the document."
+                    }
+                  },
+                  "required": [
+                    "title"
+                  ]
+                },
+                "example": {
+                  "title": "My New Document"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "The created Google Document resource, including documentId and details.",
+              "example": {
+                "documentId": "doc123",
+                "title": "My New Document"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "document_get",
+        "title": "Get Document",
+        "description": "Retrieves the latest version of a specified Google Document using its documentId and (optionally) a suggestions view mode.",
+        "actions": [
+          {
+            "id": "get_document_action",
+            "sourceId": "googledocs",
+            "operationId": "googledocs_get_document"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "document_get",
+              "fieldPath": "parameters.documentId"
+            },
+            "target": {
+              "actionId": "get_document_action",
+              "fieldPath": "parameters.documentId"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "document_get",
+              "fieldPath": "parameters.suggestionsViewMode"
+            },
+            "target": {
+              "actionId": "get_document_action",
+              "fieldPath": "parameters.suggestionsViewMode"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "documentId",
+              "description": "The ID of the Google Document to retrieve.",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "suggestionsViewMode",
+              "description": "Optional. The view mode for document suggestions (e.g., DEFAULT_FOR_CURRENT_ACCESS, SUGGESTIONS_INLINE, PREVIEW_SUGGESTIONS_ACCEPTED, PREVIEW_WITHOUT_SUGGESTIONS).",
+              "required": false,
+              "type": "string",
+              "enum": [
+                "DEFAULT_FOR_CURRENT_ACCESS",
+                "SUGGESTIONS_INLINE",
+                "PREVIEW_SUGGESTIONS_ACCEPTED",
+                "PREVIEW_WITHOUT_SUGGESTIONS"
+              ]
+            }
+          ],
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "The retrieved Google Document details.",
+              "example": {
+                "documentId": "doc123",
+                "title": "My New Document",
+                "body": {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "Example content"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "document_batch_update",
+        "title": "Batch Update Document",
+        "description": "Applies one or more updates to a Google Document. Use this flow to perform operations such as inserting text, modifying formatting, or merging elements. Supply the documentId and an array of update requests.",
+        "actions": [
+          {
+            "id": "batch_update_document_action",
+            "sourceId": "googledocs",
+            "operationId": "googledocs_batch_update_documents"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "document_batch_update",
+              "fieldPath": "parameters.documentId"
+            },
+            "target": {
+              "actionId": "batch_update_document_action",
+              "fieldPath": "parameters.documentId"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "document_batch_update",
+              "fieldPath": "requestBody.requests"
+            },
+            "target": {
+              "actionId": "batch_update_document_action",
+              "fieldPath": "requestBody.requests"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [
+            {
+              "name": "documentId",
+              "description": "The ID of the Google Document to update.",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "List of update requests to apply to the document.",
+                  "properties": {
+                    "requests": {
+                      "type": "array",
+                      "description": "An array of update requests. Each object should conform to the Google Docs update request format."
+                    },
+                    "writeControl": {
+                      "type": "object",
+                      "description": "Control over the execution of the write requests."
+                    }
+                  },
+                  "required": [
+                    "requests"
+                  ]
+                },
+                "example": {
+                  "requests": [
+                    {
+                      "insertText": {
+                        "text": "Hello, world!",
+                        "location": {
+                          "index": 1
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Response from the batch update operation, including documentId and update replies.",
+              "example": {
+                "documentId": "doc123",
+                "replies": [
+                  {
+                    "insertText": {
+                      "updatedProperties": {
+                        "text": "Hello, world!"
+                      }
+                    }
+                  }
+                ],
+                "writeControl": {
+                  "requiredRevisionId": "67890"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "document_create_and_get",
+        "title": "Create and Retrieve Document",
+        "description": "Creates a new Google Document and immediately retrieves its details. Use this compound flow to verify document creation or to chain subsequent operations.",
+        "actions": [
+          {
+            "id": "create_document_action",
+            "sourceId": "googledocs",
+            "operationId": "googledocs_create_document"
+          },
+          {
+            "id": "get_document_action",
+            "sourceId": "googledocs",
+            "operationId": "googledocs_get_document"
+          }
+        ],
+        "links": [
+          {
+            "origin": {
+              "actionId": "document_create_and_get",
+              "fieldPath": "requestBody.title"
+            },
+            "target": {
+              "actionId": "create_document_action",
+              "fieldPath": "requestBody.title"
+            }
+          },
+          {
+            "origin": {
+              "actionId": "document_create_and_get",
+              "fieldPath": "responses.success.documentId"
+            },
+            "target": {
+              "actionId": "get_document_action",
+              "fieldPath": "parameters.documentId"
+            }
+          }
+        ],
+        "fields": {
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Provide the title for the new document.",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Title of the document."
+                    }
+                  },
+                  "required": [
+                    "title"
+                  ]
+                },
+                "example": {
+                  "title": "Compound Flow Document"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "success": {
+              "type": "object",
+              "description": "Retrieved document details after creation, including documentId, title, and content.",
+              "example": {
+                "documentId": "doc456",
+                "title": "Compound Flow Document",
+                "body": {
+                  "content": [
+                    {
+                      "paragraph": {
+                        "elements": [
+                          {
+                            "textRun": {
+                              "content": "Compound flow content."
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
