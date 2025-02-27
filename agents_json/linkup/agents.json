@@ -1,0 +1,287 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Link Up API Integration Agents",
+    "version": "0.1.0",
+    "description": "This agents.json specification integrates with the Link Up API, which allows you to retrieve web content. It provides a flow for searching the web with different output types including sourced answers, search results, or structured data formats."
+  },
+  "sources": [
+    {
+      "id": "linkup",
+      "path": "https://gist.githubusercontent.com/yagnyaPatel/670dd9fec7d101b76f92a2c4f7acfba5/raw/5fd960dfdebd35016dc285bc52aa7051576b1f66/linkup.openapi.yaml",
+      "description": "The Link Up OpenAPI specification covering web search and content retrieval functionality."
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "linkup_search_flow",
+      "title": "Search the Web",
+      "description": "Retrieves web content based on a natural language query. Can return results in different formats: sourced answers with citations, search results, or custom structured data.",
+      "actions": [
+        {
+          "id": "search_action",
+          "sourceId": "linkup",
+          "operationId": "linkup_post_search"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "linkup_search_flow",
+            "fieldPath": "requestBody"
+          },
+          "target": {
+            "actionId": "search_action",
+            "fieldPath": "requestBody"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "q": {
+                    "type": "string",
+                    "description": "The natural language question for which you want to retrieve context."
+                  },
+                  "depth": {
+                    "type": "string",
+                    "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
+                    "enum": ["standard", "deep"]
+                  },
+                  "outputType": {
+                    "type": "string",
+                    "description": "The type of output you want to get. Use 'structured' for a custom-formatted response defined by 'structuredOutputSchema'.",
+                    "enum": ["sourcedAnswer", "searchResults", "structured"]
+                  },
+                  "structuredOutputSchema": {
+                    "type": "string",
+                    "description": "Required only when outputType is 'structured'. Provide a JSON schema (as a string) representing the desired response format. The root must be of type 'object'."
+                  },
+                  "includeImages": {
+                    "type": "boolean",
+                    "description": "Defines whether the API should include images in its results."
+                  }
+                },
+                "required": ["q", "depth", "outputType"]
+              },
+              "example": {
+                "q": "Can you tell me which women were awarded the Physics Nobel Prize?",
+                "depth": "standard",
+                "outputType": "sourcedAnswer",
+                "includeImages": false
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Search results in the requested format (sourced answer, search results, or structured data).",
+            "example": {
+              "answer": "Five women have been awarded the Nobel Prize in Physics: Marie Curie (1903), Maria Goeppert-Mayer (1963), Donna Strickland (2018), Andrea Ghez (2020), and Anne L'Huillier (2023).",
+              "sources": [
+                {
+                  "name": "List of Nobel laureates in Physics - Wikipedia",
+                  "url": "https://en.wikipedia.org/wiki/List_of_Nobel_laureates_in_Physics",
+                  "snippet": "Only five women have won the prize: Marie Curie (1903), Maria Goeppert-Mayer (1963), Donna Strickland (2018), Andrea Ghez (2020), and Anne L'Huillier (2023)."
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "linkup_structured_search_flow",
+      "title": "Structured Web Search",
+      "description": "Performs a web search and returns results in a specified structured format. This is useful when you need data extracted in a specific schema for further processing.",
+      "actions": [
+        {
+          "id": "structured_search_action",
+          "sourceId": "linkup",
+          "operationId": "linkup_post_search"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "linkup_structured_search_flow",
+            "fieldPath": "requestBody"
+          },
+          "target": {
+            "actionId": "structured_search_action",
+            "fieldPath": "requestBody"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "q": {
+                    "type": "string",
+                    "description": "The natural language question for which you want to retrieve context."
+                  },
+                  "depth": {
+                    "type": "string",
+                    "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
+                    "enum": ["standard", "deep"]
+                  },
+                  "outputType": {
+                    "type": "string",
+                    "description": "Must be 'structured' for this flow.",
+                    "enum": ["structured"]
+                  },
+                  "structuredOutputSchema": {
+                    "type": "string",
+                    "description": "JSON schema (as a string) representing the desired response format. The root must be of type 'object'."
+                  },
+                  "includeImages": {
+                    "type": "boolean",
+                    "description": "Defines whether the API should include images in its results."
+                  }
+                },
+                "required": ["q", "depth", "outputType", "structuredOutputSchema"]
+              },
+              "example": {
+                "q": "List the top 3 movies directed by Christopher Nolan and their ratings",
+                "depth": "deep",
+                "outputType": "structured",
+                "structuredOutputSchema": "{\"type\":\"object\",\"properties\":{\"movies\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"title\":{\"type\":\"string\"},\"year\":{\"type\":\"number\"},\"rating\":{\"type\":\"number\"}}}}}}",
+                "includeImages": false
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Structured data formatted according to the provided schema.",
+            "example": {
+              "movies": [
+                {
+                  "title": "The Dark Knight",
+                  "year": 2008,
+                  "rating": 9.0
+                },
+                {
+                  "title": "Inception",
+                  "year": 2010,
+                  "rating": 8.8
+                },
+                {
+                  "title": "Interstellar",
+                  "year": 2014,
+                  "rating": 8.6
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "linkup_image_search_flow",
+      "title": "Image-Inclusive Web Search",
+      "description": "Performs a web search that includes image results alongside text content, providing a more comprehensive view of the topic.",
+      "actions": [
+        {
+          "id": "image_search_action",
+          "sourceId": "linkup",
+          "operationId": "linkup_post_search"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "linkup_image_search_flow",
+            "fieldPath": "requestBody"
+          },
+          "target": {
+            "actionId": "image_search_action",
+            "fieldPath": "requestBody"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "q": {
+                    "type": "string",
+                    "description": "The natural language question for which you want to retrieve context."
+                  },
+                  "depth": {
+                    "type": "string",
+                    "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
+                    "enum": ["standard", "deep"]
+                  },
+                  "outputType": {
+                    "type": "string",
+                    "description": "The type of output you want to get.",
+                    "enum": ["searchResults"]
+                  },
+                  "includeImages": {
+                    "type": "boolean",
+                    "description": "Set to true to include images in the results.",
+                    "default": true
+                  }
+                },
+                "required": ["q", "depth", "outputType", "includeImages"]
+              },
+              "example": {
+                "q": "Show me images of the Eiffel Tower",
+                "depth": "standard",
+                "outputType": "searchResults",
+                "includeImages": true
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Search results including both text and image resources.",
+            "example": {
+              "results": [
+                {
+                  "type": "text",
+                  "name": "Eiffel Tower - Wikipedia",
+                  "url": "https://en.wikipedia.org/wiki/Eiffel_Tower",
+                  "content": "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower."
+                },
+                {
+                  "type": "image",
+                  "name": "Eiffel Tower at night",
+                  "url": "https://example.com/eiffel-tower-night.jpg"
+                },
+                {
+                  "type": "image",
+                  "name": "Eiffel Tower from below",
+                  "url": "https://example.com/eiffel-tower-below.jpg"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+} 
