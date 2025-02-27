@@ -27,59 +27,31 @@
       ],
       "links": [
         {
-          "origin": {
-            "actionId": "linkup_search_flow",
-            "fieldPath": "requestBody"
-          },
-          "target": {
-            "actionId": "search_action",
-            "fieldPath": "requestBody"
-          }
+          "origin": {"actionId": "linkup_search_flow", "fieldPath": "parameters.q"},
+          "target": {"actionId": "search_action", "fieldPath": "parameters.q"}
+        },
+        {
+          "origin": {"actionId": "linkup_search_flow", "fieldPath": "parameters.depth"},
+          "target": {"actionId": "search_action", "fieldPath": "parameters.depth"}
         }
       ],
       "fields": {
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "q": {
-                    "type": "string",
-                    "description": "The natural language question for which you want to retrieve context."
-                  },
-                  "depth": {
-                    "type": "string",
-                    "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
-                    "enum": ["standard", "deep"]
-                  },
-                  "outputType": {
-                    "type": "string",
-                    "description": "The type of output you want to get. Use 'structured' for a custom-formatted response defined by 'structuredOutputSchema'.",
-                    "enum": ["sourcedAnswer", "searchResults", "structured"]
-                  },
-                  "structuredOutputSchema": {
-                    "type": "string",
-                    "description": "Required only when outputType is 'structured'. Provide a JSON schema (as a string) representing the desired response format. The root must be of type 'object'."
-                  },
-                  "includeImages": {
-                    "type": "boolean",
-                    "description": "Defines whether the API should include images in its results."
-                  }
-                },
-                "required": ["q", "depth", "outputType"]
-              },
-              "example": {
-                "q": "Can you tell me which women were awarded the Physics Nobel Prize?",
-                "depth": "standard",
-                "outputType": "sourcedAnswer",
-                "includeImages": false
-              }
+        "parameters": [
+            {
+                "name": "q",
+                "type": "string",
+                "required": true,
+                "description": "The natural language question for which you want to retrieve context."
+            },
+            {
+                "name": "depth",
+                "type": "string",
+                "required": true,
+                "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
+                "enum": ["standard", "deep"]
             }
-          },
-          "required": true
-        },
+        ],
+        "requestBody": {},
         "responses": {
           "success": {
             "type": "object",
@@ -91,191 +63,6 @@
                   "name": "List of Nobel laureates in Physics - Wikipedia",
                   "url": "https://en.wikipedia.org/wiki/List_of_Nobel_laureates_in_Physics",
                   "snippet": "Only five women have won the prize: Marie Curie (1903), Maria Goeppert-Mayer (1963), Donna Strickland (2018), Andrea Ghez (2020), and Anne L'Huillier (2023)."
-                }
-              ]
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "linkup_structured_search_flow",
-      "title": "Structured Web Search",
-      "description": "Performs a web search and returns results in a specified structured format. This is useful when you need data extracted in a specific schema for further processing.",
-      "actions": [
-        {
-          "id": "structured_search_action",
-          "sourceId": "linkup",
-          "operationId": "linkup_post_search"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "linkup_structured_search_flow",
-            "fieldPath": "requestBody"
-          },
-          "target": {
-            "actionId": "structured_search_action",
-            "fieldPath": "requestBody"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "q": {
-                    "type": "string",
-                    "description": "The natural language question for which you want to retrieve context."
-                  },
-                  "depth": {
-                    "type": "string",
-                    "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
-                    "enum": ["standard", "deep"]
-                  },
-                  "outputType": {
-                    "type": "string",
-                    "description": "Must be 'structured' for this flow.",
-                    "enum": ["structured"]
-                  },
-                  "structuredOutputSchema": {
-                    "type": "string",
-                    "description": "JSON schema (as a string) representing the desired response format. The root must be of type 'object'."
-                  },
-                  "includeImages": {
-                    "type": "boolean",
-                    "description": "Defines whether the API should include images in its results."
-                  }
-                },
-                "required": ["q", "depth", "outputType", "structuredOutputSchema"]
-              },
-              "example": {
-                "q": "List the top 3 movies directed by Christopher Nolan and their ratings",
-                "depth": "deep",
-                "outputType": "structured",
-                "structuredOutputSchema": "{\"type\":\"object\",\"properties\":{\"movies\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"properties\":{\"title\":{\"type\":\"string\"},\"year\":{\"type\":\"number\"},\"rating\":{\"type\":\"number\"}}}}}}",
-                "includeImages": false
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "success": {
-            "type": "object",
-            "description": "Structured data formatted according to the provided schema.",
-            "example": {
-              "movies": [
-                {
-                  "title": "The Dark Knight",
-                  "year": 2008,
-                  "rating": 9.0
-                },
-                {
-                  "title": "Inception",
-                  "year": 2010,
-                  "rating": 8.8
-                },
-                {
-                  "title": "Interstellar",
-                  "year": 2014,
-                  "rating": 8.6
-                }
-              ]
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "linkup_image_search_flow",
-      "title": "Image-Inclusive Web Search",
-      "description": "Performs a web search that includes image results alongside text content, providing a more comprehensive view of the topic.",
-      "actions": [
-        {
-          "id": "image_search_action",
-          "sourceId": "linkup",
-          "operationId": "linkup_post_search"
-        }
-      ],
-      "links": [
-        {
-          "origin": {
-            "actionId": "linkup_image_search_flow",
-            "fieldPath": "requestBody"
-          },
-          "target": {
-            "actionId": "image_search_action",
-            "fieldPath": "requestBody"
-          }
-        }
-      ],
-      "fields": {
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "q": {
-                    "type": "string",
-                    "description": "The natural language question for which you want to retrieve context."
-                  },
-                  "depth": {
-                    "type": "string",
-                    "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
-                    "enum": ["standard", "deep"]
-                  },
-                  "outputType": {
-                    "type": "string",
-                    "description": "The type of output you want to get.",
-                    "enum": ["searchResults"]
-                  },
-                  "includeImages": {
-                    "type": "boolean",
-                    "description": "Set to true to include images in the results.",
-                    "default": true
-                  }
-                },
-                "required": ["q", "depth", "outputType", "includeImages"]
-              },
-              "example": {
-                "q": "Show me images of the Eiffel Tower",
-                "depth": "standard",
-                "outputType": "searchResults",
-                "includeImages": true
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "success": {
-            "type": "object",
-            "description": "Search results including both text and image resources.",
-            "example": {
-              "results": [
-                {
-                  "type": "text",
-                  "name": "Eiffel Tower - Wikipedia",
-                  "url": "https://en.wikipedia.org/wiki/Eiffel_Tower",
-                  "content": "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France. It is named after the engineer Gustave Eiffel, whose company designed and built the tower."
-                },
-                {
-                  "type": "image",
-                  "name": "Eiffel Tower at night",
-                  "url": "https://example.com/eiffel-tower-night.jpg"
-                },
-                {
-                  "type": "image",
-                  "name": "Eiffel Tower from below",
-                  "url": "https://example.com/eiffel-tower-below.jpg"
                 }
               ]
             }
