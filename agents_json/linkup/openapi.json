@@ -1,0 +1,267 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Linkup API",
+    "version": "1.0",
+    "description": "The Linkup API allows you to retrieve web content. Use the `/search` endpoint to query the web for answers or search results, and the `/content` endpoint to retrieve webpage content from premium source partners."
+  },
+  "servers": [
+    {
+      "url": "https://api.linkup.so/v1"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "auth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "SearchRequest": {
+        "type": "object",
+        "title": "SearchRequest",
+        "properties": {
+          "q": {
+            "description": "The natural language question for which you want to retrieve context.",
+            "required": true,
+            "type": "string",
+            "example": "Can you tell me which women were awarded the Physics Nobel Prize?"
+          },
+          "depth": {
+            "description": "Defines the precision of the search. `standard` returns results quickly; `deep` takes longer but yields more complete results.",
+            "required": true,
+            "type": "string",
+            "enum": ["standard", "deep"],
+            "example": "standard"
+          },
+          "outputType": {
+            "description": "The type of output you want to get. Use `structured` for a custom-formatted response defined by `structuredOutputSchema`.",
+            "required": true,
+            "type": "string",
+            "enum": ["sourcedAnswer", "searchResults", "structured"]
+          },
+          "structuredOutputSchema": {
+            "description": "Required only when `outputType` is `structured`. Provide a JSON schema (as a string) representing the desired response format. The root must be of type `object`.",
+            "type": "string",
+            "format": "json"
+          },
+          "includeImages": {
+            "description": "Defines whether the API should include images in its results.",
+            "required": false,
+            "type": "boolean",
+            "example": "false"
+          }
+        },
+        "required": [
+          "q",
+          "depth",
+          "outputType"
+        ],
+        "additionalProperties": false
+      },
+      "SearchResults": {
+        "type": "object",
+        "description": "When you pick `searchResults` for the `outputType` parameter, you will get a list of search results related to your query.",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "description": "When the resource item is a text.",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["text"],
+                      "description": "The type of the resource."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The title or name of the resource."
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "The URL of the resource.",
+                      "format": "uri"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Extracted text content associated with the resource."
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": ["image"],
+                      "description": "The type of the resource."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The title or name of the resource."
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "The URL of the resource.",
+                      "format": "uri"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "SourcedAnswer": {
+        "type": "object",
+        "description": "When you pick `sourcedAnswer` for the `outputType` parameter, you will get an object containing the answer to your question as well as a list of sources used to answer it.",
+        "properties": {
+          "answer": {
+            "type": "string",
+            "description": "The answer to your question."
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The name or title of the source."
+                },
+                "url": {
+                  "type": "string",
+                  "description": "The URL the source.",
+                  "format": "uri"
+                },
+                "snippet": {
+                  "type": "string",
+                  "description": "Extracted text content associated with the source."
+                }
+              }
+            }
+          }
+        }
+      },
+      "Structured": {
+        "type": "object",
+        "description": "When you pick `structured` for the `outputType` parameter, you will get the object corresponding to the JSON schema you used in the `structuredOutputSchema` param.",
+        "properties": {}
+      }
+    }
+  },
+  "security": [
+    {
+      "auth": []
+    }
+  ],
+  "paths": {
+    "/search": {
+      "post": {
+        "summary": "🔎 Search",
+        "description": "The `/search` endpoint allows you to retrieve web content.",
+        "operationId": "search",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SearchResults"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SourcedAnswer"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Structured"
+                    }
+                  ]
+                },
+                "example": {
+                  "results": [
+                    {
+                      "type": "text",
+                      "name": "Women in physics - Wikipedia",
+                      "url": "https://en.wikipedia.org/wiki/Women_in_physics",
+                      "content": "Five women have won the Nobel Prize in Physics, awarded annually since 1901 by the Royal Swedish Academy of Sciences. [1] These are: [2] 1903 Marie Curie: \"in recognition of the extraordinary services they have rendered by their joint researches on the radiation phenomena discovered by Professor Henri Becquerel\" [3]; 1963 Maria Goeppert Mayer: \"for their discoveries concerning nuclear shell ..."
+                    },
+                    {
+                      "type": "text",
+                      "name": "Physics - The Women Who Win",
+                      "url": "https://physics.aps.org/articles/v14/134",
+                      "content": "Although women through history have won major physics prizes, they have received those honors rarely. For example, Curie was the only woman to be awarded the Nobel Prize in Physics for 60 years. As of today, there are four women Nobel physics laureates, including Donna Strickland, who received the prize in 2018, and Ghez, who received it last ..."
+                    },
+                    {
+                      "type": "text",
+                      "name": "The 60 Women Who Have Won the Nobel Prize - Stacker",
+                      "url": "https://stacker.com/history/60-women-who-have-won-nobel-prize",
+                      "content": "- Award: Nobel Prize in Physics - Year: 1963. Maria Goeppert-Mayer was born in Germany. After she married, she migrated to America, where she worked on an American atom bomb project during World War II. Her work uncovered important discoveries about nuclear structure, and Goeppert-Mayer is one of only four women to win the Nobel Prize in physics."
+                    },
+                    {
+                      "type": "text",
+                      "name": "List of Nobel laureates in Physics - Wikipedia",
+                      "url": "https://en.wikipedia.org/wiki/List_of_Nobel_laureates_in_Physics",
+                      "content": "Only five women have won the prize: Marie Curie (1903), Maria Goeppert-Mayer (1963), Donna Strickland (2018), Andrea Ghez (2020), and Anne L'Huillier (2023). [8]"
+                    },
+                    {
+                      "type": "text",
+                      "name": "Physics Nobel Prizes awarded to women | Scientia News",
+                      "url": "https://www.scientianews.org/physics-nobel-prize-winners",
+                      "content": "The wide range of uses CPA has in medicine makes this an important discovery for physics which led to Strickland being awarded the Nobel Prize award. Andrea Ghez (2020) The result of the work of Andrea Ghez, the fourth female Nobel Prize in Physics recipient, may be the most exciting conclusion of the research described in this article."
+                    },
+                    {
+                      "type": "text",
+                      "name": "Nobel Prize awarded women - NobelPrize.org",
+                      "url": "https://www.nobelprize.org/prizes/lists/nobel-prize-awarded-women/",
+                      "content": "The Nobel Prize and the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel have been awarded to women 66 times between 1901 and 2024. Only one woman, Marie Curie, has been honoured twice, with the Nobel Prize in Physics 1903 and the Nobel Prize in Chemistry 1911."
+                    },
+                    {
+                      "type": "text",
+                      "name": "Nobel Prize awarded women - NobelPrize.org",
+                      "url": "https://www.nobelprize.org/categories/women-who-changed-the-world/",
+                      "content": "The Nobel Prize and the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel have been awarded to women 66 times between 1901 and 2024. Only one woman, Marie Curie, has been honoured twice, with the Nobel Prize in Physics 1903 and the Nobel Prize in Chemistry 1911. This means that 65 women […]"
+                    },
+                    {
+                      "type": "text",
+                      "name": "The Nobel Prize In Physics: 117 Years, 3 Women And Counting",
+                      "url": "https://www.npr.org/2018/10/02/653639583/the-nobel-prize-in-physics-117-years-three-women-and-counting",
+                      "content": "The Nobel Prize In Physics: 117 Years, 3 Women And Counting Donna Strickland is the first woman to win the prize in a generation. Other women in physics are not surprised, but some hope change may ..."
+                    },
+                    {
+                      "type": "text",
+                      "name": "Only 5 women have won the Nobel Prize in physics—recent winners share ...",
+                      "url": "https://phys.org/news/2024-10-women-won-nobel-prize-physics.html",
+                      "content": "Out of 225 people awarded the Nobel Prize in physics, only five have been women. This is a very small number, and certainly smaller than 50%—the percent of women in the human population."
+                    },
+                    {
+                      "type": "text",
+                      "name": "Only 5 women have won the Nobel Prize in physics—recent winners share ...",
+                      "url": "https://phys.org/news/2024-10-women-won-nobel-prize-physics.pdf",
+                      "content": "Credit: Pixabay/CC0 Public Domain Out of 225 people awarded the Nobel Prize in physics, only five have been women. This is a very small number, and certainly smaller than"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

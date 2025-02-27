@@ -136,7 +136,7 @@ def _execute(bundle: Optional[Bundle], flow: Flow, auth: AuthConfig, parameters:
         execution_trace[action.id] = {
             "parameters": action_parameters,
             "requestBody": action_requestBody
-        }     
+        }
            
         # Get authentication
         auth_key = resolve_auth(auth)
