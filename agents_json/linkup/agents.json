@@ -17,7 +17,7 @@
     {
       "id": "linkup_search_flow",
       "title": "Search the Web",
-      "description": "Retrieves web content based on a natural language query. Can return results in different formats: sourced answers with citations, search results, or custom structured data.",
+      "description": "Retrieves web content based on a natural language query. Returns as sourced answers with citations.",
       "actions": [
         {
           "id": "search_action",
@@ -55,7 +55,7 @@
         "responses": {
           "success": {
             "type": "object",
-            "description": "Search results in the requested format (sourced answer, search results, or structured data).",
+            "description": "Search results in the sourced answer format.",
             "example": {
               "answer": "Five women have been awarded the Nobel Prize in Physics: Marie Curie (1903), Maria Goeppert-Mayer (1963), Donna Strickland (2018), Andrea Ghez (2020), and Anne L'Huillier (2023).",
               "sources": [
