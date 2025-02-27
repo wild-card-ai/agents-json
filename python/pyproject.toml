@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "agentsjson"
-version = "0.1.10"
+version = "0.1.11"
 description = "Agents.json Python Implementation with Core and Integrations"
 authors = ["Wildcard AI <info@wildcard.ai>"]
 readme = "README.md"
