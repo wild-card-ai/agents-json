@@ -8,7 +8,7 @@
     "sources": [
       {
         "id": "googledocs",
-        "path": "agents-json/googledocs/openapi.yaml"
+        "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/integrations/googledocs/agents_json/googledocs/openapi.yaml"
       },
       {
         "id": "googledocs_alternate",
