@@ -1,0 +1,2084 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Google Calendar API Methods",
+    "version": "0.1.0",
+    "description": "This specification enables interaction with the Google Calendar API, allowing users to create, update, delete events, manage calendars, handle availability, and set permissions."
+  },
+  "sources": [
+    {
+      "id": "googlecalendar",
+      "path": "https://raw.githubusercontent.com/wild-card-ai/agents-json/refs/heads/master/agents_json/googlecalendar/openapi.yaml"
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "create_calendar",
+      "title": "Create Calendar",
+      "description": "Creates a new secondary calendar.",
+      "actions": [
+        {
+          "id": "create_calendar_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_calendars_insert"
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Title of the new calendar." }
+                },
+                "required": ["summary"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Newly created calendar details.",
+            "example": { "id": "xyz123", "summary": "My New Calendar" }
+          }
+        }
+      }
+    },
+    {
+      "id": "delete_calendar",
+      "title": "Delete Calendar",
+      "description": "Deletes a secondary calendar.",
+      "actions": [
+        {
+          "id": "delete_calendar_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_calendars_delete"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to delete.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of calendar deletion.",
+            "example": { "status": "success", "message": "Calendar deleted." }
+          }
+        }
+      }
+    },
+    {
+      "id": "list_calendars",
+      "title": "List Calendars",
+      "description": "Retrieves the list of calendars available to the user.",
+      "actions": [
+        {
+          "id": "list_calendars_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_calendarList_list"
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of calendars the user has access to.",
+            "example": { "calendars": [{ "id": "user@gmail.com", "summary": "My Calendar" }] }
+          }
+        }
+      }
+    },
+    {
+      "id": "get_calendar_details",
+      "title": "Get Calendar Details",
+      "description": "Retrieves details of a specific calendar.",
+      "actions": [
+        {
+          "id": "get_calendar_details_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_calendars_get"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to retrieve.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Details of the specified calendar.",
+            "example": { "id": "xyz123", "summary": "Work Calendar" }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_calendar_settings",
+      "title": "Update Calendar Settings",
+      "description": "Updates settings for a specific calendar.",
+      "actions": [
+        {
+          "id": "update_calendar_settings_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_calendars_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to update.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Updated title of the calendar." },
+                  "timeZone": { "type": "string", "description": "Updated time zone of the calendar." }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated calendar details.",
+            "example": { "id": "xyz123", "summary": "Updated Calendar", "timeZone": "America/New_York" }
+          }
+        }
+      }
+    },
+  {
+ 
+      "id": "create_event",
+      "title": "Create Event",
+      "description": "Creates a new event in a specified calendar.",
+      "actions": [
+        {
+          "id": "create_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_insert"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to create an event in.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Title of the event." },
+                  "start": { "type": "object", "properties": { "dateTime": { "type": "string", "format": "date-time" } } },
+                  "end": { "type": "object", "properties": { "dateTime": { "type": "string", "format": "date-time" } } }
+                },
+                "required": ["summary", "start", "end"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Details of the created event.",
+            "example": { "id": "abc123", "summary": "Meeting", "start": { "dateTime": "2025-03-01T10:00:00Z" }, "end": { "dateTime": "2025-03-01T11:00:00Z" } }
+          }
+        }
+      }
+    },
+    {
+      "id": "delete_event",
+      "title": "Delete Event",
+      "description": "Deletes an event from a specified calendar.",
+      "actions": [
+        {
+          "id": "delete_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_delete"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to delete.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of event deletion.",
+            "example": { "status": "success", "message": "Event deleted." }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_event",
+      "title": "Update Event",
+      "description": "Updates an existing event in a specified calendar.",
+      "actions": [
+        {
+          "id": "update_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to update.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Updated title of the event." },
+                  "start": { "type": "object", "properties": { "dateTime": { "type": "string", "format": "date-time" } } },
+                  "end": { "type": "object", "properties": { "dateTime": { "type": "string", "format": "date-time" } } }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated event details.",
+            "example": { "id": "abc123", "summary": "Updated Meeting", "start": { "dateTime": "2025-03-01T12:00:00Z" }, "end": { "dateTime": "2025-03-01T13:00:00Z" } }
+          }
+        }
+      }
+    },
+
+
+    {
+      "id": "get_event",
+      "title": "Get Event Details",
+      "description": "Retrieves details of a specific event from a calendar.",
+      "actions": [
+        {
+          "id": "get_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_get"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to retrieve.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Details of the specified event.",
+            "example": { "id": "abc123", "summary": "Team Meeting", "start": { "dateTime": "2025-03-02T09:00:00Z" }, "end": { "dateTime": "2025-03-02T10:00:00Z" } }
+          }
+        }
+      }
+    },
+    {
+      "id": "list_events",
+      "title": "List Events in Calendar",
+      "description": "Retrieves a list of events from a specified calendar.",
+      "actions": [
+        {
+          "id": "list_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_list"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to list events from.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of events in the specified calendar.",
+            "example": { "items": [ { "id": "xyz123", "summary": "Project Deadline", "start": { "dateTime": "2025-03-05T15:00:00Z" }, "end": { "dateTime": "2025-03-05T16:00:00Z" } } ] }
+          }
+        }
+      }
+    },
+    {
+      "id": "set_event_reminder",
+      "title": "Set Event Reminder",
+      "description": "Adds or updates reminders for a specific event.",
+      "actions": [
+        {
+          "id": "set_event_reminder_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to set reminders for.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reminders": {
+                    "type": "object",
+                    "properties": {
+                      "useDefault": { "type": "boolean" },
+                      "overrides": {
+                        "type": "array",
+                        "items": { "type": "object", "properties": { "method": { "type": "string" }, "minutes": { "type": "integer" } } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated event reminder settings.",
+            "example": { "status": "success", "message": "Reminder updated." }
+          }
+        }
+      }
+    },
+  
+    {
+      "id": "get_event",
+      "title": "Get Event Details",
+      "description": "Retrieves details of a specific event from a calendar.",
+      "actions": [
+        {
+          "id": "get_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_get"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to retrieve.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Details of the specified event.",
+            "example": { "id": "abc123", "summary": "Team Meeting", "start": { "dateTime": "2025-03-02T09:00:00Z" }, "end": { "dateTime": "2025-03-02T10:00:00Z" } }
+          }
+        }
+      }
+    },
+    {
+      "id": "list_events",
+      "title": "List Events in Calendar",
+      "description": "Retrieves a list of events from a specified calendar.",
+      "actions": [
+        {
+          "id": "list_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_list"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to list events from.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of events in the specified calendar.",
+            "example": { "items": [ { "id": "xyz123", "summary": "Project Deadline", "start": { "dateTime": "2025-03-05T15:00:00Z" }, "end": { "dateTime": "2025-03-05T16:00:00Z" } } ] }
+          }
+        }
+      }
+    },
+    {
+      "id": "set_event_reminder",
+      "title": "Set Event Reminder",
+      "description": "Adds or updates reminders for a specific event.",
+      "actions": [
+        {
+          "id": "set_event_reminder_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to set reminders for.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reminders": {
+                    "type": "object",
+                    "properties": {
+                      "useDefault": { "type": "boolean" },
+                      "overrides": {
+                        "type": "array",
+                        "items": { "type": "object", "properties": { "method": { "type": "string" }, "minutes": { "type": "integer" } } }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated event reminder settings.",
+            "example": { "status": "success", "message": "Reminder updated." }
+          }
+        }
+      }
+    },
+    {
+      "id": "get_calendar_settings",
+      "title": "Get Calendar Settings",
+      "description": "Retrieves settings for a specified calendar.",
+      "actions": [
+        {
+          "id": "get_calendar_settings_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_settings_get"
+        }
+      ],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Details of the calendar settings.",
+            "example": { "timezone": "America/New_York", "notifications": [ { "type": "eventReminder", "method": "email" } ] }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "set_calendar_permissions",
+      "title": "Set Calendar Permissions",
+      "description": "Grants or revokes a user's access to a calendar.",
+      "actions": [
+        {
+          "id": "set_calendar_permissions_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_acl_insert"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to modify permissions.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role": { "type": "string", "description": "Role assigned to the user (reader, writer, owner)." },
+                  "scope": {
+                    "type": "object",
+                    "properties": {
+                      "type": { "type": "string", "description": "Type of scope (user, group, domain, default)." },
+                      "value": { "type": "string", "description": "Email or domain name, if applicable." }
+                    }
+                  }
+                },
+                "required": ["role", "scope"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of updated calendar permissions.",
+            "example": { "status": "success", "message": "Permissions updated." }
+          }
+        }
+      }
+    },
+    {
+      "id": "list_calendar_acl",
+      "title": "List Calendar Access Control",
+      "description": "Retrieves the access control settings for a specified calendar.",
+      "actions": [
+        {
+          "id": "list_calendar_acl_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_acl_list"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to list ACL settings.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of access control settings.",
+            "example": { "items": [ { "scope": { "type": "user", "value": "example@gmail.com" }, "role": "reader" } ] }
+          }
+        }
+      }
+    },
+    {
+      "id": "remove_user_access",
+      "title": "Remove User Access",
+      "description": "Removes a specific user's access to a calendar.",
+      "actions": [
+        {
+          "id": "remove_user_access_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_acl_delete"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to remove user access from.", "required": true, "type": "string" },
+          { "name": "ruleId", "description": "ACL rule ID of the user to remove.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of user access removal.",
+            "example": { "status": "success", "message": "User access removed." }
+          }
+        }
+      }
+    },
+    {
+      "id": "add_event_attendee",
+      "title": "Add Attendee to Event",
+      "description": "Adds a new attendee to a specified event.",
+      "actions": [
+        {
+          "id": "add_event_attendee_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to add an attendee to.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "attendees": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "email": { "type": "string", "description": "Email address of the attendee." }
+                      },
+                      "required": ["email"]
+                    }
+                  }
+                },
+                "required": ["attendees"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated event details with the added attendee.",
+            "example": { "status": "success", "message": "Attendee added." }
+          }
+        }
+      }
+    },
+    {
+      "id": "remove_event_attendee",
+      "title": "Remove Attendee from Event",
+      "description": "Removes a specific attendee from an event.",
+      "actions": [
+        {
+          "id": "remove_event_attendee_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to remove an attendee from.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "attendees": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "email": { "type": "string", "description": "Email address of the attendee to remove." }
+                      },
+                      "required": ["email"]
+                    }
+                  }
+                },
+                "required": ["attendees"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated event details with the attendee removed.",
+            "example": { "status": "success", "message": "Attendee removed." }
+          }
+        }
+      }
+    },
+    {
+      "id": "update_attendee_response",
+      "title": "Update Attendee Response",
+      "description": "Updates the response status of an attendee for an event.",
+      "actions": [
+        {
+          "id": "update_attendee_response_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event for which to update attendee response.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "attendees": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "email": { "type": "string", "description": "Email address of the attendee." },
+                        "responseStatus": { "type": "string", "description": "New response status (accepted, declined, tentative)." }
+                      },
+                      "required": ["email", "responseStatus"]
+                    }
+                  }
+                },
+                "required": ["attendees"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated attendee response status.",
+            "example": { "status": "success", "message": "Attendee response updated." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "check_freebusy",
+      "title": "Check Free/Busy Availability",
+      "description": "Checks the availability of a calendar for scheduling.",
+      "actions": [
+        {
+          "id": "check_freebusy_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_freebusy_query"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "timeMin", "description": "Start time for checking availability.", "required": true, "type": "string" },
+          { "name": "timeMax", "description": "End time for checking availability.", "required": true, "type": "string" },
+          { "name": "items", "description": "List of calendars to check availability for.", "required": true, "type": "array" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Free/Busy information for the requested time range.",
+            "example": { "calendars": { "example@gmail.com": { "busy": [] } } }
+          }
+        }
+      }
+    },
+    {
+      "id": "set_out_of_office",
+      "title": "Set Out-of-Office",
+      "description": "Blocks time on a calendar to indicate out-of-office.",
+      "actions": [
+        {
+          "id": "set_out_of_office_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_insert"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Title of the out-of-office block." },
+                  "start": { "type": "object", "properties": { "dateTime": { "type": "string" } } },
+                  "end": { "type": "object", "properties": { "dateTime": { "type": "string" } } }
+                },
+                "required": ["summary", "start", "end"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of out-of-office block.",
+            "example": { "status": "success", "message": "Out-of-office set." }
+          }
+        }
+      }
+    },
+    {
+      "id": "reserve_meeting_room",
+      "title": "Reserve Meeting Room",
+      "description": "Books a shared meeting space on a calendar.",
+      "actions": [
+        {
+          "id": "reserve_meeting_room_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_insert"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Meeting room reservation title." },
+                  "start": { "type": "object", "properties": { "dateTime": { "type": "string" } } },
+                  "end": { "type": "object", "properties": { "dateTime": { "type": "string" } } },
+                  "location": { "type": "string", "description": "Meeting room name or location." }
+                },
+                "required": ["summary", "start", "end", "location"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Meeting room reservation confirmation.",
+            "example": { "status": "success", "message": "Meeting room reserved." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "enable_event_notifications",
+      "title": "Enable Event Notifications",
+      "description": "Sets up notifications for event changes.",
+      "actions": [
+        {
+          "id": "enable_event_notifications_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_channels_watch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "description": "Unique identifier for the notification channel." },
+                  "type": { "type": "string", "description": "Notification type (e.g., web_hook)." },
+                  "address": { "type": "string", "description": "Webhook URL to receive notifications." }
+                },
+                "required": ["id", "type", "address"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of event notifications setup.",
+            "example": { "status": "success", "message": "Event notifications enabled." }
+          }
+        }
+      }
+    },
+    {
+      "id": "subscribe_calendar_updates",
+      "title": "Subscribe to Calendar Updates",
+      "description": "Subscribes to calendar updates to receive notifications when changes occur.",
+      "actions": [
+        {
+          "id": "subscribe_calendar_updates_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_channels_watch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Subscription confirmation.",
+            "example": { "status": "success", "message": "Subscribed to calendar updates." }
+          }
+        }
+      }
+    },
+    {
+      "id": "unsubscribe_calendar_updates",
+      "title": "Unsubscribe from Calendar Updates",
+      "description": "Stops receiving calendar update notifications.",
+      "actions": [
+        {
+          "id": "unsubscribe_calendar_updates_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_channels_stop"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "resourceId", "description": "The resource ID of the subscription.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Unsubscription confirmation.",
+            "example": { "status": "success", "message": "Unsubscribed from calendar updates." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "reschedule_event",
+      "title": "Reschedule Event",
+      "description": "Changes the time of an existing event.",
+      "actions": [
+        {
+          "id": "reschedule_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to reschedule.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "start": { "type": "object", "properties": { "dateTime": { "type": "string" } } },
+                  "end": { "type": "object", "properties": { "dateTime": { "type": "string" } } }
+                },
+                "required": ["start", "end"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated event details with the new time.",
+            "example": { "status": "success", "message": "Event rescheduled." }
+          }
+        }
+      }
+    },
+    {
+      "id": "convert_time_zone",
+      "title": "Convert Time Zone",
+      "description": "Converts event times between different time zones.",
+      "actions": [
+        {
+          "id": "convert_time_zone_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to update time zone.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "timeZone": { "type": "string", "description": "New time zone to apply to the event." }
+                },
+                "required": ["timeZone"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Updated event details with the new time zone.",
+            "example": { "status": "success", "message": "Time zone converted." }
+          }
+        }
+      }
+    },
+    {
+      "id": "find_best_meeting_time",
+      "title": "Find Best Meeting Time",
+      "description": "Suggests the best meeting times based on attendees' availability.",
+      "actions": [
+        {
+          "id": "find_best_meeting_time_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_freebusy_query"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "timeMin", "description": "Start time for checking availability.", "required": true, "type": "string" },
+          { "name": "timeMax", "description": "End time for checking availability.", "required": true, "type": "string" },
+          { "name": "attendees", "description": "List of attendees for the meeting.", "required": true, "type": "array" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Suggested best times for the meeting.",
+            "example": { "status": "success", "suggested_times": [ "2025-03-10T10:00:00Z", "2025-03-10T15:00:00Z" ] }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "import_events",
+      "title": "Import Events",
+      "description": "Imports external events into Google Calendar.",
+      "actions": [
+        {
+          "id": "import_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_import"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to import events into.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Title of the imported event." },
+                  "start": { "type": "object", "properties": { "dateTime": { "type": "string" } } },
+                  "end": { "type": "object", "properties": { "dateTime": { "type": "string" } } }
+                },
+                "required": ["summary", "start", "end"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of event import.",
+            "example": { "status": "success", "message": "Events imported successfully." }
+          }
+        }
+      }
+    },
+    {
+      "id": "export_calendar",
+      "title": "Export Calendar",
+      "description": "Exports calendar data in iCal format.",
+      "actions": [
+        {
+          "id": "export_calendar_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_calendars_export"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to export.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Exported calendar data.",
+            "example": { "status": "success", "message": "Calendar exported successfully." }
+          }
+        }
+      }
+    },
+    {
+      "id": "migrate_events",
+      "title": "Migrate Events",
+      "description": "Migrates events from one calendar to another.",
+      "actions": [
+        {
+          "id": "migrate_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_move"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "sourceCalendarId", "description": "ID of the source calendar.", "required": true, "type": "string" },
+          { "name": "destinationCalendarId", "description": "ID of the destination calendar.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to migrate.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of event migration.",
+            "example": { "status": "success", "message": "Event migrated successfully." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "duplicate_event",
+      "title": "Duplicate Event",
+      "description": "Clones an existing event to create a new one with the same details.",
+      "actions": [
+        {
+          "id": "duplicate_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_copy"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar containing the event.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to duplicate.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Details of the duplicated event.",
+            "example": { "status": "success", "message": "Event duplicated successfully." }
+          }
+        }
+      }
+    },
+    {
+      "id": "bulk_delete_events",
+      "title": "Bulk Delete Events",
+      "description": "Deletes multiple events from a calendar at once.",
+      "actions": [
+        {
+          "id": "bulk_delete_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_delete"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "eventIds": { "type": "array", "description": "List of event IDs to delete.", "items": { "type": "string" } }
+                },
+                "required": ["eventIds"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of bulk event deletion.",
+            "example": { "status": "success", "message": "Events deleted successfully." }
+          }
+        }
+      }
+    },
+    {
+      "id": "bulk_update_events",
+      "title": "Bulk Update Events",
+      "description": "Applies updates to multiple events simultaneously.",
+      "actions": [
+        {
+          "id": "bulk_update_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "updates": { "type": "array", "description": "List of events with updates.", "items": {
+                    "type": "object",
+                    "properties": {
+                      "eventId": { "type": "string", "description": "ID of the event to update." },
+                      "updates": { "type": "object", "description": "Fields to update in the event." }
+                    },
+                    "required": ["eventId", "updates"]
+                  }}
+                },
+                "required": ["updates"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of bulk event updates.",
+            "example": { "status": "success", "message": "Events updated successfully." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "update_calendar_settings",
+      "title": "Update Calendar Settings",
+      "description": "Modifies calendar settings such as time zone, locale, and visibility.",
+      "actions": [
+        {
+          "id": "update_calendar_settings_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_settings_update"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to update.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "timeZone": { "type": "string", "description": "Updated time zone of the calendar." },
+                  "locale": { "type": "string", "description": "Updated locale setting." },
+                  "visibility": { "type": "string", "description": "New visibility setting (public/private)." }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of calendar settings update.",
+            "example": { "status": "success", "message": "Calendar settings updated." }
+          }
+        }
+      }
+    },
+    {
+      "id": "set_default_event_duration",
+      "title": "Set Default Event Duration",
+      "description": "Defines a default length for new calendar events.",
+      "actions": [
+        {
+          "id": "set_default_event_duration_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_settings_update"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to configure.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "defaultEventDuration": { "type": "string", "description": "Default duration for new events (e.g., '30m', '1h')." }
+                },
+                "required": ["defaultEventDuration"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of default event duration setting.",
+            "example": { "status": "success", "message": "Default event duration set." }
+          }
+        }
+      }
+    },
+    {
+      "id": "configure_working_hours",
+      "title": "Configure Working Hours",
+      "description": "Sets preferred availability times for scheduling.",
+      "actions": [
+        {
+          "id": "configure_working_hours_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_settings_update"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to update working hours.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "workingHours": {
+                    "type": "object",
+                    "description": "Details of working hours.",
+                    "properties": {
+                      "days": { "type": "array", "description": "Days of the week available.", "items": { "type": "string" } },
+                      "startTime": { "type": "string", "description": "Start time of availability." },
+                      "endTime": { "type": "string", "description": "End time of availability." }
+                    },
+                    "required": ["days", "startTime", "endTime"]
+                  }
+                },
+                "required": ["workingHours"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of working hours configuration.",
+            "example": { "status": "success", "message": "Working hours configured." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "set_event_reminder",
+      "title": "Set Event Reminder",
+      "description": "Configures reminders for upcoming events.",
+      "actions": [
+        {
+          "id": "set_event_reminder_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_patch"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to set a reminder for.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reminders": {
+                    "type": "object",
+                    "description": "Reminder settings.",
+                    "properties": {
+                      "useDefault": { "type": "boolean", "description": "Use default reminders." },
+                      "overrides": {
+                        "type": "array",
+                        "description": "Custom reminder settings.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "method": { "type": "string", "description": "Reminder method (email, popup)." },
+                            "minutes": { "type": "integer", "description": "Minutes before the event to trigger reminder." }
+                          },
+                          "required": ["method", "minutes"]
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": ["reminders"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of reminder setup.",
+            "example": { "status": "success", "message": "Reminder set successfully." }
+          }
+        }
+      }
+    },
+    {
+      "id": "automate_follow_up_event",
+      "title": "Automate Follow-Up Event",
+      "description": "Automatically schedules a follow-up meeting.",
+      "actions": [
+        {
+          "id": "automate_follow_up_event_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_insert"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "summary": { "type": "string", "description": "Title of the follow-up event." },
+                  "start": { "type": "object", "properties": { "dateTime": { "type": "string" } } },
+                  "end": { "type": "object", "properties": { "dateTime": { "type": "string" } } }
+                },
+                "required": ["summary", "start", "end"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Follow-up event scheduled successfully.",
+            "example": { "status": "success", "message": "Follow-up event created." }
+          }
+        }
+      }
+    },
+    {
+      "id": "send_reminder_email",
+      "title": "Send Reminder Emails",
+      "description": "Notifies attendees about an upcoming event.",
+      "actions": [
+        {
+          "id": "send_reminder_email_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_email_reminder"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Email reminder sent successfully.",
+            "example": { "status": "success", "message": "Reminder email sent." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "generate_event_summary",
+      "title": "Generate Event Summary Report",
+      "description": "Retrieves a summary of past and upcoming events for analysis.",
+      "actions": [
+        {
+          "id": "generate_event_summary_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_list"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to analyze.", "required": true, "type": "string" },
+          { "name": "timeMin", "description": "Start time for fetching events.", "required": false, "type": "string" },
+          { "name": "timeMax", "description": "End time for fetching events.", "required": false, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of events within the specified time range.",
+            "example": { "status": "success", "events": [{"summary": "Team Meeting", "start": "2025-03-10T10:00:00Z"}] }
+          }
+        }
+      }
+    },
+    {
+      "id": "track_meeting_attendance",
+      "title": "Track Meeting Attendance",
+      "description": "Logs attendee responses and participation in meetings.",
+      "actions": [
+        {
+          "id": "track_meeting_attendance_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_get"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to track.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of attendees and their responses.",
+            "example": { "status": "success", "attendees": [{"email": "user@example.com", "response": "accepted"}] }
+          }
+        }
+      }
+    },
+    {
+      "id": "analyze_event_trends",
+      "title": "Analyze Event Trends",
+      "description": "Identifies patterns in meeting schedules and participation.",
+      "actions": [
+        {
+          "id": "analyze_event_trends_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_list"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to analyze.", "required": true, "type": "string" },
+          { "name": "timeMin", "description": "Start time for trend analysis.", "required": false, "type": "string" },
+          { "name": "timeMax", "description": "End time for trend analysis.", "required": false, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Analysis of event trends and participation patterns.",
+            "example": { "status": "success", "trends": [{"day": "Monday", "avg_attendance": 10}] }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "generate_event_summary",
+      "title": "Generate Event Summary Report",
+      "description": "Retrieves a summary of past and upcoming events for analysis.",
+      "actions": [
+        {
+          "id": "generate_event_summary_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_list"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to analyze.", "required": true, "type": "string" },
+          { "name": "timeMin", "description": "Start time for fetching events.", "required": false, "type": "string" },
+          { "name": "timeMax", "description": "End time for fetching events.", "required": false, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of events within the specified time range.",
+            "example": { "status": "success", "events": [{"summary": "Team Meeting", "start": "2025-03-10T10:00:00Z"}] }
+          }
+        }
+      }
+    },
+    {
+      "id": "track_meeting_attendance",
+      "title": "Track Meeting Attendance",
+      "description": "Logs attendee responses and participation in meetings.",
+      "actions": [
+        {
+          "id": "track_meeting_attendance_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_get"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event to track.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "List of attendees and their responses.",
+            "example": { "status": "success", "attendees": [{"email": "user@example.com", "response": "accepted"}] }
+          }
+        }
+      }
+    },
+    {
+      "id": "analyze_event_trends",
+      "title": "Analyze Event Trends",
+      "description": "Identifies patterns in meeting schedules and participation.",
+      "actions": [
+        {
+          "id": "analyze_event_trends_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_list"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to analyze.", "required": true, "type": "string" },
+          { "name": "timeMin", "description": "Start time for trend analysis.", "required": false, "type": "string" },
+          { "name": "timeMax", "description": "End time for trend analysis.", "required": false, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Analysis of event trends and participation patterns.",
+            "example": { "status": "success", "trends": [{"day": "Monday", "avg_attendance": 10}] }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "manage_calendar_delegation",
+      "title": "Manage Calendar Delegation",
+      "description": "Grants or removes delegate access to a calendar.",
+      "actions": [
+        {
+          "id": "manage_calendar_delegation_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_acl_update"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to modify.", "required": true, "type": "string" },
+          { "name": "role", "description": "Access role to assign (reader, writer, owner).", "required": true, "type": "string" },
+          { "name": "userEmail", "description": "Email of the user to delegate access to.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of delegation update.",
+            "example": { "status": "success", "message": "Calendar delegation updated." }
+          }
+        }
+      }
+    },
+    {
+      "id": "batch_event_processing",
+      "title": "Batch Event Processing",
+      "description": "Processes multiple event operations in a single request.",
+      "actions": [
+        {
+          "id": "batch_event_processing_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_batch_request"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to modify events in.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "operations": {
+                    "type": "array",
+                    "description": "List of batch event operations.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "operation": { "type": "string", "description": "Type of operation (create, update, delete)." },
+                        "eventId": { "type": "string", "description": "ID of the event (if applicable)." },
+                        "eventData": { "type": "object", "description": "Event details for creation or update." }
+                      },
+                      "required": ["operation"]
+                    }
+                  }
+                },
+                "required": ["operations"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Result of batch event processing.",
+            "example": { "status": "success", "message": "Batch operations completed." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "manage_calendar_delegation",
+      "title": "Manage Calendar Delegation",
+      "description": "Grants or removes delegate access to a calendar.",
+      "actions": [
+        {
+          "id": "manage_calendar_delegation_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_acl_update"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to modify.", "required": true, "type": "string" },
+          { "name": "role", "description": "Access role to assign (reader, writer, owner).", "required": true, "type": "string" },
+          { "name": "userEmail", "description": "Email of the user to delegate access to.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of delegation update.",
+            "example": { "status": "success", "message": "Calendar delegation updated." }
+          }
+        }
+      }
+    },
+    {
+      "id": "batch_event_processing",
+      "title": "Batch Event Processing",
+      "description": "Processes multiple event operations in a single request.",
+      "actions": [
+        {
+          "id": "batch_event_processing_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_batch_request"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to modify events in.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "operations": {
+                    "type": "array",
+                    "description": "List of batch event operations.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "operation": { "type": "string", "description": "Type of operation (create, update, delete)." },
+                        "eventId": { "type": "string", "description": "ID of the event (if applicable)." },
+                        "eventData": { "type": "object", "description": "Event details for creation or update." }
+                      },
+                      "required": ["operation"]
+                    }
+                  }
+                },
+                "required": ["operations"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Result of batch event processing.",
+            "example": { "status": "success", "message": "Batch operations completed." }
+          }
+        }
+      }
+    },
+    {
+      "id": "export_calendar_ical",
+      "title": "Export Calendar to iCal",
+      "description": "Generates an iCal file for a calendar.",
+      "actions": [
+        {
+          "id": "export_calendar_ical_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_export"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to export.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Download link for the exported iCal file.",
+            "example": { "status": "success", "download_url": "https://calendar.google.com/export.ics" }
+          }
+        }
+      }
+    },
+    {
+      "id": "sync_external_events",
+      "title": "Sync Events with External Systems",
+      "description": "Synchronizes calendar events with external applications.",
+      "actions": [
+        {
+          "id": "sync_external_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_sync"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to sync.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of external sync operation.",
+            "example": { "status": "success", "message": "Events synchronized successfully." }
+          }
+        }
+      }
+    },
+    {
+      "id": "migrate_calendar_data",
+      "title": "Migrate Calendar Data",
+      "description": "Moves calendar data between accounts.",
+      "actions": [
+        {
+          "id": "migrate_calendar_data_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_migrate"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "sourceCalendarId", "description": "ID of the source calendar.", "required": true, "type": "string" },
+          { "name": "destinationCalendarId", "description": "ID of the destination calendar.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of calendar migration.",
+            "example": { "status": "success", "message": "Calendar data migrated successfully." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "manage_calendar_delegation",
+      "title": "Manage Calendar Delegation",
+      "description": "Grants or removes delegate access to a calendar.",
+      "actions": [
+        {
+          "id": "manage_calendar_delegation_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_acl_update"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to modify.", "required": true, "type": "string" },
+          { "name": "role", "description": "Access role to assign (reader, writer, owner).", "required": true, "type": "string" },
+          { "name": "userEmail", "description": "Email of the user to delegate access to.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of delegation update.",
+            "example": { "status": "success", "message": "Calendar delegation updated." }
+          }
+        }
+      }
+    },
+    {
+      "id": "batch_event_processing",
+      "title": "Batch Event Processing",
+      "description": "Processes multiple event operations in a single request.",
+      "actions": [
+        {
+          "id": "batch_event_processing_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_batch_request"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to modify events in.", "required": true, "type": "string" }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "operations": {
+                    "type": "array",
+                    "description": "List of batch event operations.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "operation": { "type": "string", "description": "Type of operation (create, update, delete)." },
+                        "eventId": { "type": "string", "description": "ID of the event (if applicable)." },
+                        "eventData": { "type": "object", "description": "Event details for creation or update." }
+                      },
+                      "required": ["operation"]
+                    }
+                  }
+                },
+                "required": ["operations"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Result of batch event processing.",
+            "example": { "status": "success", "message": "Batch operations completed." }
+          }
+        }
+      }
+    },
+    {
+      "id": "export_calendar_ical",
+      "title": "Export Calendar to iCal",
+      "description": "Generates an iCal file for a calendar.",
+      "actions": [
+        {
+          "id": "export_calendar_ical_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_export"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to export.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Download link for the exported iCal file.",
+            "example": { "status": "success", "download_url": "https://calendar.google.com/export.ics" }
+          }
+        }
+      }
+    },
+    {
+      "id": "sync_external_events",
+      "title": "Sync Events with External Systems",
+      "description": "Synchronizes calendar events with external applications.",
+      "actions": [
+        {
+          "id": "sync_external_events_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_events_sync"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar to sync.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of external sync operation.",
+            "example": { "status": "success", "message": "Events synchronized successfully." }
+          }
+        }
+      }
+    },
+    {
+      "id": "migrate_calendar_data",
+      "title": "Migrate Calendar Data",
+      "description": "Moves calendar data between accounts.",
+      "actions": [
+        {
+          "id": "migrate_calendar_data_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_migrate"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "sourceCalendarId", "description": "ID of the source calendar.", "required": true, "type": "string" },
+          { "name": "destinationCalendarId", "description": "ID of the destination calendar.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Confirmation of calendar migration.",
+            "example": { "status": "success", "message": "Calendar data migrated successfully." }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "auto_generate_agenda",
+      "title": "Auto-Generate Meeting Agendas",
+      "description": "Uses AI to draft an agenda based on event details.",
+      "actions": [
+        {
+          "id": "auto_generate_agenda_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_ai_generate_agenda"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Generated agenda for the meeting.",
+            "example": { "status": "success", "agenda": "1. Project updates\n2. Next steps\n3. Q&A" }
+          }
+        }
+      }
+    },
+    {
+      "id": "smart_event_categorization",
+      "title": "Smart Event Categorization",
+      "description": "Automatically labels events based on patterns and topics.",
+      "actions": [
+        {
+          "id": "smart_event_categorization_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_ai_categorize_event"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" },
+          { "name": "eventId", "description": "ID of the event.", "required": true, "type": "string" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Categorization result.",
+            "example": { "status": "success", "category": "Work Meeting" }
+          }
+        }
+      }
+    },
+    {
+      "id": "predict_best_meeting_time",
+      "title": "Predict Best Meeting Times",
+      "description": "Uses past data to suggest ideal meeting times for attendees.",
+      "actions": [
+        {
+          "id": "predict_best_meeting_time_action",
+          "sourceId": "googlecalendar",
+          "operationId": "google_calendar_ai_predict_meeting_time"
+        }
+      ],
+      "fields": {
+        "parameters": [
+          { "name": "calendarId", "description": "ID of the calendar.", "required": true, "type": "string" },
+          { "name": "attendeeEmails", "description": "List of attendee emails.", "required": true, "type": "array" }
+        ],
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Suggested best meeting times.",
+            "example": { "status": "success", "best_times": ["Monday 10 AM", "Wednesday 3 PM"] }
+          }
+        }
+      }
+    }
+  ]
+}
