@@ -12,9 +12,9 @@ from . import rootly
 from . import slack
 from . import alpacamarketdata
 from . import alpacatrading
-from . import hubspotcontacts
-from . import rootly
-from . import slack
+from . import googlecalendar
 
-__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend", "alpacamarketdata", "alpacatrading", "hubspotcontacts", "rootly", "slack"]
+__all__ = ["twitter", "giphy", "stripe", "googlesheets", "resend", 
+           "alpacamarketdata", "alpacatrading", 
+           "hubspotcontacts", "rootly", "slack", "googlecalendar"]
 

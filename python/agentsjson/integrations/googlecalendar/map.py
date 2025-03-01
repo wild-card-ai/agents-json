@@ -1,61 +1,57 @@
-from . import tools
-from agentsjson.core.models.tools import ExecutorType
+from .tools import Executor
+from ..types import ExecutorType
 
-# Define the type of execution (REST API, Function call, etc.)
-map_type = ExecutorType.RESTAPIHANDLER
+# Define the type of execution (SDK in this case, since we're using the Google Calendar API client)
+map_type = ExecutorType.SDK
 
 # Mapping of operation IDs to corresponding function implementations
 map = {
     # Calendar Operations
-    "google_calendar_calendars_insert": tools.create_calendar,
-    "google_calendar_calendars_delete": tools.delete_calendar,
-    "google_calendar_calendars_get": tools.get_calendar_details,
-    "google_calendar_calendars_list": tools.list_calendars,
-    "google_calendar_calendars_update": tools.update_calendar_settings,
+    "google_calendar_calendars_insert": Executor.google_calendar_calendars_insert,
+    "google_calendar_calendars_delete": Executor.google_calendar_calendars_delete,
+    "google_calendar_calendars_get": Executor.google_calendar_calendars_get,
+    "google_calendar_calendars_patch": Executor.google_calendar_calendars_patch,
+    "google_calendar_calendars_update": Executor.google_calendar_calendars_update,
+    "google_calendar_calendars_clear": Executor.google_calendar_calendars_clear,
 
     # Event Operations
-    "google_calendar_events_insert": tools.create_event,
-    "google_calendar_events_delete": tools.delete_event,
-    "google_calendar_events_patch": tools.update_event,
-    "google_calendar_events_get": tools.get_event_details,
-    "google_calendar_events_list": tools.list_events,
+    "google_calendar_events_list": Executor.google_calendar_events_list,
+    "google_calendar_events_insert": Executor.google_calendar_events_insert,
+    "google_calendar_events_import": Executor.google_calendar_events_import,
+    "google_calendar_events_quick_add": Executor.google_calendar_events_quick_add,
+    "google_calendar_events_watch": Executor.google_calendar_events_watch,
+    "google_calendar_events_delete": Executor.google_calendar_events_delete,
+    "google_calendar_events_get": Executor.google_calendar_events_get,
+    "google_calendar_events_patch": Executor.google_calendar_events_patch,
+    "google_calendar_events_update": Executor.google_calendar_events_update,
+    "google_calendar_events_instances": Executor.google_calendar_events_instances,
+    "google_calendar_events_move": Executor.google_calendar_events_move,
 
-    # Attendee Management
-    "google_calendar_events_attendees_add": tools.add_attendee,
-    "google_calendar_events_attendees_remove": tools.remove_attendee,
-    "google_calendar_events_attendees_update": tools.update_attendee_response,
+    # ACL Operations
+    "google_calendar_acl_list": Executor.google_calendar_acl_list,
+    "google_calendar_acl_insert": Executor.google_calendar_acl_insert,
+    "google_calendar_acl_watch": Executor.google_calendar_acl_watch,
+    "google_calendar_acl_delete": Executor.google_calendar_acl_delete,
+    "google_calendar_acl_get": Executor.google_calendar_acl_get,
+    "google_calendar_acl_patch": Executor.google_calendar_acl_patch,
+    "google_calendar_acl_update": Executor.google_calendar_acl_update,
 
-    # Permissions & ACL
-    "google_calendar_acl_insert": tools.set_calendar_permissions,
-    "google_calendar_acl_list": tools.list_calendar_access_control,
-    "google_calendar_acl_delete": tools.remove_user_access,
+    # Calendar List Operations
+    "google_calendar_calendar_list_list": Executor.google_calendar_calendar_list_list,
+    "google_calendar_calendar_list_insert": Executor.google_calendar_calendar_list_insert,
+    "google_calendar_calendar_list_watch": Executor.google_calendar_calendar_list_watch,
+    "google_calendar_calendar_list_delete": Executor.google_calendar_calendar_list_delete,
+    "google_calendar_calendar_list_get": Executor.google_calendar_calendar_list_get,
+    "google_calendar_calendar_list_patch": Executor.google_calendar_calendar_list_patch,
+    "google_calendar_calendar_list_update": Executor.google_calendar_calendar_list_update,
 
-    # Availability & Scheduling
-    "google_calendar_freebusy_query": tools.check_free_busy,
-    "google_calendar_working_hours_set": tools.set_working_hours,
-    "google_calendar_events_reschedule": tools.reschedule_event,
+    # Settings Operations
+    "google_calendar_settings_list": Executor.google_calendar_settings_list,
+    "google_calendar_settings_watch": Executor.google_calendar_settings_watch,
+    "google_calendar_settings_get": Executor.google_calendar_settings_get,
 
-    # Notifications & Reminders
-    "google_calendar_events_reminders_set": tools.set_event_reminder,
-    "google_calendar_notifications_subscribe": tools.subscribe_calendar_updates,
-    "google_calendar_notifications_unsubscribe": tools.unsubscribe_calendar_updates,
-
-    # AI-Powered Features
-    "google_calendar_ai_generate_agenda": tools.auto_generate_agenda,
-    "google_calendar_ai_categorize_event": tools.smart_event_categorization,
-    "google_calendar_ai_predict_meeting_time": tools.predict_best_meeting_time,
-
-    # Data Import/Export
-    "google_calendar_events_import": tools.import_events,
-    "google_calendar_calendars_export": tools.export_calendar,
-    "google_calendar_events_migrate": tools.migrate_events,
-
-    # Bulk Operations
-    "google_calendar_events_bulk_delete": tools.bulk_delete_events,
-    "google_calendar_events_bulk_update": tools.bulk_update_events,
-
-    # Advanced Analytics
-    "google_calendar_events_summary_report": tools.generate_event_summary,
-    "google_calendar_meeting_attendance_track": tools.track_meeting_attendance,
-    "google_calendar_events_trends_analysis": tools.analyze_event_trends,
+    # Other Operations
+    "google_calendar_channels_stop": Executor.google_calendar_channels_stop,
+    "google_calendar_colors_get": Executor.google_calendar_colors_get,
+    "google_calendar_freebusy_query": Executor.google_calendar_freebusy_query,
 }
