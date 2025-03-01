@@ -1,0 +1,206 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Devopness - Your automated DevOps engineer AI Agent",
+    "version": "0.1.0",
+    "description": "This agents.json specification integrates with the Devopness API, which automates essential DevOps workflows to provision and manage cloud infrastructure and deploy any application to any cloud provider (such as AWS, Azure, DigitalOcean, Google Cloud/GCP, Hetzner, Linoe, Oracle Cloud and Vultr). Using Devopness an agent, or even a human :-), can manage cloud infastructure resources and applications in their own cloud provider accounts without the need to learn how to use all the specifics of each cloud provider web console applications, APIs or teraform providers.."
+  },
+  "sources": [
+    {
+      "id": "devopness",
+      "path": "https://github.com/devopness/devopness/blob/main/packages/sdks/javascript/src/api/spec.json",
+      "description": "The Devopness OpenAPI specification automating essential DevOps workflows for application zero downtime deployment and cloud infrastructure management on AWS, Azure, DigitalOcean, Google Cloud/GCP, Hetzner, Linoe, Oracle Cloud and Vultr."
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "devopness_create_server_flow",
+      "title": "Create a server in the selected cloud provider",
+      "description": "Provision a server in the selected cloud provider, configure its Linux operating system and setup firewall network rules using security groups and security rules, leaving a server ready to be used in production by web and non-web applications.",
+      "actions": [
+        {
+          "id": "devopness_list_projects",
+          "sourceId": "devopness",
+          "operationId": "listProjects"
+        },
+        {
+          "id": "devopness_get_project",
+          "sourceId": "devopness",
+          "operationId": "getProject"
+        },
+        {
+          "id": "devopness_list_project_environments",
+          "sourceId": "devopness",
+          "operationId": "listProjectEnvironments"
+        },
+        {
+          "id": "devopness_get_environment",
+          "sourceId": "devopness",
+          "operationId": "getEnvironment"
+        },
+        {
+          "id": "devopness_list_credentials",
+          "sourceId": "devopness",
+          "operationId": "listCredentials"
+        },
+        {
+          "id": "devopness_get_credential",
+          "sourceId": "devopness",
+          "operationId": "getCredential"
+        },
+        {
+          "id": "devopness_create_server",
+          "sourceId": "devopness",
+          "operationId": "addEnvironmentServer"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "devopness_list_projects",
+            "fieldPath": "responses.200.0.id"
+          },
+          "target": {
+            "actionId": "devopness_get_project",
+            "fieldPath": "parameters.project_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_get_project",
+            "fieldPath": "responses.200.id"
+          },
+          "target": {
+            "actionId": "devopness_list_project_environments",
+            "fieldPath": "parameters.project_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_list_project_environments",
+            "fieldPath": "responses.200.0.id"
+          },
+          "target": {
+            "actionId": "devopness_get_environment",
+            "fieldPath": "parameters.environment_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_get_environment",
+            "fieldPath": "responses.id"
+          },
+          "target": {
+            "actionId": "devopness_list_credentials",
+            "fieldPath": "parameters.environment_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_list_credentials",
+            "fieldPath": "responses.200.0.id"
+          },
+          "target": {
+            "actionId": "devopness_get_credential",
+            "fieldPath": "parameters.credential_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_get_credential",
+            "fieldPath": "responses.id"
+          },
+          "target": {
+            "actionId": "devopness_create_server",
+            "fieldPath": "requestBody.credential_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "hostname",
+            "type": "string",
+            "required": true,
+            "description": "The server name and hostname to be set on Linux cloud servers. Accepts numbers (0-9), dash (-) and lower case non accented characters. Must not be greater than 60 characters."
+          },
+          {
+            "name": "provision_input",
+            "required": true,
+            "type": "object",
+            "description": "Configuration used to launch the new server as a virtual machine instance in the cloud provider",
+            "properties": {
+              "credential_id": {
+                "type": "integer",
+                "description": "The unique id of the cloud provider credential to be used on connect to cloud provider",
+                "example": 8430015757
+              },
+              "cloud_service_code": {
+                "$ref": "#/components/schemas/ServerCloudServiceCode"
+              },
+              "settings": {
+                "description": "The configurations used to cloud service",
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/CloudServiceSettingsAwsEc2"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CloudServiceSettingsDigitalOceanDroplet"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CloudServiceSettingsGcpGce"
+                  },
+                  {
+                    "$ref": "#/components/schemas/CloudServiceSettingsSelfHostedCustom"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "requestBody": {},
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Server"
+                }
+              }
+            },
+            "headers": {
+              "X-Devopness-Action-Id": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "The dispatched action ID of the resource"
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden/Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity/Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
