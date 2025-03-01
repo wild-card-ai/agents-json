@@ -1,0 +1,74 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Link Up API Integration Agents",
+    "version": "0.1.0",
+    "description": "This agents.json specification integrates with the Link Up API, which allows you to retrieve web content. It provides a flow for searching the web with different output types including sourced answers, search results, or structured data formats."
+  },
+  "sources": [
+    {
+      "id": "linkup",
+      "path": "https://gist.githubusercontent.com/yagnyaPatel/670dd9fec7d101b76f92a2c4f7acfba5/raw/5fd960dfdebd35016dc285bc52aa7051576b1f66/linkup.openapi.yaml",
+      "description": "The Link Up OpenAPI specification covering web search and content retrieval functionality."
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "linkup_search_flow",
+      "title": "Search the Web",
+      "description": "Retrieves web content based on a natural language query. Returns as sourced answers with citations.",
+      "actions": [
+        {
+          "id": "search_action",
+          "sourceId": "linkup",
+          "operationId": "linkup_post_search"
+        }
+      ],
+      "links": [
+        {
+          "origin": {"actionId": "linkup_search_flow", "fieldPath": "parameters.q"},
+          "target": {"actionId": "search_action", "fieldPath": "parameters.q"}
+        },
+        {
+          "origin": {"actionId": "linkup_search_flow", "fieldPath": "parameters.depth"},
+          "target": {"actionId": "search_action", "fieldPath": "parameters.depth"}
+        }
+      ],
+      "fields": {
+        "parameters": [
+            {
+                "name": "q",
+                "type": "string",
+                "required": true,
+                "description": "The natural language question for which you want to retrieve context."
+            },
+            {
+                "name": "depth",
+                "type": "string",
+                "required": true,
+                "description": "Defines the precision of the search. 'standard' returns results quickly; 'deep' takes longer but yields more complete results.",
+                "enum": ["standard", "deep"]
+            }
+        ],
+        "requestBody": {},
+        "responses": {
+          "success": {
+            "type": "object",
+            "description": "Search results in the sourced answer format.",
+            "example": {
+              "answer": "Five women have been awarded the Nobel Prize in Physics: Marie Curie (1903), Maria Goeppert-Mayer (1963), Donna Strickland (2018), Andrea Ghez (2020), and Anne L'Huillier (2023).",
+              "sources": [
+                {
+                  "name": "List of Nobel laureates in Physics - Wikipedia",
+                  "url": "https://en.wikipedia.org/wiki/List_of_Nobel_laureates_in_Physics",
+                  "snippet": "Only five women have won the prize: Marie Curie (1903), Maria Goeppert-Mayer (1963), Donna Strickland (2018), Andrea Ghez (2020), and Anne L'Huillier (2023)."
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+} 

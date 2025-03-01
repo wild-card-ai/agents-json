@@ -1646,16 +1646,6 @@
             "actionId": "append_initial_values",
             "fieldPath": "requestBody.values"
           }
-        },
-        {
-          "origin": {
-            "actionId": "create_and_initialize_spreadsheet",
-            "fieldPath": "responses.success.spreadsheetId"
-          },
-          "target": {
-            "actionId": "append_initial_values",
-            "fieldPath": "parameters.spreadsheetId"
-          }
         }
       ],
       "fields": {

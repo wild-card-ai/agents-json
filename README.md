@@ -3,7 +3,7 @@
   <img alt="Shows a white agents.json Logo with a black background." src="./static/logo/agentsjson-white-blackbackground.png" width="full">
 </p>
 
-<h1 align="center"> Make APIs work for AI Agents </h1>
+<h1 align="center"> Translate OpenAPI into LLM Tools</h1>
 
 [![GitHub stars](https://img.shields.io/github/stars/wild-card-ai/agents-json?style=social)](https://github.com/wild-card-ai/agents-json/stargazers)
 [![Discord](https://img.shields.io/discord/1334616501436682405?style=flat&logo=discord&logoColor=white&label=discord&color=7289DA&link=https%3A%2F%2Fdiscord.gg%2F7AP6wSkVtQ)](https://discord.gg/7VU6HKq7cZ)
@@ -24,15 +24,20 @@ Use the Wildcard Bridge Python package to load, parse, and run agents.json.
 
 | Agent | Auth | Notebook |
 | --- | --- | --- |
+| [Resend](./examples/resend.ipynb) | API Key | `./examples/resend.ipynb` |
 | [Stripe](./examples/single.ipynb) | Bearer Token | `./examples/single.ipynb` |
+| [Rootly](./examples/rootly.ipynb) | Bearer Token | `./examples/rootly.ipynb` |
 | [Twitter + Giphy](./examples/multiple.ipynb) | OAuth 1.0, API Key | `./examples/multiple.ipynb` |
+| [Resend + Hubspot + Google Sheets](./examples/multiple-dynamic.ipynb) | OAuth 2.0, API Key | `./examples/multiple-dynamic.ipynb` |
 
 ## Demos
 
 |  |  |
 | --- | --- |
-| [Stripe Agent](https://wild-card.ai/stripe) | [<img src="./static/demo/stripe-demo.png" alt="Stripe Agent" width="300">](https://wild-card.ai/stripe) |
-| [Google Sheets Agent](https://wild-card.ai/googlesheets) | [<img src="./static/demo/googlesheets-demo.png" alt="Google Sheets Agent" width="300">](https://wild-card.ai/googlesheets) |
+| [Stripe Agent](https://demo.wild-card.ai/stripe) | [<img src="./static/demo/stripe-demo.png" alt="Stripe Agent" width="300">](https://demo.wild-card.ai/stripe) |
+| [Google Sheets Agent](https://demo.wild-card.ai/googlesheets) | [<img src="./static/demo/googlesheets-demo.png" alt="Google Sheets Agent" width="300">](https://demo.wild-card.ai/googlesheets) |
+| [Resend Agent](https://demo.wild-card.ai/resend) | [<img src="./static/demo/resend-demo.png" alt="Resend Agent" width="300">](https://demo.wild-card.ai/resend) |
+| [Rootly Agent](https://demo.wild-card.ai/rootly) | [<img src="./static/demo/rootly-demo.png" alt="Rootly Agent" width="300">](https://demo.wild-card.ai/rootly) |
 
 ## agents.json Specification
 The `agents.json` Specification is an open specification that formally describes contracts for API and agent interactions, built on top of the OpenAPI standard.
@@ -75,7 +80,7 @@ Describing endpoints/data models without describing ***how*** they interact toge
 
 To solve this, we introduce flows and links. Flows are contracts with a series of 1 or more API calls that describe an outcome. Links describe how two actions are stitched together.
 
-We propose the file placed in `/.well-known/agents.json` so it is easily discoverable by agents accessing web services. For now, we compose a GitHub repository as a registry for [available `agents.json` files](./agents_json/).
+We propose the file placed in `/.well-known/agents.json` so it is easily discoverable by agents accessing web services. For now, we maintain a registry for [available `agents.json` files](https://wild-card.ai/registry).
 
 <p align="center">
 <img style="text-align: center;" src="./static/diagram/LlmWorksDiagram.png" alt="LLMs and APIs with Agents.json" width="full" title="LLMs and APIs with Agents.json">
@@ -162,12 +167,12 @@ OpenAPI is a thoughtful standard that has evolved with the changes of HTTP APIs.
 - [ ] Streaming
 - [ ] Pagination
 - [ ] agents.json Interactive Builder
-- [ ] agents.json Validator
+- [x] agents.json Validator
 
 ## Licenses
 
-The agents.json specification is open-source, licensed under the [Apache 2.0 License](./agents_json/LICENSE).
-The Wildcard Bridge is open-source, licensed under the [GNU Affero General Public License](./LICENSE).
+The agents.json specification is open source, licensed under the [Apache 2.0 License](./agents_json/LICENSE).
+The Wildcard Bridge is source-available, licensed under the [Affero GPL v3](./LICENSE).
 
 ## Contributions
 
