@@ -8,7 +8,7 @@
   "sources": [
     {
       "id": "googlecalendar",
-      "path": "https://gist.githubusercontent.com/yagnyaPatel/7107c9b226b22121ed8762d389ba202c/raw/91110b80f7327cb26be556ef3ee4ca5015474653/googlecalendar.openapi.yaml"
+      "path": "https://gist.githubusercontent.com/yagnyaPatel/7107c9b226b22121ed8762d389ba202c/raw/d1e279740d3388ed84a5133f8af5afb28a2c47ad/googlecalendar.openapi.yaml"
     }
   ],
   "overrides": [],
