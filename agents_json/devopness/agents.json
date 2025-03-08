@@ -8,7 +8,7 @@
   "sources": [
     {
       "id": "devopness",
-      "path": "https://github.com/devopness/devopness/blob/main/packages/sdks/javascript/src/api/spec.json",
+      "path": "https://raw.githubusercontent.com/devopness/devopness/refs/heads/main/packages/sdks/javascript/src/api/spec.json",
       "description": "The Devopness OpenAPI specification automating essential DevOps workflows for application zero downtime deployment and cloud infrastructure management on AWS, Azure, DigitalOcean, Google Cloud/GCP, Hetzner, Linoe, Oracle Cloud and Vultr."
     }
   ],
