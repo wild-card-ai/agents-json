@@ -59,7 +59,7 @@
         {
           "origin": {
             "actionId": "devopness_list_projects",
-            "fieldPath": "responses.200.0.id"
+            "fieldPath": "responses.success.0.id"
           },
           "target": {
             "actionId": "devopness_get_project",
@@ -69,7 +69,7 @@
         {
           "origin": {
             "actionId": "devopness_get_project",
-            "fieldPath": "responses.200.id"
+            "fieldPath": "responses.success.id"
           },
           "target": {
             "actionId": "devopness_list_project_environments",
@@ -79,7 +79,7 @@
         {
           "origin": {
             "actionId": "devopness_list_project_environments",
-            "fieldPath": "responses.200.0.id"
+            "fieldPath": "responses.success.0.id"
           },
           "target": {
             "actionId": "devopness_get_environment",
@@ -99,7 +99,7 @@
         {
           "origin": {
             "actionId": "devopness_list_credentials",
-            "fieldPath": "responses.200.0.id"
+            "fieldPath": "responses.success.0.id"
           },
           "target": {
             "actionId": "devopness_get_credential",
@@ -161,43 +161,73 @@
         ],
         "requestBody": {},
         "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Server"
-                }
-              }
-            },
-            "headers": {
-              "X-Devopness-Action-Id": {
-                "schema": {
-                  "type": "integer"
-                },
-                "description": "The dispatched action ID of the resource"
+          "success": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "The unique id of the given record",
+                "type": "integer",
+                "example": 9654123
+              },
+              "created_by": {
+                "description": "The id of the user who created the server and to whom the server belongs",
+                "type": "integer",
+                "example": 1
+              },
+              "name": {
+                "description": "The server's name",
+                "type": "string",
+                "example": "web-srv-1"
+              },
+              "hostname": {
+                "description": "The server's hostname",
+                "type": "string",
+                "example": "web-srv-1"
+              },
+              "provider_name": {
+                "description": "The name of the server's provider.",
+                "type": "string",
+                "example": "aws"
+              },
+              "provider_name_human_readable": {
+                "description": "The human readable version of the provider's name",
+                "type": "string",
+                "example": "Amazon Web Services"
+              },
+              "ip_address": {
+                "description": "Public ipv4 address for server access",
+                "type": "string",
+                "example": "200.123.45.67"
+              },
+              "ssh_port": {
+                "description": "The network port to which the SSH daemon is listening to SSH connections on the server",
+                "type": "integer",
+                "example": 22
+              },
+              "os_version_code": {
+                "description": "The Operating System distribution and version used in the server/virtual machine instance",
+                "type": "string",
+                "example":  "ubuntu_24_04"
+              },
+              "created_at": {
+                "description": "The date and time when the record was created",
+                "type": "string",
+                "example": "2019-09-25T15:50:48.000000Z"
               }
             }
           },
-          "403": {
-            "description": "Forbidden/Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Unprocessable Entity/Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiError"
-                }
-              }
-            }
+          "example": {
+            "id": 123,
+            "created_by": 1,
+            "name": "web-srv-1",
+            "hostname": "web-srv-1",
+            "provider_name": "aws",
+            "provider_name_human_readable": "Amazon Web Services",
+            "cloud_service_code": "aws-ec2",
+            "ip_address": "200.123.45.67",
+            "ssh_port": 22,
+            "os_version_code": "ubuntu_24_04",
+            "created_at": "2019-09-25T15:50:48.000000Z"
           }
         }
       }
