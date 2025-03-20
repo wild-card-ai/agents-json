@@ -1,0 +1,403 @@
+{
+  "agentsJson": "0.1.0",
+  "info": {
+    "title": "Devopness - Your automated DevOps engineer AI Agent",
+    "version": "0.1.0",
+    "description": "This agents.json specification integrates with the Devopness API, which automates essential DevOps workflows to provision and manage cloud infrastructure and deploy any application to any cloud provider (such as AWS, Azure, DigitalOcean, Google Cloud/GCP, Hetzner, Linoe, Oracle Cloud and Vultr). Using Devopness an agent, or even a human :-), can manage cloud infastructure resources and applications in their own cloud provider accounts without the need to learn how to use all the specifics of each cloud provider web console applications, APIs or teraform providers.."
+  },
+  "sources": [
+    {
+      "id": "devopness",
+      "path": "https://raw.githubusercontent.com/devopness/devopness/refs/heads/main/packages/sdks/javascript/src/api/spec.json",
+      "description": "The Devopness OpenAPI specification automating essential DevOps workflows for application zero downtime deployment and cloud infrastructure management on AWS, Azure, DigitalOcean, Google Cloud/GCP, Hetzner, Linoe, Oracle Cloud and Vultr."
+    }
+  ],
+  "overrides": [],
+  "flows": [
+    {
+      "id": "devopness_create_server_flow",
+      "title": "Create a server in the selected cloud provider",
+      "description": "Provision a server in the selected cloud provider, configure its Linux operating system and setup firewall network rules using security groups and security rules, leaving a server ready to be used in production by web and non-web applications.",
+      "actions": [
+        {
+          "id": "devopness_list_projects",
+          "sourceId": "devopness",
+          "operationId": "listProjects"
+        },
+        {
+          "id": "devopness_get_project",
+          "sourceId": "devopness",
+          "operationId": "getProject"
+        },
+        {
+          "id": "devopness_list_project_environments",
+          "sourceId": "devopness",
+          "operationId": "listProjectEnvironments"
+        },
+        {
+          "id": "devopness_get_environment",
+          "sourceId": "devopness",
+          "operationId": "getEnvironment"
+        },
+        {
+          "id": "devopness_list_credentials",
+          "sourceId": "devopness",
+          "operationId": "listCredentials"
+        },
+        {
+          "id": "devopness_get_credential",
+          "sourceId": "devopness",
+          "operationId": "getCredential"
+        },
+        {
+          "id": "devopness_create_server",
+          "sourceId": "devopness",
+          "operationId": "addEnvironmentServer"
+        }
+      ],
+      "links": [
+        {
+          "origin": {
+            "actionId": "devopness_list_projects",
+            "fieldPath": "responses.success.0.id"
+          },
+          "target": {
+            "actionId": "devopness_get_project",
+            "fieldPath": "parameters.project_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_get_project",
+            "fieldPath": "responses.success.id"
+          },
+          "target": {
+            "actionId": "devopness_list_project_environments",
+            "fieldPath": "parameters.project_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_list_project_environments",
+            "fieldPath": "responses.success.0.id"
+          },
+          "target": {
+            "actionId": "devopness_get_environment",
+            "fieldPath": "parameters.environment_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_get_environment",
+            "fieldPath": "responses.id"
+          },
+          "target": {
+            "actionId": "devopness_list_credentials",
+            "fieldPath": "parameters.environment_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_list_credentials",
+            "fieldPath": "responses.success.0.id"
+          },
+          "target": {
+            "actionId": "devopness_get_credential",
+            "fieldPath": "parameters.credential_id"
+          }
+        },
+        {
+          "origin": {
+            "actionId": "devopness_get_credential",
+            "fieldPath": "responses.id"
+          },
+          "target": {
+            "actionId": "devopness_create_server",
+            "fieldPath": "requestBody.credential_id"
+          }
+        }
+      ],
+      "fields": {
+        "parameters": [
+          {
+            "name": "hostname",
+            "type": "string",
+            "required": true,
+            "description": "The server name and hostname to be set on Linux cloud servers. Accepts numbers (0-9), dash (-) and lower case non accented characters. Must not be greater than 60 characters."
+          },
+          {
+            "name": "provision_input",
+            "required": true,
+            "type": "object",
+            "description": "Configuration used to launch the new server as a virtual machine instance in the cloud provider",
+            "properties": {
+              "credential_id": {
+                "type": "integer",
+                "description": "The unique id of the cloud provider credential to be used on connect to cloud provider",
+                "example": 8430015757
+              },
+              "cloud_service_code": {
+                "type": "string",
+                "description": "The name of the cloud service used to provide the cloud instance",
+                "example": "aws-ec2",
+                "enum": [
+                  "aws-ec2",
+                  "azure-rm",
+                  "digitalocean-droplet",
+                  "gcp-gce",
+                  "self-hosted-custom"
+                ]
+              },
+              "settings": {
+                "description": "The configurations used to cloud service",
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "instance_type": {
+                        "type": "string",
+                        "description": "The instance type to be launched on the cloud provider",
+                        "example": "a1.medium"
+                      },
+                      "region": {
+                        "type": "string",
+                        "description": "Datacenter region where the cloud instance will be launched",
+                        "example": "us-east-1"
+                      },
+                      "region_human_readable": {
+                        "type": "string",
+                        "description": "Human readable version of the server region",
+                        "example": "US East (N. Virginia) us-east-1"
+                      },
+                      "storage_size": {
+                        "type": "integer",
+                        "description": "The storage's size of the cloud instance",
+                        "example": 32
+                      },
+                      "os_version_code": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The Operating System distribution and version used in the server/virtual machine instance",
+                        "example": "ubuntu_24_04",
+                        "enum": [
+                          "ubuntu_22_04",
+                          "ubuntu_24_04"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "region",
+                      "instance_type",
+                      "storage_size",
+                      "os_version_code"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "instance_type": {
+                        "type": "string",
+                        "description": "The instance type to be launched on the cloud provider",
+                        "example": "Standard_B1ls"
+                      },
+                      "region": {
+                        "type": "string",
+                        "description": "Datacenter region where the cloud instance will be launched",
+                        "example": "brazilsouth"
+                      },
+                      "region_human_readable": {
+                        "type": "string",
+                        "description": "Human readable version of the server region",
+                        "example": "(South America) Brazil South brazilsouth"
+                      },
+                      "storage_size": {
+                        "type": "integer",
+                        "description": "The storage's size of the cloud instance",
+                        "example": 30
+                      },
+                      "os_version_code": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The Operating System distribution and version used in the server/virtual machine instance",
+                        "example": "ubuntu_24_04",
+                        "enum": [
+                          "ubuntu_22_04",
+                          "ubuntu_24_04"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "region",
+                      "instance_type",
+                      "storage_size",
+                      "os_version_code"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "instance_type": {
+                        "type": "string",
+                        "description": "The instance type to be launched on the cloud provider",
+                        "example": "s-1vcpu-1gb"
+                      },
+                      "region": {
+                        "type": "string",
+                        "description": "Datacenter region where the cloud instance will be launched",
+                        "example": "nyc1"
+                      },
+                      "region_human_readable": {
+                        "type": "string",
+                        "description": "Human readable version of the server region",
+                        "example": "New York nyc1"
+                      },
+                      "os_version_code": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The Operating System distribution and version used in the server/virtual machine instance",
+                        "example": "ubuntu_24_04",
+                        "enum": [
+                          "ubuntu_22_04",
+                          "ubuntu_24_04"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "instance_type",
+                      "region",
+                      "os_version_code"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "instance_type": {
+                        "type": "string",
+                        "description": "The instance type to be launched on the cloud provider",
+                        "example": "f1-micro"
+                      },
+                      "region": {
+                        "type": "string",
+                        "description": "Datacenter region where the cloud instance will be launched",
+                        "example": "us-east1"
+                      },
+                      "region_human_readable": {
+                        "type": "string",
+                        "description": "Human readable version of the server region",
+                        "example": "US East (N. Virginia) us-east1"
+                      },
+                      "os_version_code": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The Operating System distribution and version used in the server/virtual machine instance",
+                        "example": "ubuntu_24_04",
+                        "enum": [
+                          "ubuntu_22_04",
+                          "ubuntu_24_04"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "instance_type",
+                      "region",
+                      "os_version_code"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "os_version_code": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The Operating System distribution and version used in the server/virtual machine instance",
+                        "example": "ubuntu_24_04",
+                        "enum": [
+                          "ubuntu_22_04",
+                          "ubuntu_24_04"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "os_version_code"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "requestBody": {},
+        "responses": {
+          "success": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "The unique id of the given record",
+                "type": "integer",
+                "example": 9654123
+              },
+              "created_by": {
+                "description": "The id of the user who created the server and to whom the server belongs",
+                "type": "integer",
+                "example": 1
+              },
+              "name": {
+                "description": "The server's name",
+                "type": "string",
+                "example": "web-srv-1"
+              },
+              "hostname": {
+                "description": "The server's hostname",
+                "type": "string",
+                "example": "web-srv-1"
+              },
+              "provider_name": {
+                "description": "The name of the server's provider.",
+                "type": "string",
+                "example": "aws"
+              },
+              "provider_name_human_readable": {
+                "description": "The human readable version of the provider's name",
+                "type": "string",
+                "example": "Amazon Web Services"
+              },
+              "ip_address": {
+                "description": "Public ipv4 address for server access",
+                "type": "string",
+                "example": "200.123.45.67"
+              },
+              "ssh_port": {
+                "description": "The network port to which the SSH daemon is listening to SSH connections on the server",
+                "type": "integer",
+                "example": 22
+              },
+              "os_version_code": {
+                "description": "The Operating System distribution and version used in the server/virtual machine instance",
+                "type": "string",
+                "example":  "ubuntu_24_04"
+              },
+              "created_at": {
+                "description": "The date and time when the record was created",
+                "type": "string",
+                "example": "2019-09-25T15:50:48.000000Z"
+              }
+            }
+          },
+          "example": {
+            "id": 123,
+            "created_by": 1,
+            "name": "web-srv-1",
+            "hostname": "web-srv-1",
+            "provider_name": "aws",
+            "provider_name_human_readable": "Amazon Web Services",
+            "cloud_service_code": "aws-ec2",
+            "ip_address": "200.123.45.67",
+            "ssh_port": 22,
+            "os_version_code": "ubuntu_24_04",
+            "created_at": "2019-09-25T15:50:48.000000Z"
+          }
+        }
+      }
+    }
+  ]
+}
