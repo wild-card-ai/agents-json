@@ -137,7 +137,16 @@
                 "example": 8430015757
               },
               "cloud_service_code": {
-                "$ref": "#/components/schemas/ServerCloudServiceCode"
+                "type": "string",
+                "description": "The name of the cloud service used to provide the cloud instance",
+                "example": "aws-ec2",
+                "enum": [
+                  "aws-ec2",
+                  "azure-rm",
+                  "digitalocean-droplet",
+                  "gcp-gce",
+                  "self-hosted-custom"
+                ]
               },
               "settings": {
                 "description": "The configurations used to cloud service",
