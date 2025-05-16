@@ -180,7 +180,7 @@ The agents.json specification needs community input. This GitHub repository will
 
 
 ## Team
-This project is started by [Wildcard AI](https://wild-card.ai). We're a team of 2 founders, [Kaushik](https://x.com/kaushikm_) and [Yagnya](https://x.com/Life_of_Y_), wanting to make agents act predictably and safely.
+This project is started by [Wildcard AI](https://wild-card.ai). We're a team of 2 founders, [Kaushik](https://x.com/kaushikm_) and [Yagnya](https://x.com/lifeof_y), wanting to make agents act predictably and safely.
 
 <br>
 
@@ -197,7 +197,7 @@ Made with ❤️ in San Francisco
 [![Discord](https://img.shields.io/discord/1334616501436682405?style=flat&logo=discord&logoColor=white&label=discord&color=7289DA&link=https%3A%2F%2Fdiscord.gg%2F7AP6wSkVtQ)](https://discord.gg/7AP6wSkVtQ)
 [![Twitter Follow](https://img.shields.io/twitter/follow/wildcard_ai?style=social)](https://x.com/wildcard_ai)
 [![Twitter Follow](https://img.shields.io/twitter/follow/kaushikm_?style=social)](https://x.com/kaushikm_)
-[![Twitter Follow](https://img.shields.io/twitter/follow/Life_of_Y_?style=social)](https://x.com/Life_of_Y_)
+[![Twitter Follow](https://img.shields.io/twitter/follow/Life_of_Y_?style=social)](https://x.com/lifeof_y)
 </div> 
 
 
