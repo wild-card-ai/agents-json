@@ -169,26 +169,15 @@ OpenAPI is a thoughtful standard that has evolved with the changes of HTTP APIs.
 - [ ] agents.json Interactive Builder
 - [x] agents.json Validator
 
-## Licenses
-
-The agents.json specification is open source, licensed under the [Apache 2.0 License](./agents_json/LICENSE).
-The Wildcard Bridge is source-available, licensed under the [Affero GPL v3](./LICENSE).
-
 ## Contributions
 
 The agents.json specification needs community input. This GitHub repository will host informal reviews, allowing for version control and public discussion. To discuss, [join the Discord community](https://discord.gg/7AP6wSkVtQ). This is an evolving project and can't be done without your feedback.
 
 
-## Team
-This project is started by [Wildcard AI](https://wild-card.ai). We're a team of 2 founders, [Kaushik](https://x.com/kaushikm_) and [Yagnya](https://x.com/lifeof_y), wanting to make agents act predictably and safely.
+## Team and Maintainers
+This project is started by [Wildcard AI](https://wild-card.ai).
 
-<br>
-
-<p align="center">
-<img align="center" src="./static/people/WildcardFoundersYC.jpg" alt="Wildcard AI Founders" width="500">
-</p>
-
-<br>
+See [MAINTAINERS.md](https://github.com/wild-card-ai/agents-json/blob/master/MAINTAINERS.md) for a list of current maintainers.
 
 <div align="center">
 Made with ❤️ in San Francisco
