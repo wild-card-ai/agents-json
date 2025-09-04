@@ -17,7 +17,7 @@ class Executor(BaseModel):
     
     @staticmethod
     @lru_cache(maxsize=100)  # Cache up to 100 service instances
-    def _build_service(token: str, refresh_token: str | None, scopes_str: str) -> Resource:
+    def _build_service(token: str, refresh_token: Optional[str], scopes_str: str) -> Resource:
         """
         Creates a Google Sheets service using OAuth2 credentials.
         This function is cached with LRU policy.
