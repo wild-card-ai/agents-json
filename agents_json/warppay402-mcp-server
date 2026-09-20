@@ -1,0 +1,313 @@
+{
+  "$schema": "https://raw.githubusercontent.com/wild-card-ai/agents-json/main/schema.json",
+  "schema_version": "1.0",
+  "name": "WarpPay402 MCP Gateway & Yield Engine",
+  "display_name": "WarpPay402 MCP Gateway",
+  "description": "Multi-chain keyless x402 micropayment gateway and autonomous AI agent tool suite. Provides real-time Web3 intelligence, PDF text extraction, web scraping, Base & Arc analytics, yield vault optimization, smart contract deployment factories, Aerodrome DEX swaps, CLAMM liquidity management, veAERO governance voting, and Circle CCTP cross-chain bridging across Base, Solana, Arbitrum One, and Arc Mainnet.",
+  "category": "Developer / Web3 / Finance",
+  "version": "1.0.0",
+  "owner": "0x556c77792642E8ff95eC930FFb8D46a76579126E",
+  "url": "https://api.warppay402.com",
+  "manifest_url": "https://api.warppay402.com/.well-known/agent.json",
+  "pricing_summary": "x402 USDC ($0.0001 - $5.00)",
+  "defaultInputModes": ["application/json"],
+  "defaultOutputModes": ["application/json"],
+  "provider": {
+    "organization": "WarpPay402 Studio",
+    "url": "https://warppay402.com",
+    "contact": "warppay.402@gmail.com"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "x402Micropayments": true,
+    "x402Support": true,
+    "agentEscrows": true,
+    "pendleYieldVaults": true,
+    "paymaster": {
+      "version": "v0.8",
+      "contract": "0x0000000000000000000000000000000000000000",
+      "quoteEndpoint": "https://api.warppay402.com/api/v1/paymaster/quote",
+      "rpcEndpoint": "https://api.warppay402.com/api/v1/paymaster/rpc"
+    }
+  },
+  "discovery_endpoints": {
+    "agent_card": "https://api.warppay402.com/.well-known/agent.json",
+    "mcp": "https://api.warppay402.com/mcp?v=2",
+    "mcp_manifest": "https://api.warppay402.com/.well-known/mcp.json",
+    "x402_manifest": "https://api.warppay402.com/.well-known/x402-manifest.json",
+    "glama_manifest": "https://api.warppay402.com/.well-known/glama.json",
+    "agent_offers": "https://api.warppay402.com/agent-offers.json",
+    "openapi": "https://api.warppay402.com/openapi.json",
+    "llms_txt": "https://api.warppay402.com/llms.txt",
+    "telemetry": "https://api.warppay402.com/api/v1/telemetry/settlements"
+  },
+  "payment": {
+    "protocol": "x402",
+    "x402Support": true,
+    "endpoints": [
+      {
+        "name": "x402",
+        "endpoint": "https://api.warppay402.com/api/v1/tools/aerodrome-yields"
+      }
+    ],
+    "networks": [
+      "eip155:8453",
+      "eip155:5042",
+      "eip155:42161",
+      "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp"
+    ],
+    "supportedAssets": [
+      {
+        "network": "eip155:8453",
+        "chain": "base",
+        "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "symbol": "USDC",
+        "payee": "0x556c77792642E8ff95eC930FFb8D46a76579126E"
+      },
+      {
+        "network": "eip155:5042",
+        "chain": "arc",
+        "asset": "0x0000000000000000000000000000000000000000",
+        "symbol": "USDC",
+        "payee": "0x556c77792642E8ff95eC930FFb8D46a76579126E"
+      },
+      {
+        "network": "eip155:42161",
+        "chain": "arbitrum",
+        "asset": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+        "symbol": "USDC",
+        "payee": "0x556c77792642E8ff95eC930FFb8D46a76579126E"
+      },
+      {
+        "network": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+        "chain": "solana",
+        "asset": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "symbol": "USDC",
+        "payee": "HXeYkDCYT813GaWThsx3qZ9qrtVDkVARU5X2p7mAVrV7"
+      }
+    ],
+    "escrowContract": "0x456CdEC6ccf1FE853563a0fBa2BA72DE9266aD0E",
+    "subscriptionEscrow": "0x58A3d3e48fA326979e0f9F9378091b549a209cAd",
+    "bountyEscrow": "0x93e9a6E89ec95A01a713F8e701f2Ce14cD58DeAD"
+  },
+  "contracts": {
+    "agentPaymentEscrow": "0x456CdEC6ccf1FE853563a0fBa2BA72DE9266aD0E",
+    "agentSubscriptionEscrow": "0x58A3d3e48fA326979e0f9F9378091b549a209cAd",
+    "agentBountyEscrow": "0x93e9a6E89ec95A01a713F8e701f2Ce14cD58DeAD",
+    "pendleYieldAgent": "0x7dB45Ac4C5fE7f982875823e894A06347f03A52e",
+    "agentPaymasterV8": "0x0000000000000000000000000000000000000000"
+  },
+  "skills": [
+    {
+      "id": "public-data-feed",
+      "name": "Public Attestation Data Feed",
+      "description": "Fetch raw signed attestation JSON records ($0.0001 USDC).",
+      "price": "$0.0001 USDC",
+      "endpoint": "https://api.warppay402.com/public_data_feed/{filename}",
+      "method": "GET",
+      "tags": ["attestation", "data-feed", "json"],
+      "examples": ["Fetch attestation feed file payload"]
+    },
+    {
+      "id": "data-feeds",
+      "name": "Pre-Scraped Intelligence Feeds",
+      "description": "Fetches live pre-scraped market intelligence reports ($0.001 USDC).",
+      "price": "$0.001 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/feeds/{feedId}",
+      "method": "GET",
+      "tags": ["base", "defi", "yield", "apy", "dex", "trending", "data-feed"],
+      "examples": ["Fetch current Base yield opportunities"]
+    },
+    {
+      "id": "web-scraper",
+      "name": "Markdown Web Scraper",
+      "description": "Scrapes public webpages into clean Markdown for AI context window ingestion ($0.001 USDC).",
+      "price": "$0.001 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/web-scraper",
+      "method": "POST",
+      "tags": ["web-scraping", "markdown", "cheerio", "html-parser"],
+      "examples": ["Scrape https://news.ycombinator.com and extract markdown text"]
+    },
+    {
+      "id": "browser-scraper",
+      "name": "Headless Browser Scraper",
+      "description": "Executes unblockable JavaScript Chromium rendering via residential proxy workers ($0.005 USDC).",
+      "price": "$0.005 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/browser-scraper",
+      "method": "POST",
+      "tags": ["browser", "puppeteer", "headless", "proxy-scraper"],
+      "examples": ["Render and scrape text from dynamic JS web pages"]
+    },
+    {
+      "id": "base-analytics",
+      "name": "Base Wallet & Token Analytics",
+      "description": "Fetches ETH balance, nonce, and account stats on Base Mainnet ($0.002 USDC).",
+      "price": "$0.002 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/base-analytics",
+      "method": "POST",
+      "tags": ["base", "analytics", "eth-balance", "wallet-tracker"],
+      "examples": ["Check ETH balance for 0x556c77792642e8ff95ec930ffb8d46a76579126e on Base"]
+    },
+    {
+      "id": "arc-analytics",
+      "name": "Arc Mainnet Network Analytics",
+      "description": "Fetches live block height, gas fees, and network status for Arc Mainnet ($0.001 USDC).",
+      "price": "$0.001 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/arc-analytics",
+      "method": "POST",
+      "tags": ["arc", "analytics", "rpc", "gas-tracker"],
+      "examples": ["Get live gas prices and block height on Arc Mainnet"]
+    },
+    {
+      "id": "arc_network_oracle_query",
+      "name": "Arc Network Oracle Query",
+      "description": "Pre-flight Arc Mainnet telemetry: RPC latency (ms), gas prices (Gwei), native USDC balance, and account nonce ($0.10 USDC).",
+      "price": "$0.10 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/arc-network-query",
+      "method": "POST",
+      "tags": ["arc", "analytics", "rpc", "telemetry", "oracle"],
+      "examples": ["Get live RPC latency and pre-flight telemetry on Arc Mainnet"]
+    },
+    {
+      "id": "arc_dex_oracle",
+      "name": "Arc Live DEX Price Oracle",
+      "description": "Real-time ETH/USDC spot price resolver and DEX liquidity oracle for Arc Mainnet ($0.001 USDC).",
+      "price": "$0.001 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/arc-dex-oracle",
+      "method": "POST",
+      "tags": ["arc", "oracle", "price-feed", "eth-usdc", "dex"],
+      "examples": ["Get live ETH/USDC price feed on Arc Mainnet"]
+    },
+    {
+      "id": "telemetry-feed",
+      "name": "x402 Settlement Telemetry",
+      "description": "Verify on-chain transaction settlement history and endpoint health ($0.0000 USDC).",
+      "price": "$0.0000 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/telemetry/settlements",
+      "method": "GET",
+      "tags": ["telemetry", "oracle", "settlement-proof", "x402"],
+      "examples": ["Query public settlement telemetry feed"]
+    },
+    {
+      "id": "pdf-extractor",
+      "name": "PDF Document Extractor",
+      "description": "Downloads and extracts clean plain text preview from public PDF URLs ($0.005 USDC).",
+      "price": "$0.005 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/pdf-extractor",
+      "method": "POST",
+      "tags": ["pdf", "pdf-parser", "document-reader"],
+      "examples": ["Extract text content from https://example.com/document.pdf"]
+    },
+    {
+      "id": "render-screenshot",
+      "name": "Full-Page Render & Screenshot",
+      "description": "Captures full-page rendered screenshot image data ($0.01 USDC).",
+      "price": "$0.01 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/render-screenshot",
+      "method": "POST",
+      "tags": ["screenshot", "web-capture", "headless-browser"],
+      "examples": ["Take a full page screenshot of https://base.org"]
+    },
+    {
+      "id": "extract-json",
+      "name": "Structured JSON Schema Extractor",
+      "description": "Extracts structured JSON schema data from web pages ($0.01 USDC).",
+      "price": "$0.01 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/extract-json",
+      "method": "POST",
+      "tags": ["json-extractor", "schema", "data-parser"],
+      "examples": ["Extract structured JSON data from web pages"]
+    },
+    {
+      "id": "smart-contract-verifier",
+      "name": "Base Smart Contract Verifier",
+      "description": "Source code analysis, ABI fetching, and proxy validation on Basescan ($0.02 USDC).",
+      "price": "$0.02 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/smart-contract-verifier",
+      "method": "POST",
+      "tags": ["basescan", "smart-contract", "abi", "proxy", "security"],
+      "examples": ["Verify if contract is verified on Basescan"]
+    },
+    {
+      "id": "aerodrome-yields",
+      "name": "Aerodrome DEX Yield Optimizer",
+      "description": "Fetches top live Aerodrome DEX yield pools, APYs, and TVL ($0.003 USDC).",
+      "price": "$0.003 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/aerodrome-yields",
+      "method": "GET",
+      "tags": ["aerodrome", "yield", "apy", "base", "dex"],
+      "examples": ["Fetch top yield pools on Aerodrome Finance Base"]
+    },
+    {
+      "id": "aerodrome-swap",
+      "name": "Aerodrome Swap Execution Engine",
+      "description": "Executes low-slippage token swaps directly via Aerodrome Finance Router ($0.01 USDC).",
+      "price": "$0.01 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/aerodrome-swap",
+      "method": "POST",
+      "tags": ["aerodrome", "swap", "router", "base", "dex"],
+      "examples": ["Swap USDC for AERO on Aerodrome Finance Base"]
+    },
+    {
+      "id": "aerodrome-clamm",
+      "name": "Aerodrome Slipstream CLAMM LP Route",
+      "description": "Open, adjust, and rebalance concentrated liquidity ranges ($0.01 USDC).",
+      "price": "$0.01 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/aerodrome-clamm",
+      "method": "POST",
+      "tags": ["aerodrome", "slipstream", "clamm", "concentrated-liquidity"],
+      "examples": ["Mint a concentrated liquidity range position"]
+    },
+    {
+      "id": "aerodrome-veaero",
+      "name": "Aerodrome veAERO Lock & Vote Route",
+      "description": "Automates $AERO locking, epoch gauge voting, and bribe reward harvesting ($0.01 USDC).",
+      "price": "$0.01 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/aerodrome-veaero",
+      "method": "POST",
+      "tags": ["aerodrome", "veaero", "governance", "locking", "voting"],
+      "examples": ["Create a 52-week veAERO lock and vote for pool gauges"]
+    },
+    {
+      "id": "deploy-contract",
+      "name": "Base Smart Contract Deployment Factory",
+      "description": "Programmatically deploys custom Escrow, Bounty, or Agent contracts to Base ($5.00 USDC).",
+      "price": "$5.00 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/deploy-contract",
+      "method": "POST",
+      "tags": ["viem", "deployment", "smart-contract", "base", "escrow"],
+      "examples": ["Deploy custom escrow contract to Base Mainnet"]
+    },
+    {
+      "id": "deploy-solana-contract",
+      "name": "Solana Smart Contract Factory",
+      "description": "Programmatically initializes SPL Escrows, cNFT Badge Issuers, or Raydium Vaults ($5.00 USDC).",
+      "price": "$5.00 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/deploy-solana-contract",
+      "method": "POST",
+      "tags": ["solana", "spl-token", "escrow", "cnft", "raydium"],
+      "examples": ["Initialize SPL token escrow on Solana Mainnet"]
+    },
+    {
+      "id": "deploy-arc-contract",
+      "name": "Arc Smart Contract Factory",
+      "description": "Programmatically deploys custom Escrow, Bounty, or Agent contracts to Arc Mainnet ($5.00 USDC).",
+      "price": "$5.00 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/deploy-arc-contract",
+      "method": "POST",
+      "tags": ["arc", "deployment", "smart-contract", "escrow", "bounty"],
+      "examples": ["Deploy custom escrow contract to Arc Mainnet"]
+    },
+    {
+      "id": "arc-cctp-bridge",
+      "name": "Arc Circle CCTP Bridge Engine",
+      "description": "Bridges USDC cross-chain from Arc Mainnet via Circle CCTP V2 ($0.25 USDC).",
+      "price": "$0.25 USDC",
+      "endpoint": "https://api.warppay402.com/api/v1/tools/arc-cctp-bridge",
+      "method": "POST",
+      "tags": ["cctp", "bridge", "arc", "circle", "cross-chain", "usdc"],
+      "examples": ["Bridge $10 USDC from Arc to Solana via CCTP"]
+    }
+  ]
+}
